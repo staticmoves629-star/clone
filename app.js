@@ -104,44 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2800);
   }
 
-  // Desktop Controls
-  const frameToggleBtn = document.getElementById('frameToggleBtn');
-  const soundToggleBtn = document.getElementById('soundToggleBtn');
-  const compareBtn = document.getElementById('compareBtn');
-  const screenshotCompareModal = document.getElementById('screenshotCompareModal');
-  const closeCompareBtn = document.getElementById('closeCompareBtn');
-
-  if (frameToggleBtn) {
-    frameToggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('fullscreen-mobile-mode');
-      const isFullscreen = document.body.classList.contains('fullscreen-mobile-mode');
-      frameToggleBtn.classList.toggle('active', !isFullscreen);
-      frameToggleBtn.querySelector('.btn-text').textContent = isFullscreen ? 'Pure Mobile' : 'Phone Frame';
-      showToast(isFullscreen ? 'Switched to Full Mobile View' : 'Switched to Device Frame');
-    });
-  }
-
-  if (soundToggleBtn) {
-    soundToggleBtn.addEventListener('click', () => {
-      soundEnabled = !soundEnabled;
-      soundToggleBtn.classList.toggle('active', soundEnabled);
-      soundToggleBtn.querySelector('.btn-text').textContent = soundEnabled ? 'Sound: ON' : 'Sound: OFF';
-      showToast(soundEnabled ? 'Audio feedback enabled' : 'Audio feedback muted');
-      if (soundEnabled) playSound('tap');
-    });
-  }
-
-  if (compareBtn && screenshotCompareModal) {
-    compareBtn.addEventListener('click', () => {
-      screenshotCompareModal.classList.add('active');
-    });
-  }
-  if (closeCompareBtn && screenshotCompareModal) {
-    closeCompareBtn.addEventListener('click', () => {
-      screenshotCompareModal.classList.remove('active');
-    });
-  }
-
   // Modal Backdrop dismiss helper
   document.querySelectorAll('.interactive-modal-backdrop').forEach(backdrop => {
     backdrop.addEventListener('click', (e) => {
@@ -299,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="bubble-footer-row">
             <div class="bubble-status-left">
               <div class="status-check-circle">
-                <svg viewBox="0 0 24 24" width="13" height="13" fill="#ffffff">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="#003915">
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                 </svg>
               </div>
@@ -332,33 +294,47 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="scratch-bubble-title">You earned a scratch card!</div>
           <div class="scratch-card-illustration">
             <div class="scratch-graphic-card">
-              <svg viewBox="0 0 160 85" width="100%" height="100%" fill="none">
-                <circle cx="28" cy="20" r="1.5" fill="#93c5fd"/>
-                <circle cx="132" cy="18" r="1.5" fill="#93c5fd"/>
-                <circle cx="125" cy="62" r="1.5" fill="#93c5fd"/>
-                <circle cx="34" cy="65" r="1.5" fill="#93c5fd"/>
-                <g transform="translate(48, 48)">
-                  <circle cx="0" cy="0" r="2.5" fill="#60a5fa"/>
-                  <line x1="0" y1="-5" x2="0" y2="-12" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
-                  <line x1="4" y1="-4" x2="9" y2="-9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
-                  <line x1="5" y1="0" x2="12" y2="0" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
-                  <line x1="4" y1="4" x2="9" y2="9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
-                  <line x1="0" y1="5" x2="0" y2="12" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
-                  <line x1="-4" y1="4" x2="-9" y2="9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
-                  <line x1="-5" y1="0" x2="-12" y2="0" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
-                  <line x1="-4" y1="-4" x2="-9" y2="-9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+              <svg viewBox="0 0 200 90" width="100%" height="100%" fill="none">
+                <!-- Sunburst / radiating rays on the left -->
+                <g transform="translate(56, 44)" opacity="0.65">
+                  <circle cx="0" cy="0" r="2.5" fill="#1d5fc4" />
+                  <line x1="0" y1="-5" x2="0" y2="-16" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="0" cy="-18" r="1.5" fill="#1d5fc4" />
+                  <line x1="6" y1="-6" x2="14" y2="-14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="16" cy="-16" r="1.5" fill="#1d5fc4" />
+                  <line x1="8" y1="0" x2="19" y2="0" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="21" cy="0" r="1.5" fill="#1d5fc4" />
+                  <line x1="6" y1="6" x2="14" y2="14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="16" cy="16" r="1.5" fill="#1d5fc4" />
+                  <line x1="0" y1="8" x2="0" y2="19" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="0" cy="21" r="1.5" fill="#1d5fc4" />
+                  <line x1="-6" y1="6" x2="-14" y2="14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="-16" cy="16" r="1.5" fill="#1d5fc4" />
+                  <line x1="-8" y1="0" x2="-19" y2="0" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="-21" cy="0" r="1.5" fill="#1d5fc4" />
+                  <line x1="-6" y1="-6" x2="-14" y2="-14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="-16" cy="-16" r="1.5" fill="#1d5fc4" />
                 </g>
-                <g transform="translate(100, 40)">
-                  <circle cx="0" cy="0" r="10" fill="#3b82f6"/>
-                  <circle cx="0" cy="0" r="6" fill="#1d4ed8"/>
-                  <polygon points="-4,8 0,18 4,8" fill="#1d4ed8"/>
-                  <polygon points="1,8 5,18 8,8" fill="#2563eb"/>
-                  <polygon points="0,-4 1.2,-1 4.2,-1 1.8,0.8 2.6,3.8 0,2 -2.6,3.8 -1.8,0.8 -4.2,-1 -1.2,-1" fill="#bfdbfe"/>
+
+                <!-- Rosette Medal Badge -->
+                <g transform="translate(108, 38)" opacity="0.65">
+                  <circle cx="0" cy="0" r="10.5" fill="#1d5fc4" />
+                  <polygon points="-5,9 0,22 2,9" fill="#1d5fc4" />
+                  <polygon points="1,9 5,22 7,9" fill="#1a56b2" />
+                  <polygon points="0,-4.5 1.4,-1.2 5,-1.2 2.2,0.8 3.2,4.2 0,2.1 -3.2,4.2 -2.2,0.8 -5,-1.2 -1.4,-1.2" fill="#2d77e5" />
                 </g>
-                <rect x="115" y="48" width="16" height="8" rx="1.5" transform="rotate(25 115 48)" fill="#2563eb" opacity="0.8"/>
-                <rect x="22" y="32" width="10" height="5" rx="1" transform="rotate(-15 22 32)" fill="#3b82f6" opacity="0.7"/>
-                <rect x="70" y="24" width="8" height="4" rx="1" transform="rotate(10 70 24)" fill="#60a5fa" opacity="0.6"/>
-                <rect x="105" y="65" width="8" height="4" rx="1" transform="rotate(-30 105 65)" fill="#60a5fa" opacity="0.5"/>
+
+                <!-- Confetti shapes scattered across card -->
+                <rect x="145" y="44" width="22" height="11" rx="2" transform="rotate(-8 145 44)" fill="#1d5fc4" opacity="0.65" />
+                <path d="M 28 32 A 4 4 0 0 1 36 28" fill="none" stroke="#1d5fc4" stroke-width="2.5" stroke-linecap="round" opacity="0.65" />
+                <path d="M 132 58 A 4 4 0 0 1 140 54" fill="none" stroke="#1d5fc4" stroke-width="2.5" stroke-linecap="round" opacity="0.65" />
+                <circle cx="68" cy="18" r="2.2" fill="#1d5fc4" opacity="0.65" />
+                <circle cx="152" cy="24" r="2" fill="#1d5fc4" opacity="0.65" />
+                <circle cx="170" cy="38" r="2.2" fill="#1d5fc4" opacity="0.65" />
+                <circle cx="95" cy="62" r="2.2" fill="#1d5fc4" opacity="0.65" />
+                <circle cx="140" cy="72" r="2.2" fill="#1d5fc4" opacity="0.65" />
+                <polygon points="135,18 136.5,21.5 140,23 136.5,24.5 135,28 133.5,24.5 130,23 133.5,21.5" fill="#1d5fc4" opacity="0.65" />
+                <polygon points="172,60 173.2,62.5 176,63.5 173.2,64.5 172,67 170.8,64.5 168,63.5 170.8,62.5" fill="#1d5fc4" opacity="0.65" />
               </svg>
             </div>
           </div>
@@ -409,6 +385,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (chatBackBtn) {
     chatBackBtn.addEventListener('click', closeChatView);
+  }
+
+  if (chatFloatingPayBtn) {
+    chatFloatingPayBtn.addEventListener('click', () => {
+      openPayScreenView(
+        currentRecipient.name || 'CAFETERIA',
+        currentRecipient.initial || 'C',
+        currentRecipient.phone || '+91 98765 43210',
+        currentRecipient.avatarBg || '#c2185b',
+        0
+      );
+    });
   }
 
   // ================= VIEW 3: FULL SCREEN PAYMENT INTERFACE =================

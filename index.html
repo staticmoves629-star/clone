@@ -25,44 +25,6 @@
 
 <body class="desktop-preview-mode">
 
-  <!-- Desktop Floating Control Bar -->
-  <aside class="desktop-toolbar" id="desktopToolbar" aria-label="Preview Controls">
-    <div class="toolbar-brand">
-      <div class="gpay-logo-pill">
-        <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span
-          class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span> <span
-          class="g-pay">Pay</span>
-      </div>
-      <span class="toolbar-badge">Mobile View</span>
-    </div>
-
-    <div class="toolbar-actions">
-      <button class="tool-btn active" id="frameToggleBtn" title="Toggle Phone Frame">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-          <path
-            d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z" />
-        </svg>
-        <span class="btn-text">Phone Frame</span>
-      </button>
-
-      <button class="tool-btn" id="compareBtn" title="Compare with Original Screenshot">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-          <path
-            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z" />
-        </svg>
-        <span class="btn-text">Original Screenshot</span>
-      </button>
-
-      <button class="tool-btn" id="soundToggleBtn" title="Toggle UPI Audio Feedback">
-        <svg id="soundIconOn" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-          <path
-            d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-        </svg>
-        <span class="btn-text">Sound: ON</span>
-      </button>
-    </div>
-  </aside>
-
   <!-- Mobile Device Outer Container -->
   <main class="app-viewport-wrapper">
     <div class="mobile-phone-device" id="phoneDevice">
@@ -736,7 +698,7 @@
               <div class="bubble-footer-row">
                 <div class="bubble-status-left">
                   <div class="status-check-circle">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="#ffffff">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="#003915">
                       <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                     </svg>
                   </div>
@@ -755,49 +717,47 @@
               <!-- Realistic Blue Scratch Card Graphic matching Screenshot -->
               <div class="scratch-card-illustration">
                 <div class="scratch-graphic-card">
-                  <!-- Festive Confetti, Sparkles and Medal Ribbon -->
-                  <svg viewBox="0 0 160 85" width="100%" height="100%" fill="none">
-                    <!-- Burst / Sparkle elements -->
-                    <circle cx="28" cy="20" r="1.5" fill="#93c5fd" />
-                    <circle cx="132" cy="18" r="1.5" fill="#93c5fd" />
-                    <circle cx="125" cy="62" r="1.5" fill="#93c5fd" />
-                    <circle cx="34" cy="65" r="1.5" fill="#93c5fd" />
-
-                    <!-- Firework / sunburst rays -->
-                    <g transform="translate(48, 48)">
-                      <circle cx="0" cy="0" r="2.5" fill="#60a5fa" />
-                      <line x1="0" y1="-5" x2="0" y2="-12" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
-                      <line x1="4" y1="-4" x2="9" y2="-9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
-                      <line x1="5" y1="0" x2="12" y2="0" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
-                      <line x1="4" y1="4" x2="9" y2="9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
-                      <line x1="0" y1="5" x2="0" y2="12" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
-                      <line x1="-4" y1="4" x2="-9" y2="9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
-                      <line x1="-5" y1="0" x2="-12" y2="0" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
-                      <line x1="-4" y1="-4" x2="-9" y2="-9" stroke="#60a5fa" stroke-width="1.5"
-                        stroke-linecap="round" />
+                  <svg viewBox="0 0 200 90" width="100%" height="100%" fill="none">
+                    <!-- Sunburst / radiating rays on the left -->
+                    <g transform="translate(56, 44)" opacity="0.65">
+                      <circle cx="0" cy="0" r="2.5" fill="#1d5fc4" />
+                      <line x1="0" y1="-5" x2="0" y2="-16" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                      <circle cx="0" cy="-18" r="1.5" fill="#1d5fc4" />
+                      <line x1="6" y1="-6" x2="14" y2="-14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                      <circle cx="16" cy="-16" r="1.5" fill="#1d5fc4" />
+                      <line x1="8" y1="0" x2="19" y2="0" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                      <circle cx="21" cy="0" r="1.5" fill="#1d5fc4" />
+                      <line x1="6" y1="6" x2="14" y2="14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                      <circle cx="16" cy="16" r="1.5" fill="#1d5fc4" />
+                      <line x1="0" y1="8" x2="0" y2="19" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                      <circle cx="0" cy="21" r="1.5" fill="#1d5fc4" />
+                      <line x1="-6" y1="6" x2="-14" y2="14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                      <circle cx="-16" cy="16" r="1.5" fill="#1d5fc4" />
+                      <line x1="-8" y1="0" x2="-19" y2="0" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                      <circle cx="-21" cy="0" r="1.5" fill="#1d5fc4" />
+                      <line x1="-6" y1="-6" x2="-14" y2="-14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
+                      <circle cx="-16" cy="-16" r="1.5" fill="#1d5fc4" />
                     </g>
 
                     <!-- Rosette Medal Badge -->
-                    <g transform="translate(100, 40)">
-                      <circle cx="0" cy="0" r="10" fill="#3b82f6" />
-                      <circle cx="0" cy="0" r="6" fill="#1d4ed8" />
-                      <!-- Ribbons hanging down -->
-                      <polygon points="-4,8 0,18 4,8" fill="#1d4ed8" />
-                      <polygon points="1,8 5,18 8,8" fill="#2563eb" />
-                      <!-- Star inside medal -->
-                      <polygon points="0,-4 1.2,-1 4.2,-1 1.8,0.8 2.6,3.8 0,2 -2.6,3.8 -1.8,0.8 -4.2,-1 -1.2,-1"
-                        fill="#bfdbfe" />
+                    <g transform="translate(108, 38)" opacity="0.65">
+                      <circle cx="0" cy="0" r="10.5" fill="#1d5fc4" />
+                      <polygon points="-5,9 0,22 2,9" fill="#1d5fc4" />
+                      <polygon points="1,9 5,22 7,9" fill="#1a56b2" />
+                      <polygon points="0,-4.5 1.4,-1.2 5,-1.2 2.2,0.8 3.2,4.2 0,2.1 -3.2,4.2 -2.2,0.8 -5,-1.2 -1.4,-1.2" fill="#2d77e5" />
                     </g>
 
-                    <!-- Festive Floating Confetti Rectangles -->
-                    <rect x="115" y="48" width="16" height="8" rx="1.5" transform="rotate(25 115 48)" fill="#2563eb"
-                      opacity="0.8" />
-                    <rect x="22" y="32" width="10" height="5" rx="1" transform="rotate(-15 22 32)" fill="#3b82f6"
-                      opacity="0.7" />
-                    <rect x="70" y="24" width="8" height="4" rx="1" transform="rotate(10 70 24)" fill="#60a5fa"
-                      opacity="0.6" />
-                    <rect x="105" y="65" width="8" height="4" rx="1" transform="rotate(-30 105 65)" fill="#60a5fa"
-                      opacity="0.5" />
+                    <!-- Confetti shapes scattered across card -->
+                    <rect x="145" y="44" width="22" height="11" rx="2" transform="rotate(-8 145 44)" fill="#1d5fc4" opacity="0.65" />
+                    <path d="M 28 32 A 4 4 0 0 1 36 28" fill="none" stroke="#1d5fc4" stroke-width="2.5" stroke-linecap="round" opacity="0.65" />
+                    <path d="M 132 58 A 4 4 0 0 1 140 54" fill="none" stroke="#1d5fc4" stroke-width="2.5" stroke-linecap="round" opacity="0.65" />
+                    <circle cx="68" cy="18" r="2.2" fill="#1d5fc4" opacity="0.65" />
+                    <circle cx="152" cy="24" r="2" fill="#1d5fc4" opacity="0.65" />
+                    <circle cx="170" cy="38" r="2.2" fill="#1d5fc4" opacity="0.65" />
+                    <circle cx="95" cy="62" r="2.2" fill="#1d5fc4" opacity="0.65" />
+                    <circle cx="140" cy="72" r="2.2" fill="#1d5fc4" opacity="0.65" />
+                    <polygon points="135,18 136.5,21.5 140,23 136.5,24.5 135,28 133.5,24.5 130,23 133.5,21.5" fill="#1d5fc4" opacity="0.65" />
+                    <polygon points="172,60 173.2,62.5 176,63.5 173.2,64.5 172,67 170.8,64.5 168,63.5 170.8,62.5" fill="#1d5fc4" opacity="0.65" />
                   </svg>
                 </div>
               </div>
@@ -817,7 +777,7 @@
               <div class="bubble-footer-row">
                 <div class="bubble-status-left">
                   <div class="status-check-circle">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="#ffffff">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="#003915">
                       <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                     </svg>
                   </div>
@@ -1715,20 +1675,6 @@
           <span class="history-amount debit">- ₹500.00</span>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Modal 9: Original Screenshot Comparison Viewer -->
-  <div class="interactive-modal-backdrop" id="screenshotCompareModal">
-    <div class="screenshot-compare-panel">
-      <div class="compare-header">
-        <h3>Original Stitched Screenshot</h3>
-        <button class="modal-close-btn" id="closeCompareBtn">&times;</button>
-      </div>
-      <div class="compare-image-scroll-box">
-        <img src="original_screenshot.jpg" alt="Original Google Pay Scrolling Screenshot" class="original-scroll-img">
-      </div>
-      <p class="compare-footer-note">Scroll the image above to view the original screenshot.</p>
     </div>
   </div>
 

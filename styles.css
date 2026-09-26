@@ -56,87 +56,9 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ================= DESKTOP TOOLBAR CONTROLS ================= */
+/* ================= DESKTOP TOOLBAR (REMOVED) ================= */
 .desktop-toolbar {
-  position: fixed;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 8px 18px;
-  background: rgba(26, 27, 30, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-full);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  transition: all var(--transition-normal);
-}
-
-.toolbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.gpay-logo-pill {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-}
-.g-blue { color: #4285f4; }
-.g-red { color: #ea4335; }
-.g-yellow { color: #fbbc05; }
-.g-green { color: #34a853; }
-.g-pay { color: #e8eaed; margin-left: 2px; }
-
-.toolbar-badge {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  background: rgba(168, 199, 250, 0.15);
-  color: var(--gpay-blue-light);
-  border-radius: var(--radius-full);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.toolbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tool-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-secondary);
-  border-radius: var(--radius-full);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.tool-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--text-primary);
-}
-
-.tool-btn.active {
-  background: var(--gpay-blue);
-  color: #ffffff;
-  border-color: transparent;
-  box-shadow: 0 2px 10px rgba(11, 87, 208, 0.4);
+  display: none !important;
 }
 
 /* ================= PHONE VIEWPORT WRAPPER ================= */
@@ -146,7 +68,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 70px 16px 30px;
+  padding: 20px 16px;
   background: radial-gradient(circle at 50% 10%, #17181c 0%, #0a0b0d 100%);
 }
 
@@ -2008,13 +1930,13 @@ body.fullscreen-mobile-mode .phone-camera-hole {
 
 /* Chat App Bar */
 .chat-app-bar {
-  height: 58px;
-  background: #18191d;
+  height: 56px;
+  background: #111214;
   display: flex;
   align-items: center;
-  padding: 0 12px;
-  gap: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0 10px;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   z-index: 30;
   flex-shrink: 0;
 }
@@ -2022,8 +1944,8 @@ body.fullscreen-mobile-mode .phone-camera-hole {
 .chat-back-btn, .chat-menu-btn {
   background: transparent;
   border: none;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -2037,8 +1959,8 @@ body.fullscreen-mobile-mode .phone-camera-hole {
 }
 
 .chat-header-avatar {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #c2185b;
   color: #ffffff;
@@ -2046,8 +1968,7 @@ body.fullscreen-mobile-mode .phone-camera-hole {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  font-weight: 700;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  font-weight: 500;
   flex-shrink: 0;
 }
 
@@ -2057,10 +1978,10 @@ body.fullscreen-mobile-mode .phone-camera-hole {
 }
 
 .chat-header-name {
-  font-size: 15.5px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 500;
   color: #ffffff;
-  letter-spacing: 0.1px;
+  letter-spacing: 0.2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2088,13 +2009,13 @@ body.fullscreen-mobile-mode .phone-camera-hole {
 
 /* Reward Bazaar Card */
 .chat-reward-bazaar-card {
-  width: 86%;
-  max-width: 290px;
+  width: 78%;
+  max-width: 320px;
   margin-left: auto;
-  background: #1f2024;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  padding: 12px 16px;
+  background: #28292d;
+  border: none;
+  border-radius: 24px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2103,7 +2024,7 @@ body.fullscreen-mobile-mode .phone-camera-hole {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 .chat-reward-bazaar-card:hover {
-  background: #27282e;
+  background: #2e3035;
 }
 
 .bazaar-card-left {
@@ -2112,26 +2033,29 @@ body.fullscreen-mobile-mode .phone-camera-hole {
 }
 
 .bazaar-title {
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   color: #ffffff;
 }
 
 .bazaar-subtitle {
-  font-size: 11.5px;
+  font-size: 13px;
   color: #9aa0a6;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 .bazaar-icon-peach {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background: #fed7aa;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #fee8d6;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+.bazaar-icon-peach svg {
+  fill: #e07a5f;
 }
 
 /* Date Divider */
@@ -2139,20 +2063,20 @@ body.fullscreen-mobile-mode .phone-camera-hole {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 6px 0 2px;
-  opacity: 0.85;
+  margin: 14px 0 8px;
+  padding: 0 8px;
 }
 
 .date-divider-line {
   flex: 1;
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #333539;
 }
 
 .date-divider-text {
-  font-size: 11px;
+  font-size: 12px;
   color: #9aa0a6;
-  font-weight: 500;
+  font-weight: 400;
   white-space: nowrap;
 }
 
@@ -2165,66 +2089,71 @@ body.fullscreen-mobile-mode .phone-camera-hole {
 
 /* Payment Bubbles */
 .chat-bubble-payment {
-  width: 86%;
-  max-width: 290px;
+  width: 78%;
+  max-width: 320px;
   margin-left: auto;
-  background: #25262a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 14px 16px 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: #28292d;
+  border: none;
+  border-radius: 24px;
+  padding: 16px 18px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: transform var(--transition-fast), background var(--transition-fast);
 }
 .chat-bubble-payment:hover {
-  background: #2d2e33;
+  background: #2e3035;
 }
 .chat-bubble-payment:active {
   transform: scale(0.98);
 }
 
 .bubble-header-label {
-  font-size: 13px;
-  color: #d1d5db;
-  font-weight: 500;
+  font-size: 15px;
+  color: #ffffff;
+  font-weight: 400;
+  letter-spacing: -0.1px;
 }
 
 .bubble-amount-text {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 36px;
+  font-weight: 400;
   color: #ffffff;
-  margin: 4px 0 10px;
+  margin: 4px 0 22px;
   letter-spacing: -0.5px;
+  line-height: 1.15;
 }
 
 .bubble-footer-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 10px;
+  border-top: none;
+  padding-top: 0;
 }
 
 .bubble-status-left {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .status-check-circle {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: #34a853;
+  background: #6dd58c;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
+.status-check-circle svg {
+  fill: #003915;
+}
 
 .bubble-status-text {
-  font-size: 11px;
-  color: #d1d5db;
+  font-size: 13.5px;
+  color: #ffffff;
   font-weight: 500;
 }
 
@@ -2234,50 +2163,50 @@ body.fullscreen-mobile-mode .phone-camera-hole {
 
 /* Scratch Card Bubble */
 .chat-bubble-scratch-card {
-  width: 86%;
-  max-width: 290px;
+  width: 78%;
+  max-width: 320px;
   margin-left: auto;
-  background: #25262a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 14px 16px 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: #28292d;
+  border: none;
+  border-radius: 24px;
+  padding: 16px 18px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: transform var(--transition-fast), background var(--transition-fast);
 }
 .chat-bubble-scratch-card:hover {
-  background: #2d2e33;
+  background: #2e3035;
 }
 .chat-bubble-scratch-card:active {
   transform: scale(0.98);
 }
 
 .scratch-bubble-title {
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   color: #ffffff;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .scratch-card-illustration {
-  background: #33363d;
-  border-radius: 14px;
-  height: 84px;
+  background: #383a40;
+  border-radius: 16px;
+  height: 80px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  overflow: hidden;
   position: relative;
-  margin-bottom: 10px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  margin-bottom: 6px;
 }
 
 .scratch-graphic-card {
-  width: 86%;
-  height: 72px;
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%);
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 82%;
+  height: 90px;
+  background: #2d77e5;
+  border-radius: 10px;
+  transform: rotate(-3.5deg) translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2288,56 +2217,58 @@ body.fullscreen-mobile-mode .phone-camera-hole {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: none;
   padding-top: 10px;
 }
 
 .scratch-tap-text {
-  font-size: 11px;
-  color: #d1d5db;
-  font-weight: 500;
+  font-size: 13.5px;
+  color: #e2e3e0;
+  font-weight: 400;
 }
 
 .chat-bottom-spacer {
-  height: 60px;
+  height: 80px;
 }
 
-/* Floating Bottom Bar */
+/* Floating Bottom Bar with Pastel Blue "Pay" Button */
 .chat-floating-bottom-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 66px;
-  background: linear-gradient(180deg, rgba(17, 18, 20, 0) 0%, rgba(17, 18, 20, 0.95) 45%, rgba(17, 18, 20, 1) 100%);
+  height: 74px;
+  background: transparent;
+  pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 18px 10px;
+  padding: 0 16px 20px;
   z-index: 30;
 }
 
 .chat-floating-pay-btn {
+  pointer-events: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 9px 24px;
+  padding: 10px 24px;
   background: #a8c7fa;
   color: #042a49;
   border: none;
   border-radius: var(--radius-full);
   font-family: inherit;
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: 14.5px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 3px 12px rgba(168, 199, 250, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
   transition: transform var(--transition-fast), background var(--transition-fast);
 }
 .chat-floating-pay-btn:hover {
-  background: #bed7ff;
+  background: #bcd6ff;
 }
 .chat-floating-pay-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
 }
 
 /* ================= VIEW 3: FULL SCREEN PAYMENT INTERFACE ================= */
@@ -3557,12 +3488,6 @@ body.fullscreen-mobile-mode .phone-camera-hole {
 
 /* ================= RESPONSIVE ADJUSTMENTS ================= */
 @media (max-width: 480px) {
-  .desktop-toolbar {
-    bottom: 20px;
-    top: auto;
-    padding: 6px 12px;
-    gap: 10px;
-  }
   .app-viewport-wrapper {
     padding: 0;
   }
