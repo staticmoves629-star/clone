@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Google Pay - Mobile View</title>
+  <meta name="description" content="Pixel-perfect interactive mobile scrolling view of Google Pay dark mode interface.">
+  <meta name="theme-color" content="#111214">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Google Pay">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="desktop-preview-mode">
+
+  <!-- Desktop Floating Control Bar -->
+  <aside class="desktop-toolbar" id="desktopToolbar" aria-label="Preview Controls">
+    <div class="toolbar-brand">
+      <div class="gpay-logo-pill">
+        <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span
+          class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span> <span
+          class="g-pay">Pay</span>
+      </div>
+      <span class="toolbar-badge">Mobile View</span>
+    </div>
+
+    <div class="toolbar-actions">
+      <button class="tool-btn active" id="frameToggleBtn" title="Toggle Phone Frame">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path
+            d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z" />
+        </svg>
+        <span class="btn-text">Phone Frame</span>
+      </button>
+
+      <button class="tool-btn" id="compareBtn" title="Compare with Original Screenshot">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path
+            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z" />
+        </svg>
+        <span class="btn-text">Original Screenshot</span>
+      </button>
+
+      <button class="tool-btn" id="soundToggleBtn" title="Toggle UPI Audio Feedback">
+        <svg id="soundIconOn" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path
+            d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+        </svg>
+        <span class="btn-text">Sound: ON</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile Device Outer Container -->
+  <main class="app-viewport-wrapper">
+    <div class="mobile-phone-device" id="phoneDevice">
+
+      <!-- Phone Hardware Bezel Elements -->
+      <div class="phone-speaker"></div>
+      <div class="phone-camera-hole"></div>
+
+      <!-- VIEW 1: MAIN HOME SCROLL SCREEN -->
+      <div class="phone-view active" id="homeView">
+
+        <!-- Scrollable Mobile Screen Content -->
+        <div class="mobile-screen-scroll-container" id="scrollContainer">
+
+          <!-- Top Search Bar Floating inside App -->
+          <section class="top-search-section">
+            <div class="search-input-pill" id="searchTriggerBtn">
+              <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span class="search-placeholder">Pay by name or phone number</span>
+              <div class="search-right-icons">
+                <svg class="mic-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path
+                    d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5-3c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                </svg>
+                <div class="search-profile-avatar" title="Account profile">
+                  <span>A</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 1. TOP PROMOTIONAL HERO BANNER -->
+          <section class="promo-hero-banner" id="promoBanner">
+            <div class="promo-content">
+              <div class="promo-sparkle-top">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="#ffffff">
+                  <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+                </svg>
+              </div>
+              <h2 class="promo-title">₹1,000 welcome rewards</h2>
+              <p class="promo-subtitle">Get the zero-fee Flex credit card</p>
+              <button class="promo-cta-btn" id="applyFlexBtn" aria-label="Apply for Flex credit card">
+                <span>Apply now</span>
+                <div class="cta-arrow-circle">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                    <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42 5.43 5.43H5v2.44z" />
+                  </svg>
+                </div>
+              </button>
+            </div>
+
+            <!-- Hero Artwork Illustration -->
+            <div class="promo-artwork" aria-hidden="true">
+              <svg class="artwork-svg" viewBox="0 0 170 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="100%" stop-color="#f0f3f6" />
+                  </linearGradient>
+                  <linearGradient id="hillGrad1" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#14532d" />
+                    <stop offset="100%" stop-color="#052e16" />
+                  </linearGradient>
+                  <linearGradient id="hillGrad2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#15803d" />
+                    <stop offset="100%" stop-color="#14532d" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Golden floating sparkle stars -->
+                <polygon points="50,15 52,22 59,24 52,26 50,33 48,26 41,24 48,22" fill="#fbbf24" opacity="0.9" />
+                <polygon points="25,40 26,44 30,45 26,46 25,50 24,46 20,45 24,44" fill="#fbbf24" opacity="0.75" />
+                <polygon points="155,12 156.5,16 161,17 156.5,18 155,22 153.5,18 149,17 153.5,16" fill="#fef08a" />
+
+                <!-- Background Green Hills -->
+                <path d="M20 110 Q 75 72 130 95 Q 155 102 170 110 L 20 110 Z" fill="url(#hillGrad1)" />
+                <path d="M50 110 Q 95 82 145 100 Q 160 105 170 110 L 50 110 Z" fill="url(#hillGrad2)" />
+
+                <!-- Stylized Little Pink Buildings / Shops -->
+                <rect x="58" y="78" width="16" height="24" rx="2" fill="#be185d" />
+                <rect x="76" y="72" width="22" height="30" rx="2" fill="#047857" />
+                <rect x="80" y="78" width="14" height="12" rx="1" fill="#ec4899" />
+                <rect x="62" y="84" width="8" height="12" rx="1" fill="#fbcfe8" />
+
+                <!-- Daisy Flower in Foreground -->
+                <g transform="translate(90, 86)">
+                  <ellipse cx="0" cy="-10" rx="3.5" ry="7" fill="#ffffff" />
+                  <ellipse cx="7" cy="-7" rx="3.5" ry="7" transform="rotate(45 7 -7)" fill="#ffffff" />
+                  <ellipse cx="10" cy="0" rx="7" ry="3.5" fill="#ffffff" />
+                  <ellipse cx="7" cy="7" rx="3.5" ry="7" transform="rotate(-45 7 7)" fill="#ffffff" />
+                  <ellipse cx="-7" cy="-7" rx="3.5" ry="7" transform="rotate(-45 -7 -7)" fill="#ffffff" />
+                  <ellipse cx="-10" cy="0" rx="7" ry="3.5" fill="#ffffff" />
+                  <ellipse cx="-7" cy="7" rx="3.5" ry="7" transform="rotate(45 -7 7)" fill="#ffffff" />
+                  <circle cx="0" cy="0" r="5" fill="#fbbf24" />
+                </g>
+
+                <!-- Floating Credit Card: "Flex RuPay" -->
+                <g transform="translate(100, 16) rotate(-1)">
+                  <rect x="0" y="0" width="56" height="38" rx="4" fill="url(#cardGrad)"
+                    filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))" />
+                  <text x="5" y="10" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.5" font-weight="800"
+                    fill="#0f172a">Flex</text>
+                  <circle cx="28" cy="8" r="1.5" fill="#be185d" />
+                  <circle cx="32" cy="8" r="1.5" fill="#f59e0b" />
+                  <rect x="5" y="24" width="20" height="7" rx="1.5" fill="#ec4899" opacity="0.6" />
+                  <rect x="27" y="24" width="12" height="7" rx="1.5" fill="#cbd5e1" />
+                  <rect x="40" y="28" width="12" height="5" rx="1" fill="#0284c7" />
+                  <text x="41" y="32" font-family="sans-serif" font-size="3.5" font-weight="700"
+                    fill="#ffffff">RuPay</text>
+                </g>
+
+                <!-- Illustrated Person Holding Phone -->
+                <g transform="translate(142, 60)">
+                  <ellipse cx="14" cy="11" rx="4" ry="4.5" fill="#18181b" />
+                  <circle cx="14" cy="13" r="3.2" fill="#fcd34d" />
+                  <path d="M8 20 C8 16, 20 16, 20 20 L22 36 L6 36 Z" fill="#eab308" />
+                  <path d="M8 22 L3 16" stroke="#fcd34d" stroke-width="2.5" stroke-linecap="round" />
+                  <rect x="1" y="12" width="3.5" height="6.5" rx="0.8" fill="#10b981" />
+                </g>
+              </svg>
+            </div>
+          </section>
+
+          <!-- 2. FOUR MAIN ACTION BUTTONS GRID -->
+          <section class="main-actions-grid" aria-label="Quick Actions">
+            <!-- Action 1: Scan any QR code -->
+            <button class="action-tile-btn ripple-btn" id="scanQrBtn">
+              <div class="action-icon-squircle">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <path
+                    d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm0 5h3v3h-3v-3zm5 0h3v3h-3v-3zm-2-2h2v2h-2v-2zm-5-3h2v2h-2v-2z" />
+                  <path d="M1 1h4v2H3v2H1V1zm18 0h4v4h-2V3h-2V1zM1 19h2v2h2v2H1v-4zm20 2h-2v-2h-2v4h4v-2z"
+                    opacity="0.6" />
+                </svg>
+              </div>
+              <span class="action-label">Scan any<br>QR code</span>
+            </button>
+
+            <!-- Action 2: Pay anyone -->
+            <button class="action-tile-btn ripple-btn" id="payAnyoneBtn">
+              <div class="action-icon-squircle">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="15" rx="3"></rect>
+                  <line x1="8" y1="8" x2="16" y2="8"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                  <path d="M10 11c0 2 1.5 3 3 3l-3 3"></path>
+                  <path d="M16 2v4"></path>
+                </svg>
+              </div>
+              <span class="action-label">Pay<br>anyone</span>
+            </button>
+
+            <!-- Action 3: Bank transfer -->
+            <button class="action-tile-btn ripple-btn" id="bankTransferBtn">
+              <div class="action-icon-squircle">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <path
+                    d="M12 1L2 6v2h20V6L12 1zm-7 8v8h2V9H5zm5 0v8h2V9h-2zm5 0v8h2V9h-2zm5 0v8h2V9h-2zM2 19v3h20v-3H2zm2 1.5h16V20H4v.5z" />
+                </svg>
+              </div>
+              <span class="action-label">Bank<br>transfer</span>
+            </button>
+
+            <!-- Action 4: Mobile recharge -->
+            <button class="action-tile-btn ripple-btn" id="mobileRechargeBtn">
+              <div class="action-icon-squircle">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <path
+                    d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 18H7V6h10v12zm-5 1a1 1 0 100 2 1 1 0 000-2z" />
+                  <polygon points="12.5,8 10,12 12,12 11.5,15.5 14.5,11 12.5,11" fill="#ffffff" />
+                </svg>
+              </div>
+              <span class="action-label">Mobile<br>recharge</span>
+            </button>
+          </section>
+
+          <!-- 3. HORIZONTAL QUICK PILLS ROW -->
+          <section class="quick-chips-row" aria-label="Quick Features">
+            <!-- Chip 1: Tap & Pay -->
+            <div class="quick-chip-pill" id="chipTapPay">
+              <div class="chip-icon-circle blue-light">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+                    opacity="0.2" />
+                  <path d="M9.5 7.5c2.48 0 4.5 2.02 4.5 4.5s-2.02 4.5-4.5 4.5" />
+                  <path d="M8 9.5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5" />
+                  <path d="M11 5.5c3.59 0 6.5 2.91 6.5 6.5s-2.91 6.5-6.5 6.5" />
+                </svg>
+              </div>
+              <div class="chip-text-group">
+                <span class="chip-primary">Tap & Pay</span>
+                <span class="chip-secondary">View cards</span>
+              </div>
+            </div>
+
+            <!-- Chip 2: UPI Lite -->
+            <div class="quick-chip-pill" id="chipUpiLite">
+              <div class="chip-icon-circle dark-rocket">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                  <path
+                    d="M12 2.5c2 0 4.5 2 5.5 4.5 1 2.5.5 5.5-.5 7.5l-5 5-5-5c-1-2-1.5-5-.5-7.5 1-2.5 3.5-4.5 5.5-4.5z"
+                    fill="#0284c7" />
+                  <circle cx="12" cy="8.5" r="2" fill="#ffffff" />
+                  <path d="M9 17l-3 4 3-1 2 2 .5-2" fill="#f97316" />
+                  <path d="M15 17l3 4-3-1-2 2-.5-2" fill="#ea580c" />
+                </svg>
+              </div>
+              <div class="chip-text-group">
+                <span class="chip-primary">UPI Lite</span>
+                <span class="chip-secondary">₹0</span>
+              </div>
+            </div>
+
+            <!-- Chip 3: Rewards -->
+            <div class="quick-chip-pill" id="chipRewards">
+              <div class="chip-icon-circle gold-trophy">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="#f59e0b">
+                  <path
+                    d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
+                </svg>
+              </div>
+              <div class="chip-text-group">
+                <span class="chip-primary">Rewards</span>
+                <span class="chip-secondary">₹1,240</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4. "SEND MONEY" SECTION -->
+          <section class="content-card-section" aria-label="Send Money">
+            <div class="section-header">
+              <h3 class="section-title">Send money</h3>
+            </div>
+
+            <!-- 4x2 Contacts Grid with Clean Letter Initials -->
+            <div class="contacts-grid" id="contactsGrid">
+              <!-- 1. Cupcake Siblings -->
+              <button class="contact-item-btn ripple-btn" data-name="Cupcake Siblings" data-initial="C"
+                data-color="#388e3c" data-upi="cupcake@okhdfc">
+                <div class="contact-avatar-circle avatar-light-green">
+                  <span class="avatar-letter">C</span>
+                </div>
+                <span class="contact-name">Cupcake<br>Siblings</span>
+              </button>
+
+              <!-- 2. SINDHU JOY -->
+              <button class="contact-item-btn ripple-btn" data-name="SINDHU JOY" data-initial="S" data-color="#1b5e20"
+                data-upi="sindhujoy@okaxis">
+                <div class="contact-avatar-circle avatar-dark-green">
+                  <span class="avatar-letter">S</span>
+                </div>
+                <span class="contact-name">SINDHU<br>JOY</span>
+              </button>
+
+              <!-- 3. Adithya -->
+              <button class="contact-item-btn ripple-btn" data-name="Adithya" data-initial="A" data-color="#00838f"
+                data-upi="adithya.kumar@okicici">
+                <div class="contact-avatar-circle avatar-teal">
+                  <span class="avatar-letter">A</span>
+                </div>
+                <span class="contact-name">Adithya</span>
+              </button>
+
+              <!-- 4. Kerala State Road... -->
+              <button class="contact-item-btn ripple-btn" data-name="Kerala State Road Transport" data-initial="K"
+                data-color="#7b1fa2" data-upi="ksrtc@sbi">
+                <div class="contact-avatar-circle avatar-purple">
+                  <span class="avatar-letter">K</span>
+                </div>
+                <span class="contact-name">Kerala<br>State Roa...</span>
+              </button>
+
+              <!-- 5. CAFETERIA -->
+              <button class="contact-item-btn ripple-btn" data-name="CAFETERIA" data-initial="C" data-color="#c2185b"
+                data-upi="cafeteria.store@okaxis">
+                <div class="contact-avatar-circle avatar-hot-pink">
+                  <span class="avatar-letter">C</span>
+                </div>
+                <span class="contact-name">CAFETERIA</span>
+              </button>
+
+              <!-- 6. Alwin -->
+              <button class="contact-item-btn ripple-btn" data-name="Alwin" data-initial="A" data-color="#ef6c00"
+                data-upi="alwin.p@okicici">
+                <div class="contact-avatar-circle avatar-amber">
+                  <span class="avatar-letter">A</span>
+                </div>
+                <span class="contact-name">Alwin</span>
+              </button>
+
+              <!-- 7. Adarshuv -->
+              <button class="contact-item-btn ripple-btn" data-name="Adarshuv" data-initial="A" data-color="#3949ab"
+                data-upi="adarshuv@okhdfc">
+                <div class="contact-avatar-circle avatar-indigo">
+                  <span class="avatar-letter">A</span>
+                </div>
+                <span class="contact-name">Adarshuv</span>
+              </button>
+
+              <!-- 8. More -->
+              <button class="contact-item-btn ripple-btn" id="moreContactsBtn">
+                <div class="contact-avatar-circle avatar-more-dark">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="#c4c7c5">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+                  </svg>
+                </div>
+                <span class="contact-name">More</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 5. "BILLS & RECHARGES" SECTION -->
+          <section class="content-card-section" aria-label="Bills & Recharges">
+            <div class="section-header space-between">
+              <h3 class="section-title">Bills & recharges</h3>
+              <button class="section-link-btn" id="manageBillsBtn">
+                <span>Manage</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Row 1: Quick billers with badges -->
+            <div class="bills-quick-grid">
+              <!-- 1. Vi Prepaid -->
+              <div class="bill-provider-item ripple-btn" data-biller="Vi Prepaid" data-amount="299">
+                <span class="expiring-badge orange">Expiring</span>
+                <div class="biller-logo-circle vi-circle">
+                  <span class="vi-logo-text">Vi</span>
+                </div>
+                <span class="biller-name">Vi Prepaid</span>
+              </div>
+
+              <!-- 2. Sun Direct -->
+              <div class="bill-provider-item ripple-btn" data-biller="Sun Direct" data-amount="340">
+                <span class="expiring-badge blue">Expiring</span>
+                <div class="biller-logo-circle sun-direct-circle">
+                  <div class="sun-symbol">
+                    <div class="sun-rays"></div>
+                    <div class="sun-core"></div>
+                  </div>
+                  <span class="sun-text">SUN</span>
+                </div>
+                <span class="biller-name">Sun Direct</span>
+              </div>
+
+              <!-- 3. Jio Prepaid -->
+              <div class="bill-provider-item ripple-btn" data-biller="Jio Prepaid" data-amount="239">
+                <div class="biller-logo-circle jio-circle">
+                  <span class="jio-logo-text">Jio</span>
+                </div>
+                <span class="biller-name">Jio Prepaid</span>
+              </div>
+
+              <!-- 4. Airtel Prepaid -->
+              <div class="bill-provider-item ripple-btn" data-biller="Airtel Prepaid" data-amount="319">
+                <div class="biller-logo-circle airtel-circle">
+                  <span class="airtel-logo-text">airtel</span>
+                </div>
+                <span class="biller-name">Airtel<br>Prepaid</span>
+              </div>
+            </div>
+
+            <!-- Row 2: Bill categories in blue circles -->
+            <div class="bill-categories-row">
+              <!-- Category 1: Mobile recharge -->
+              <button class="category-icon-btn ripple-btn" data-category="Mobile recharge">
+                <div class="category-circle-blue">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path
+                      d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 18H7V6h10v12z" />
+                    <circle cx="12" cy="12" r="1.5" fill="#a8c7fa" />
+                  </svg>
+                </div>
+                <span class="category-label">Mobile<br>recharge</span>
+              </button>
+
+              <div class="category-connector-line"></div>
+
+              <!-- Category 2: DTH / Cable TV -->
+              <button class="category-icon-btn ripple-btn" data-category="DTH / Cable TV">
+                <div class="category-circle-blue">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path
+                      d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z" />
+                    <rect x="5" y="7" width="14" height="8" rx="1" fill="#004a77" />
+                  </svg>
+                </div>
+                <span class="category-label">DTH /<br>Cable TV</span>
+              </button>
+
+              <div class="category-connector-line"></div>
+
+              <!-- Category 3: Electricity -->
+              <button class="category-icon-btn ripple-btn" data-category="Electricity">
+                <div class="category-circle-blue">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path
+                      d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z" />
+                  </svg>
+                </div>
+                <span class="category-label">Electricity</span>
+              </button>
+
+              <!-- Category 4: Credit cards -->
+              <button class="category-icon-btn ripple-btn" data-category="Credit cards">
+                <div class="category-circle-blue">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path
+                      d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                    <rect x="5.5" y="14" width="3" height="2" rx="0.5" fill="#a8c7fa" />
+                  </svg>
+                </div>
+                <span class="category-label">Credit<br>cards</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 6. "OFFERS & REWARDS" SECTION -->
+          <section class="content-card-section" aria-label="Offers & Rewards">
+            <div class="section-header">
+              <h3 class="section-title">Offers & rewards</h3>
+            </div>
+
+            <div class="offers-grid-row">
+              <!-- 1. Rewards (Gold Gradient) -->
+              <button class="offer-tile-btn ripple-btn" id="rewardsTileBtn">
+                <div class="offer-gradient-circle rewards-circle">
+                  <svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff">
+                    <path
+                      d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
+                    <polygon points="12,7 13,9 15,9 13.5,10.5 14,12.5 12,11.2 10,12.5 10.5,10.5 9,9 11,9"
+                      fill="#fef08a" />
+                  </svg>
+                </div>
+                <span class="offer-label">Rewards</span>
+              </button>
+
+              <!-- 2. Offers (Pink/Red Gradient) -->
+              <button class="offer-tile-btn ripple-btn" id="offersTileBtn">
+                <div class="offer-gradient-circle offers-circle">
+                  <svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff">
+                    <path
+                      d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" />
+                    <path d="M14 13l2-2m-2 0l2 2" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
+                </div>
+                <span class="offer-label">Offers</span>
+              </button>
+
+              <!-- 3. Referrals (Cyan/Blue Gradient) -->
+              <button class="offer-tile-btn ripple-btn" id="referralsTileBtn">
+                <div class="offer-gradient-circle referrals-circle">
+                  <svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff">
+                    <path d="M4 3h7v5c0 2-1.5 3.5-3.5 3.5S4 10 4 8V3zm1.5 1.5v3.5c0 1.1.9 2 2 2s2-.9 2-2V4.5h-4z" />
+                    <path d="M7.5 11.5V17H4v1.5h7V17H7.5v-5.5z" />
+                    <path d="M13 3h7v5c0 2-1.5 3.5-3.5 3.5S13 10 13 8V3zm1.5 1.5v3.5c0 1.1.9 2 2 2s2-.9 2-2V4.5h-4z" />
+                    <path d="M16.5 11.5V17H13v1.5h7V17h-3.5v-5.5z" />
+                    <circle cx="12" cy="2" r="1" fill="#fef08a" />
+                  </svg>
+                </div>
+                <span class="offer-label">Referrals</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 7. "MANAGE YOUR MONEY" SECTION -->
+          <section class="content-card-section" aria-label="Manage your money">
+            <div class="section-header">
+              <h3 class="section-title">Manage your money</h3>
+            </div>
+
+            <!-- Two Side-by-side Dark Cards -->
+            <div class="money-cards-grid">
+              <!-- Card 1: Flex by Google Pay -->
+              <div class="money-card-tile ripple-btn" id="cardFlexGpay">
+                <div class="card-icon-header">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="#a8c7fa">
+                    <path
+                      d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                    <circle cx="16" cy="15" r="2" fill="#004a77" stroke="#a8c7fa" stroke-width="1.5" />
+                  </svg>
+                </div>
+                <h4 class="card-headline">Flex by Google Pay</h4>
+                <p class="card-subtext">UPI credit card made simple</p>
+                <button class="card-action-link">Check details</button>
+              </div>
+
+              <!-- Card 2: Personal loan -->
+              <div class="money-card-tile ripple-btn" id="cardPersonalLoan">
+                <div class="card-icon-header">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="#a8c7fa">
+                    <path
+                      d="M16 6h-2.18c-.45-1.72-2-3-3.82-3s-3.37 1.28-3.82 3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c.73 0 1.34.4 1.66 1h-3.32c.32-.6 1.01-1 1.66-1zm10 15H4V8h16v11z" />
+                    <path
+                      d="M12 10c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm0 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+                  </svg>
+                </div>
+                <h4 class="card-headline">Personal loan</h4>
+                <p class="card-subtext">Up to ₹40 lakh,<br>instant approval</p>
+                <button class="card-action-link">Check details</button>
+              </div>
+            </div>
+
+            <!-- Full Width Vertical Action Rows with Chevrons -->
+            <div class="money-list-rows">
+              <!-- Row 1: Check your CIBIL score for free -->
+              <div class="money-list-row ripple-btn" id="rowCibilScore">
+                <div class="row-left">
+                  <div class="row-icon-blue">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#a8c7fa" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.17.83-.3.83-.8v-2.2"></path>
+                      <path d="M12 12l4-4"></path>
+                      <circle cx="12" cy="12" r="2"></circle>
+                      <path d="M22 12c0-5.52-4.48-10-10-10"></path>
+                    </svg>
+                  </div>
+                  <span class="row-title">Check your CIBIL score for free</span>
+                </div>
+                <svg class="chevron-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                </svg>
+              </div>
+
+              <!-- Row 2: See transaction history -->
+              <div class="money-list-row ripple-btn" id="rowTxHistory">
+                <div class="row-left">
+                  <div class="row-icon-blue">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path
+                        d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z" />
+                    </svg>
+                  </div>
+                  <span class="row-title">See transaction history</span>
+                </div>
+                <svg class="chevron-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                </svg>
+              </div>
+
+              <!-- Row 3: Check bank balance -->
+              <div class="money-list-row ripple-btn" id="rowCheckBalance">
+                <div class="row-left">
+                  <div class="row-icon-blue">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path
+                        d="M12 1L2 6v2h20V6L12 1zm-7 8v8h2V9H5zm5 0v8h2V9h-2zm5 0v8h2V9h-2zm5 0v8h2V9h-2zM2 19v3h20v-3H2zm2 1.5h16V20H4v.5z" />
+                    </svg>
+                  </div>
+                  <span class="row-title">Check bank balance</span>
+                </div>
+                <svg class="chevron-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                </svg>
+              </div>
+            </div>
+          </section>
+
+          <!-- Extra bottom spacing to scroll smoothly above bottom bar -->
+          <div class="bottom-scroll-spacer"></div>
+
+        </div> <!-- /mobile-screen-scroll-container -->
+
+        <!-- 8. FIXED DOCKED MATERIAL 3 BOTTOM NAVIGATION BAR -->
+        <nav class="bottom-navigation-bar" aria-label="Bottom Navigation">
+          <!-- 1. Home Tab (Active) -->
+          <button class="nav-tab-item active" id="navHomeTab">
+            <div class="nav-pill-highlight">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+              </svg>
+            </div>
+            <span class="nav-tab-label">Home</span>
+          </button>
+
+          <!-- 2. Money Tab -->
+          <button class="nav-tab-item" id="navMoneyTab">
+            <div class="nav-icon-container">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 8h8M8 11h6M9.5 11c0 2 1.5 2.8 3 2.8l-3 3"></path>
+              </svg>
+            </div>
+            <span class="nav-tab-label">Money</span>
+          </button>
+
+          <!-- 3. You Tab (Letter Initial Avatar, no photo) -->
+          <button class="nav-tab-item" id="navYouTab">
+            <div class="nav-icon-container">
+              <div class="nav-avatar-circle">
+                <span>Y</span>
+              </div>
+            </div>
+            <span class="nav-tab-label">You</span>
+          </button>
+
+          <!-- Android Home Navigation Handle Indicator -->
+          <div class="android-home-pill"></div>
+        </nav>
+
+      </div> <!-- /#homeView -->
+
+      <!-- VIEW 2: CONTACT CONVERSATION & TRANSACTIONS (New Screen matching User Screenshot) -->
+      <div class="phone-view" id="chatView">
+
+        <!-- Chat Header App Bar with Back, Avatar, Name, 3-dots -->
+        <div class="chat-app-bar" id="chatAppBar">
+          <button class="chat-back-btn ripple-btn" id="chatBackBtn" title="Back to home">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+          </button>
+
+          <!-- Contact Profile Letter Initial (No photo) -->
+          <div class="chat-header-avatar" id="chatHeaderAvatar">
+            <span id="chatHeaderInitial">C</span>
+          </div>
+
+          <div class="chat-header-info">
+            <h3 class="chat-header-name" id="chatHeaderName">CAFETERIA</h3>
+          </div>
+
+          <button class="chat-menu-btn" id="chatMenuBtn" title="Options">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="#ffffff">
+              <path
+                d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Chat Scrollable Stream / Conversation Timeline -->
+        <div class="chat-scroll-container" id="chatScrollContainer">
+
+          <!-- Top Card: Reward bazaar (Expired) -->
+          <div class="chat-reward-bazaar-card ripple-btn" id="rewardBazaarCard">
+            <div class="bazaar-card-left">
+              <h4 class="bazaar-title">Reward bazaar</h4>
+              <span class="bazaar-subtitle">Expired</span>
+            </div>
+            <div class="bazaar-icon-peach">
+              <!-- Stylized Market / Stall SVG Icon -->
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="#e07a5f">
+                <path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Date Divider: "18 Sept, 12:53 pm" with flourish lines -->
+          <div class="chat-date-divider">
+            <div class="date-divider-line left"></div>
+            <span class="date-divider-text" id="chatDateDividerText">18 Sept, 12:53 pm</span>
+            <div class="date-divider-line right"></div>
+          </div>
+
+          <!-- Dynamic Chat Message Bubbles Stream -->
+          <div class="chat-messages-stream" id="chatMessagesStream">
+
+            <!-- Payment Bubble 1: ₹60 -->
+            <div class="chat-bubble-payment right ripple-btn" data-amount="60" data-date="18 Sept">
+              <div class="bubble-header-label">Payment to <span class="bubble-recipient-name">CAFETERIA</span></div>
+              <div class="bubble-amount-text">₹60</div>
+              <div class="bubble-footer-row">
+                <div class="bubble-status-left">
+                  <div class="status-check-circle">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="#ffffff">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span class="bubble-status-text">Paid • 18 Sept</span>
+                </div>
+                <svg class="bubble-chevron" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Reward Scratch Card Bubble: "You earned a scratch card!" -->
+            <div class="chat-bubble-scratch-card right ripple-btn" id="chatScratchCardBubble">
+              <div class="scratch-bubble-title">You earned a scratch card!</div>
+
+              <!-- Realistic Blue Scratch Card Graphic matching Screenshot -->
+              <div class="scratch-card-illustration">
+                <div class="scratch-graphic-card">
+                  <!-- Festive Confetti, Sparkles and Medal Ribbon -->
+                  <svg viewBox="0 0 160 85" width="100%" height="100%" fill="none">
+                    <!-- Burst / Sparkle elements -->
+                    <circle cx="28" cy="20" r="1.5" fill="#93c5fd" />
+                    <circle cx="132" cy="18" r="1.5" fill="#93c5fd" />
+                    <circle cx="125" cy="62" r="1.5" fill="#93c5fd" />
+                    <circle cx="34" cy="65" r="1.5" fill="#93c5fd" />
+
+                    <!-- Firework / sunburst rays -->
+                    <g transform="translate(48, 48)">
+                      <circle cx="0" cy="0" r="2.5" fill="#60a5fa" />
+                      <line x1="0" y1="-5" x2="0" y2="-12" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
+                      <line x1="4" y1="-4" x2="9" y2="-9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
+                      <line x1="5" y1="0" x2="12" y2="0" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
+                      <line x1="4" y1="4" x2="9" y2="9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
+                      <line x1="0" y1="5" x2="0" y2="12" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
+                      <line x1="-4" y1="4" x2="-9" y2="9" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
+                      <line x1="-5" y1="0" x2="-12" y2="0" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" />
+                      <line x1="-4" y1="-4" x2="-9" y2="-9" stroke="#60a5fa" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    </g>
+
+                    <!-- Rosette Medal Badge -->
+                    <g transform="translate(100, 40)">
+                      <circle cx="0" cy="0" r="10" fill="#3b82f6" />
+                      <circle cx="0" cy="0" r="6" fill="#1d4ed8" />
+                      <!-- Ribbons hanging down -->
+                      <polygon points="-4,8 0,18 4,8" fill="#1d4ed8" />
+                      <polygon points="1,8 5,18 8,8" fill="#2563eb" />
+                      <!-- Star inside medal -->
+                      <polygon points="0,-4 1.2,-1 4.2,-1 1.8,0.8 2.6,3.8 0,2 -2.6,3.8 -1.8,0.8 -4.2,-1 -1.2,-1"
+                        fill="#bfdbfe" />
+                    </g>
+
+                    <!-- Festive Floating Confetti Rectangles -->
+                    <rect x="115" y="48" width="16" height="8" rx="1.5" transform="rotate(25 115 48)" fill="#2563eb"
+                      opacity="0.8" />
+                    <rect x="22" y="32" width="10" height="5" rx="1" transform="rotate(-15 22 32)" fill="#3b82f6"
+                      opacity="0.7" />
+                    <rect x="70" y="24" width="8" height="4" rx="1" transform="rotate(10 70 24)" fill="#60a5fa"
+                      opacity="0.6" />
+                    <rect x="105" y="65" width="8" height="4" rx="1" transform="rotate(-30 105 65)" fill="#60a5fa"
+                      opacity="0.5" />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="scratch-bubble-footer">
+                <span class="scratch-tap-text">Tap to view</span>
+                <svg class="bubble-chevron" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Payment Bubble 2: ₹20 -->
+            <div class="chat-bubble-payment right ripple-btn" data-amount="20" data-date="18 Sept">
+              <div class="bubble-header-label">Payment to <span class="bubble-recipient-name">CAFETERIA</span></div>
+              <div class="bubble-amount-text">₹20</div>
+              <div class="bubble-footer-row">
+                <div class="bubble-status-left">
+                  <div class="status-check-circle">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="#ffffff">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  </div>
+                  <span class="bubble-status-text">Paid • 18 Sept</span>
+                </div>
+                <svg class="bubble-chevron" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                </svg>
+              </div>
+            </div>
+
+          </div> <!-- /chat-messages-stream -->
+
+          <!-- Extra bottom spacer for floating button -->
+          <div class="chat-bottom-spacer"></div>
+
+        </div> <!-- /chat-scroll-container -->
+
+        <!-- Bottom Floating Action Bar with Light Blue "Pay" Pill Button -->
+        <div class="chat-floating-bottom-bar">
+          <button class="chat-floating-pay-btn ripple-btn" id="chatFloatingPayBtn">
+            <span>Pay</span>
+          </button>
+
+          <!-- Bottom Navigation Handle Indicator -->
+          <div class="android-home-pill"></div>
+        </div>
+
+      </div> <!-- /#chatView -->
+
+      <!-- VIEW 3: FULL SCREEN PAYMENT INTERFACE (Matching New User Screenshot) -->
+      <div class="phone-view" id="payScreenView">
+
+        <!-- Top App Bar with Back and 3-dots -->
+        <div class="pay-screen-top-bar">
+          <button class="pay-screen-back-btn ripple-btn" id="payScreenBackBtn" title="Back">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#ffffff">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+          </button>
+          <div class="pay-screen-top-spacer"></div>
+          <button class="pay-screen-menu-btn ripple-btn" id="payScreenMenuBtn" title="More options">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+              <path
+                d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Scrollable Middle Section: Profile, Amount, Note -->
+        <div class="pay-screen-body">
+
+          <!-- Centered Recipient Info -->
+          <div class="pay-screen-recipient-section">
+            <div class="pay-screen-avatar-circle" id="payScreenAvatar">
+              <img id="payScreenAvatarImg" src="arjun_avatar.jpg" alt="Avatar" class="pay-screen-avatar-img">
+              <span id="payScreenInitial" style="display: none;">A</span>
+            </div>
+            <h2 class="pay-screen-name" id="payScreenRecipientName">Arjun S</h2>
+            <span class="pay-screen-phone" id="payScreenRecipientPhone">+91 98765 43210</span>
+            <div class="pay-screen-bank-linked">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="#9aa0a6">
+                <path
+                  d="M12 1L2 6v2h20V6L12 1zm-7 8v8h2V9H5zm5 0v8h2V9h-2zm5 0v8h2V9h-2zm5 0v8h2V9h-2zM2 19v3h20v-3H2zm2 1.5h16V20H4v.5z" />
+              </svg>
+              <span>Bank account linked</span>
+            </div>
+          </div>
+
+          <!-- Big Centered Amount with Blinking Blue Cursor -->
+          <div class="pay-screen-amount-display-box" id="payAmountBox">
+            <span class="pay-currency-symbol">₹</span>
+            <span class="pay-amount-number" id="payScreenAmountDisplay">0</span>
+            <span class="pay-amount-cursor">|</span>
+          </div>
+
+          <!-- "Add a note" Pill Button / Input -->
+          <div class="pay-screen-note-container">
+            <button class="pay-note-pill-btn" id="payNotePillBtn">
+              <span id="payNotePillText">Add a note</span>
+            </button>
+          </div>
+
+        </div> <!-- /pay-screen-body -->
+
+        <!-- Bottom Payment Controls: Bank Selector, Keypad & Blue Pay Button -->
+        <div class="pay-screen-bottom-container">
+
+          <!-- Bank Selector Card: Federal Bank •••• 1234 -->
+          <div class="pay-bank-selector-card ripple-btn" id="payBankSelector">
+            <div class="bank-selector-left">
+              <div class="federal-bank-logo-badge">
+                <svg viewBox="0 0 32 32" width="22" height="22">
+                  <polygon points="7,8 17,16 7,24" fill="#ea580c" />
+                  <polygon points="15,8 25,16 15,24" fill="#16a34a" />
+                </svg>
+              </div>
+              <div class="bank-selector-text">
+                <span class="bank-selector-name">Federal Bank</span>
+                <span class="bank-selector-account">•••• 1234</span>
+              </div>
+            </div>
+            <svg class="bank-selector-chevron" viewBox="0 0 24 24" width="20" height="20" fill="#ffffff">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+            </svg>
+          </div>
+
+          <!-- Custom Numeric Keypad (Matching Screenshot) -->
+          <div class="pay-screen-keypad" id="payScreenKeypad">
+            <button class="pay-key ripple-btn" data-key="1">1</button>
+            <button class="pay-key ripple-btn" data-key="2">2</button>
+            <button class="pay-key ripple-btn" data-key="3">3</button>
+
+            <button class="pay-key ripple-btn" data-key="4">4</button>
+            <button class="pay-key ripple-btn" data-key="5">5</button>
+            <button class="pay-key ripple-btn" data-key="6">6</button>
+
+            <button class="pay-key ripple-btn" data-key="7">7</button>
+            <button class="pay-key ripple-btn" data-key="8">8</button>
+            <button class="pay-key ripple-btn" data-key="9">9</button>
+
+            <button class="pay-key ripple-btn" data-key=".">.</button>
+            <button class="pay-key ripple-btn" data-key="0">0</button>
+            <button class="pay-key ripple-btn key-backspace" id="payKeyBackspace" title="Backspace">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <path
+                  d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Bottom Vibrant Blue "Pay ₹0" Pill Button -->
+          <div class="pay-screen-submit-wrapper">
+            <button class="pay-screen-submit-btn ripple-btn" id="payScreenSubmitBtn">
+              Pay <span id="payScreenSubmitAmountText">₹0</span>
+            </button>
+          </div>
+
+          <!-- Android Home Navigation Handle Indicator -->
+          <div class="android-home-pill"></div>
+
+        </div> <!-- /pay-screen-bottom-container -->
+
+      </div> <!-- /#payScreenView -->
+
+      <!-- VIEW 4: FULL-SCREEN PAYMENT SUCCESS (Matching New User Screenshot) -->
+      <div class="phone-view" id="successScreenView">
+
+        <!-- Center Success Celebration -->
+        <div class="full-success-content-wrapper" id="fullSuccessWrapper">
+
+          <!-- Large Blue Circle with Checkmark and Floating Confetti Particles -->
+          <div class="full-success-badge-container">
+
+            <!-- Confetti Particles matching screenshot -->
+            <div class="confetti-item green-dot"></div>
+            <div class="confetti-item green-diamond"></div>
+            <div class="confetti-item gold-star"></div>
+            <div class="confetti-item red-arc"></div>
+            <div class="confetti-item teal-square"></div>
+
+            <!-- The Big Blue Checkmark Badge -->
+            <div class="blue-checkmark-circle">
+              <svg class="success-bold-check" viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#ffffff"
+                stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Transaction Summary Text matching screenshot -->
+          <p class="full-success-sub" id="fullSuccessSubText">₹10 paid to CAFETERIA</p>
+
+
+        </div> <!-- /full-success-content-wrapper -->
+
+        <!-- Bottom Home Handle -->
+        <div class="android-home-pill"></div>
+
+      </div> <!-- /#successScreenView -->
+
+      <!-- VIEW 5: TRANSACTION DETAILS / RECEIPT SCREEN (Matching New User Screenshot) -->
+      <div class="phone-view" id="txDetailView">
+        
+        <!-- Top App Bar: Back Arrow, Spacer, Info Circle, 3 Dots -->
+        <div class="tx-detail-top-bar">
+          <button class="tx-top-icon-btn ripple-btn" id="txDetailBackBtn" title="Back">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+          </button>
+          <div class="tx-top-spacer"></div>
+          <button class="tx-top-icon-btn ripple-btn" id="txDetailInfoBtn" title="Help">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+              <path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-11h2V7h-2v2z" />
+            </svg>
+          </button>
+          <button class="tx-top-icon-btn ripple-btn" id="txDetailMenuBtn" title="Options">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Scrollable Receipt Body -->
+        <div class="tx-detail-scroll-container" id="txDetailScrollContainer">
+          
+          <!-- Hero Section: Avatar, Recipient, Large Amount, Pay again, Completed Status, Date -->
+          <div class="tx-detail-hero">
+            <div class="tx-detail-avatar" id="txDetailAvatar">
+              <span id="txDetailAvatarLetter">C</span>
+            </div>
+            <div class="tx-detail-to-text">To <span id="txDetailRecipientName">CAFETERIA</span></div>
+            <div class="tx-detail-big-amount" id="txDetailBigAmount">₹20</div>
+            
+            <button class="tx-pay-again-btn ripple-btn" id="txDetailPayAgainBtn">
+              Pay again
+            </button>
+
+            <div class="tx-completed-pill">
+              <div class="tx-green-check-dot">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <span class="tx-completed-text">Completed</span>
+            </div>
+
+            <div class="tx-detail-timestamp" id="txDetailTimestamp">18 Sept 2026, 12:57 pm</div>
+          </div>
+
+          <!-- Main Dark Card matching Screenshot -->
+          <div class="tx-receipt-card">
+            
+            <!-- Section 1: Bank Header -->
+            <div class="tx-card-bank-header">
+              <div class="tx-bank-logo-badge">
+                <svg viewBox="0 0 32 32" width="20" height="20">
+                  <polygon points="6,7 16,16 6,25" fill="#ea580c" />
+                  <polygon points="14,7 24,16 14,25" fill="#003366" />
+                </svg>
+              </div>
+              <span class="tx-bank-name-text" id="txDetailBankText">Federal Bank 8299</span>
+            </div>
+
+            <div class="tx-card-divider"></div>
+
+            <!-- Section 2: Confirmation Bell & Message -->
+            <div class="tx-card-msg-row">
+              <div class="tx-bell-icon-wrapper">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="#a8c7fa">
+                  <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z" />
+                </svg>
+              </div>
+              <div class="tx-card-msg-text">
+                <h4 class="tx-msg-title" id="txDetailMsgTitle">Payment of ₹20 completed</h4>
+                <p class="tx-msg-sub" id="txDetailMsgSub">Receiver's bank has confirmed deposit of money to CAFETERIA's bank account</p>
+              </div>
+            </div>
+
+            <div class="tx-card-divider"></div>
+
+            <!-- Section 3: Vertical Stepper / Progress Timeline -->
+            <div class="tx-card-timeline">
+              <div class="tx-stepper-list">
+                
+                <!-- Step 1 -->
+                <div class="tx-step-item">
+                  <div class="tx-step-marker dot-blue"></div>
+                  <div class="tx-step-info">
+                    <span class="tx-step-label">Payment started</span>
+                    <span class="tx-step-time" id="txStepTime1">18 Sept 2026, 12:57 pm</span>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="tx-step-item">
+                  <div class="tx-step-marker dot-blue"></div>
+                  <div class="tx-step-info">
+                    <span class="tx-step-label" id="txStepLabel2">₹20 was debited</span>
+                    <span class="tx-step-time" id="txStepTime2">12:57 pm</span>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="tx-step-item">
+                  <div class="tx-step-marker dot-blue"></div>
+                  <div class="tx-step-info">
+                    <span class="tx-step-label" id="txStepLabel3">₹20 sent to CAFETERIA</span>
+                    <span class="tx-step-time" id="txStepTime3">12:57 pm</span>
+                  </div>
+                </div>
+
+                <!-- Step 4 (Completed) -->
+                <div class="tx-step-item completed">
+                  <div class="tx-step-marker check-green">
+                    <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
+                  <div class="tx-step-info">
+                    <span class="tx-step-label text-green">Payment completed</span>
+                    <span class="tx-step-time" id="txStepTime4">12:57 pm</span>
+                  </div>
+                </div>
+
+              </div> <!-- /tx-stepper-list -->
+            </div> <!-- /tx-card-timeline -->
+
+            <div class="tx-card-divider"></div>
+
+            <!-- Section 4: Metadata Fields -->
+            <div class="tx-card-meta-list">
+              <div class="tx-meta-item">
+                <span class="tx-meta-key">UPI transaction ID</span>
+                <span class="tx-meta-val" id="txDetailUpiId">662729941462</span>
+              </div>
+              <div class="tx-meta-item">
+                <span class="tx-meta-key" id="txDetailToLabel">To: CAFETERIA</span>
+                <span class="tx-meta-val" id="txDetailToVpa">••••460a@sib</span>
+              </div>
+              <div class="tx-meta-item">
+                <span class="tx-meta-key">From: JOB THOMAS CHERIAN (Federal Bank)</span>
+                <span class="tx-meta-val" id="txDetailFromVpa">••••0421@okicici on Google Pay</span>
+              </div>
+              <div class="tx-meta-item">
+                <span class="tx-meta-key">Google transaction ID</span>
+                <span class="tx-meta-val" id="txDetailGoogleId">CICAgPjUgO37NA</span>
+              </div>
+            </div>
+
+          </div> <!-- /tx-receipt-card -->
+
+          <!-- Powered by UPI Logo -->
+          <div class="tx-powered-upi-wrapper">
+            <span class="tx-powered-text">POWERED BY</span>
+            <div class="tx-upi-logo">
+              <span class="upi-text-italic">UPI</span>
+              <svg viewBox="0 0 24 24" width="18" height="14" fill="none">
+                <polygon points="4,2 14,12 4,22" fill="#009900" />
+                <polygon points="12,2 22,12 12,22" fill="#ff6600" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Bottom Action Pills: Having issues?, Share, Split expense -->
+          <div class="tx-bottom-actions-row">
+            <button class="tx-pill-action-btn ripple-btn" id="txHavingIssuesBtn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
+              </svg>
+              <span>Having issues?</span>
+            </button>
+
+            <button class="tx-pill-action-btn ripple-btn" id="txShareBtn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+              </svg>
+              <span>Share</span>
+            </button>
+
+            <button class="tx-pill-action-btn ripple-btn" id="txSplitBtn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+              </svg>
+              <span>Split expense</span>
+            </button>
+          </div>
+
+          <!-- Bottom Home Indicator -->
+          <div class="android-home-pill"></div>
+
+        </div> <!-- /tx-detail-scroll-container -->
+
+      </div> <!-- /#txDetailView -->
+
+      <!-- VIEW 6: TRANSACTION HISTORY SCREEN (Matching New User Screenshot) -->
+      <div class="phone-view" id="historyView">
+
+        <!-- Top Search Bar: Back Arrow, Search Input Pill with Mic, 3 Dots -->
+        <div class="hist-top-bar">
+          <button class="hist-back-btn ripple-btn" id="historyBackBtn" title="Back to home">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+          </button>
+
+          <div class="hist-search-pill">
+            <input type="text" class="hist-search-input" id="histSearchInput" placeholder="Search transactions" autocomplete="off">
+            <button class="hist-mic-btn" id="histMicBtn" title="Voice search">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="#ffffff">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5-3c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+              </svg>
+            </button>
+          </div>
+
+          <button class="hist-menu-btn ripple-btn" id="histMenuBtn" title="More options">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Filter Chips Row -->
+        <div class="hist-filters-scroll-row">
+          <button class="hist-filter-chip active-filter" data-filter="status">
+            <span>Status</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M7 10l5 5 5-5z" />
+            </svg>
+          </button>
+          <button class="hist-filter-chip" data-filter="payment-method">
+            <span>Payment method</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M7 10l5 5 5-5z" />
+            </svg>
+          </button>
+          <button class="hist-filter-chip" data-filter="date">
+            <span>Date</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M7 10l5 5 5-5z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Scrollable Transaction List Body -->
+        <div class="hist-scroll-body" id="histScrollBody">
+
+          <!-- Month Header Summary: "2026 September" and "₹3,621.91" -->
+          <div class="hist-month-summary-row">
+            <div class="hist-month-left">
+              <span class="hist-year-tag">2026</span>
+              <h2 class="hist-month-title">September</h2>
+            </div>
+            <div class="hist-month-total">₹3,621.91</div>
+          </div>
+
+          <!-- Transaction Items List -->
+          <div class="hist-tx-list" id="histTxList">
+
+            <!-- 1. Federal Bank ••••8299 to UPI Lite -->
+            <div class="hist-tx-row ripple-btn" data-recipient="UPI Lite" data-amount="10" data-date="27 September 2026" data-time="11:42 am">
+              <div class="hist-avatar-box dark-bank">
+                <svg viewBox="0 0 32 32" width="22" height="22">
+                  <polygon points="6,7 16,16 6,25" fill="#ea580c" />
+                  <polygon points="14,7 24,16 14,25" fill="#16a34a" />
+                </svg>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">Federal Bank ••••8299 to UPI Lite</span>
+                <span class="hist-tx-date">27 September</span>
+              </div>
+              <div class="hist-tx-amount">₹10</div>
+            </div>
+
+            <!-- 2. Nithin Mathew (+ ₹2,000 Credit) -->
+            <div class="hist-tx-row ripple-btn" data-recipient="Nithin Mathew" data-amount="2000" data-credit="true" data-date="27 September 2026" data-time="10:15 am">
+              <div class="hist-avatar-box slate-gray">
+                <span>N</span>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">Nithin Mathew</span>
+                <span class="hist-tx-date">27 September</span>
+              </div>
+              <div class="hist-tx-amount credit">+ ₹2,000</div>
+            </div>
+
+            <!-- 3. Nithin Mathew (₹2,000) -->
+            <div class="hist-tx-row ripple-btn" data-recipient="Nithin Mathew" data-amount="2000" data-date="27 September 2026" data-time="9:40 am">
+              <div class="hist-avatar-box slate-gray">
+                <span>N</span>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">Nithin Mathew</span>
+                <span class="hist-tx-date">27 September</span>
+              </div>
+              <div class="hist-tx-amount">₹2,000</div>
+            </div>
+
+            <!-- 4. GO GRILL -->
+            <div class="hist-tx-row ripple-btn" data-recipient="GO GRILL" data-amount="310" data-date="26 September 2026" data-time="8:25 pm">
+              <div class="hist-avatar-box blue-circle">
+                <span>G</span>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">GO GRILL</span>
+                <span class="hist-tx-date">26 September</span>
+              </div>
+              <div class="hist-tx-amount">₹310</div>
+            </div>
+
+            <!-- 5. Cupcake Siblings -->
+            <div class="hist-tx-row ripple-btn" data-recipient="Cupcake Siblings" data-amount="20" data-date="26 September 2026" data-time="5:12 pm">
+              <div class="hist-avatar-box light-green">
+                <span>C</span>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">Cupcake Siblings</span>
+                <span class="hist-tx-date">26 September</span>
+              </div>
+              <div class="hist-tx-amount">₹20</div>
+            </div>
+
+            <!-- 6. Mid-List Flex Promo Card -->
+            <div class="hist-promo-card ripple-btn" id="histPromoCard">
+              <div class="hist-promo-text">
+                <h4 class="hist-promo-title">₹1,000 welcome rewards</h4>
+                <p class="hist-promo-sub">Get the zero-fee Flex credit card</p>
+                <span class="hist-promo-link">Apply now</span>
+              </div>
+              <div class="hist-promo-art">
+                <svg viewBox="0 0 110 80" width="110" height="80" fill="none">
+                  <polygon points="15,22 17,28 23,30 17,32 15,38 13,32 7,30 13,28" fill="#fbbf24" opacity="0.9" />
+                  <path d="M5 80 Q 40 55 85 70 Q 100 75 110 80 L 5 80 Z" fill="#047857" />
+                  <!-- Flex RuPay mini card -->
+                  <g transform="translate(48, 12)">
+                    <rect x="0" y="0" width="46" height="30" rx="3.5" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))" />
+                    <text x="4" y="8" font-family="'Plus Jakarta Sans', sans-serif" font-size="5.5" font-weight="800" fill="#0f172a">Flex</text>
+                    <circle cx="23" cy="6.5" r="1.2" fill="#be185d" />
+                    <circle cx="26" cy="6.5" r="1.2" fill="#f59e0b" />
+                    <rect x="4" y="19" width="16" height="5.5" rx="1.2" fill="#ec4899" opacity="0.6" />
+                    <rect x="22" y="19" width="9" height="5.5" rx="1.2" fill="#cbd5e1" />
+                    <rect x="33" y="22" width="10" height="4" rx="0.8" fill="#0284c7" />
+                    <text x="34" y="25.5" font-family="sans-serif" font-size="2.8" font-weight="700" fill="#ffffff">RuPay</text>
+                  </g>
+                  <!-- Person holding phone -->
+                  <g transform="translate(25, 34)">
+                    <ellipse cx="11" cy="9" rx="3" ry="3.5" fill="#18181b" />
+                    <circle cx="11" cy="10" r="2.5" fill="#fcd34d" />
+                    <path d="M6 16 C6 13, 16 13, 16 16 L18 28 L4 28 Z" fill="#eab308" />
+                    <rect x="1" y="9" width="2.8" height="5" rx="0.6" fill="#10b981" />
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            <!-- 7. Cupcake Siblings -->
+            <div class="hist-tx-row ripple-btn" data-recipient="Cupcake Siblings" data-amount="70" data-date="25 September 2026" data-time="4:15 pm">
+              <div class="hist-avatar-box light-green">
+                <span>C</span>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">Cupcake Siblings</span>
+                <span class="hist-tx-date">25 September</span>
+              </div>
+              <div class="hist-tx-amount">₹70</div>
+            </div>
+
+            <!-- 8. CAFETERIA -->
+            <div class="hist-tx-row ripple-btn" data-recipient="CAFETERIA" data-amount="20" data-date="18 September 2026" data-time="12:57 pm">
+              <div class="hist-avatar-box hot-pink">
+                <span>C</span>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">CAFETERIA</span>
+                <span class="hist-tx-date">18 September</span>
+              </div>
+              <div class="hist-tx-amount">₹20</div>
+            </div>
+
+            <!-- 9. CAFETERIA -->
+            <div class="hist-tx-row ripple-btn" data-recipient="CAFETERIA" data-amount="60" data-date="18 September 2026" data-time="12:53 pm">
+              <div class="hist-avatar-box hot-pink">
+                <span>C</span>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">CAFETERIA</span>
+                <span class="hist-tx-date">18 September</span>
+              </div>
+              <div class="hist-tx-amount">₹60</div>
+            </div>
+
+            <!-- 10. Alwin -->
+            <div class="hist-tx-row ripple-btn" data-recipient="Alwin" data-amount="250" data-date="15 September 2026" data-time="3:45 pm">
+              <div class="hist-avatar-box amber">
+                <span>A</span>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">Alwin</span>
+                <span class="hist-tx-date">15 September</span>
+              </div>
+              <div class="hist-tx-amount">₹250</div>
+            </div>
+
+            <!-- 11. Adarshuv -->
+            <div class="hist-tx-row ripple-btn" data-recipient="Adarshuv" data-amount="400" data-date="16 September 2026" data-time="6:50 pm">
+              <div class="hist-avatar-box indigo">
+                <span>A</span>
+              </div>
+              <div class="hist-tx-info">
+                <span class="hist-tx-title">Adarshuv</span>
+                <span class="hist-tx-date">16 September</span>
+              </div>
+              <div class="hist-tx-amount">₹400</div>
+            </div>
+
+          </div> <!-- /hist-tx-list -->
+
+          <!-- Bottom Home Indicator -->
+          <div class="android-home-pill"></div>
+
+        </div> <!-- /hist-scroll-body -->
+
+      </div> <!-- /#historyView -->
+
+    </div> <!-- /mobile-phone-device -->
+  </main>
+
+  <!-- ================= INTERACTIVE BOTTOM SHEETS & MODALS ================= -->
+
+  <!-- Modal 1: Payment Bottom Sheet (Pay Anyone / Contact Tap) -->
+  <div class="interactive-modal-backdrop" id="paymentModalBackdrop">
+    <div class="bottom-sheet-panel" id="paymentSheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="sheet-header">
+        <div class="recipient-avatar-large" id="payRecipientAvatar">
+          <span id="payRecipientInitial">A</span>
+        </div>
+        <div class="recipient-info">
+          <h3 class="pay-recipient-name" id="payRecipientName">Adithya</h3>
+          <span class="pay-recipient-upi" id="payRecipientUpi">adithya.kumar@okicici</span>
+          <span class="banking-name-tag">✓ Banking name verified</span>
+        </div>
+        <button class="modal-close-btn" id="closePaymentModalBtn">&times;</button>
+      </div>
+
+      <div class="payment-amount-box">
+        <span class="currency-symbol">₹</span>
+        <input type="number" id="payAmountInput" class="pay-amount-input" placeholder="0" autofocus>
+      </div>
+
+      <!-- Quick Amount Presets -->
+      <div class="amount-presets-row">
+        <button class="preset-chip-btn" data-preset="100">+ ₹100</button>
+        <button class="preset-chip-btn" data-preset="500">+ ₹500</button>
+        <button class="preset-chip-btn" data-preset="1000">+ ₹1,000</button>
+        <button class="preset-chip-btn" data-preset="2000">+ ₹2,000</button>
+      </div>
+
+      <div class="payment-note-wrapper">
+        <input type="text" id="payNoteInput" class="pay-note-input" placeholder="Add a note (e.g. Lunch, movie, bill)">
+      </div>
+
+      <!-- Paying from Account selection -->
+      <div class="paying-from-card">
+        <div class="bank-pill-mini">SBI</div>
+        <div class="bank-account-text">
+          <span class="bank-name">State Bank of India</span>
+          <span class="account-num">•••• 4092</span>
+        </div>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M7 10l5 5 5-5z" />
+        </svg>
+      </div>
+
+      <button class="gpay-primary-submit-btn ripple-btn" id="confirmPayBtn">
+        Pay <span id="confirmPayAmountText">₹0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal 2: Simulated UPI PIN Keypad Modal -->
+  <div class="interactive-modal-backdrop" id="upiPinBackdrop">
+    <div class="bottom-sheet-panel upi-pin-sheet">
+      <div class="upi-header-row">
+        <span class="upi-gov-logo">UPI</span>
+        <span class="upi-bank-name">State Bank of India</span>
+      </div>
+      <p class="upi-instruction-text">ENTER 4-DIGIT UPI PIN</p>
+
+      <!-- PIN Dots -->
+      <div class="pin-dots-container" id="pinDotsRow">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+      </div>
+
+      <!-- Simulated Keypad -->
+      <div class="upi-keypad-grid" id="upiKeypad">
+        <button class="key-digit" data-num="1">1</button>
+        <button class="key-digit" data-num="2">2</button>
+        <button class="key-digit" data-num="3">3</button>
+        <button class="key-digit" data-num="4">4</button>
+        <button class="key-digit" data-num="5">5</button>
+        <button class="key-digit" data-num="6">6</button>
+        <button class="key-digit" data-num="7">7</button>
+        <button class="key-digit" data-num="8">8</button>
+        <button class="key-digit" data-num="9">9</button>
+        <button class="key-digit key-backspace" id="pinBackspaceBtn">⌫</button>
+        <button class="key-digit" data-num="0">0</button>
+        <button class="key-digit key-submit" id="pinSubmitBtn">✔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Payment Success Animated Celebration -->
+  <div class="interactive-modal-backdrop" id="successBackdrop">
+    <div class="success-card-modal">
+      <div class="success-animation-circle">
+        <svg class="checkmark-svg" viewBox="0 0 52 52">
+          <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+        </svg>
+      </div>
+      <h3 class="success-title">Payment Successful!</h3>
+      <div class="success-amount-display" id="successAmountText">₹500.00</div>
+      <p class="success-recipient-text" id="successRecipientSub">Paid to Adithya</p>
+      <div class="success-upi-ref">UPI Ref ID: <span id="successRefId">426918402914</span></div>
+      <button class="success-done-btn ripple-btn" id="successDoneBtn">Done</button>
+    </div>
+  </div>
+
+  <!-- Modal 4: Bank Balance Display -->
+  <div class="interactive-modal-backdrop" id="balanceModalBackdrop">
+    <div class="bottom-sheet-panel balance-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="sheet-header">
+        <h3>Bank Balance</h3>
+        <button class="modal-close-btn" id="closeBalanceModalBtn">&times;</button>
+      </div>
+      <div class="balance-bank-card">
+        <div class="bank-card-top">
+          <span class="bank-title">State Bank of India</span>
+          <span class="account-pill">Savings A/C •••• 4092</span>
+        </div>
+        <div class="available-balance-label">Available Balance</div>
+        <div class="balance-big-amount">₹42,850.75</div>
+        <div class="balance-updated-time">Updated just now</div>
+      </div>
+      <button class="gpay-secondary-btn ripple-btn" id="balanceCloseBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- Modal 5: QR Code Scanner Simulation -->
+  <div class="interactive-modal-backdrop" id="scannerModalBackdrop">
+    <div class="scanner-fullscreen-modal">
+      <div class="scanner-top-bar">
+        <button class="scanner-back-btn" id="closeScannerBtn">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+          </svg>
+        </button>
+        <span class="scanner-title">Scan any QR code</span>
+        <button class="scanner-torch-btn" id="scannerTorchBtn" title="Flashlight">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+            <path d="M7 2v11h3v9l7-12h-4l3-8z" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="scanner-camera-viewport">
+        <!-- Live laser scanning beam -->
+        <div class="scanner-target-reticle">
+          <div class="reticle-corner top-left"></div>
+          <div class="reticle-corner top-right"></div>
+          <div class="reticle-corner bottom-left"></div>
+          <div class="reticle-corner bottom-right"></div>
+          <div class="scanner-laser-line"></div>
+        </div>
+        <p class="scanner-prompt-text">Align QR code within the frame to pay</p>
+      </div>
+
+      <div class="scanner-bottom-actions">
+        <button class="scanner-gallery-btn" id="scanGallerySimBtn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path
+              d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+          </svg>
+          <span>Upload from gallery</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6: Interactive Scratch Card / Rewards Modal -->
+  <div class="interactive-modal-backdrop" id="scratchModalBackdrop">
+    <div class="scratch-card-modal">
+      <div class="scratch-modal-header">
+        <h3>Google Pay Rewards</h3>
+        <button class="modal-close-btn" id="closeScratchBtn">&times;</button>
+      </div>
+      <p class="scratch-instruction">Scratch the card to reveal your reward!</p>
+
+      <div class="scratch-card-box">
+        <!-- Hidden Prize under scratch -->
+        <div class="scratch-prize-layer">
+          <div class="prize-trophy-icon">🏆</div>
+          <div class="prize-tag-line">You won cashback!</div>
+          <div class="prize-big-number">₹45</div>
+          <p class="prize-note">Credited directly to State Bank of India</p>
+        </div>
+
+        <!-- Scratchable HTML5 Canvas Layer -->
+        <canvas id="scratchCanvas" width="260" height="260"></canvas>
+      </div>
+
+      <button class="gpay-primary-submit-btn ripple-btn" id="claimRewardBtn">Claim Reward</button>
+    </div>
+  </div>
+
+  <!-- Modal 7: CIBIL Score Gauge Modal -->
+  <div class="interactive-modal-backdrop" id="cibilModalBackdrop">
+    <div class="bottom-sheet-panel cibil-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="sheet-header">
+        <h3>Free CIBIL Credit Score</h3>
+        <button class="modal-close-btn" id="closeCibilBtn">&times;</button>
+      </div>
+
+      <div class="cibil-gauge-wrapper">
+        <svg class="cibil-svg-gauge" viewBox="0 0 200 120">
+          <!-- Background arc -->
+          <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="#2d3036" stroke-width="16"
+            stroke-linecap="round" />
+          <!-- Active colored arc -->
+          <path class="cibil-active-arc" d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="url(#cibilGrad)"
+            stroke-width="16" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="50" />
+          <defs>
+            <linearGradient id="cibilGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ea4335" />
+              <stop offset="50%" stop-color="#fbbc04" />
+              <stop offset="100%" stop-color="#34a853" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="cibil-score-display">
+          <span class="cibil-score-num" id="cibilNumber">788</span>
+          <span class="cibil-rating-text">Excellent</span>
+        </div>
+      </div>
+
+      <div class="cibil-insights-row">
+        <div class="insight-box">
+          <span class="insight-value">100%</span>
+          <span class="insight-label">On-time payments</span>
+        </div>
+        <div class="insight-box">
+          <span class="insight-value">14%</span>
+          <span class="insight-label">Credit usage</span>
+        </div>
+        <div class="insight-box">
+          <span class="insight-value">0</span>
+          <span class="insight-label">Late marks</span>
+        </div>
+      </div>
+
+      <button class="gpay-secondary-btn ripple-btn" id="closeCibilBtn2">Got it</button>
+    </div>
+  </div>
+
+  <!-- Modal 8: Transaction History Drawer Modal -->
+  <div class="interactive-modal-backdrop" id="historyModalBackdrop">
+    <div class="bottom-sheet-panel history-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="sheet-header">
+        <h3>Transaction History</h3>
+        <button class="modal-close-btn" id="closeHistoryBtn">&times;</button>
+      </div>
+
+      <div class="history-list-items">
+        <div class="history-item">
+          <div class="history-avatar-initial" style="background:#2e7d32">C</div>
+          <div class="history-details">
+            <span class="history-name">Cupcake Siblings</span>
+            <span class="history-date">Today, 5:20 PM • UPI</span>
+          </div>
+          <span class="history-amount debit">- ₹350.00</span>
+        </div>
+
+        <div class="history-item">
+          <div class="history-avatar-initial" style="background:#c2185b">C</div>
+          <div class="history-details">
+            <span class="history-name">CAFETERIA</span>
+            <span class="history-date">Yesterday, 1:15 PM • UPI</span>
+          </div>
+          <span class="history-amount debit">- ₹120.00</span>
+        </div>
+
+        <div class="history-item">
+          <div class="history-avatar-initial" style="background:#0284c7">R</div>
+          <div class="history-details">
+            <span class="history-name">Google Pay Reward</span>
+            <span class="history-date">24 Sep, 10:45 AM • Cashback</span>
+          </div>
+          <span class="history-amount credit">+ ₹45.00</span>
+        </div>
+
+        <div class="history-item">
+          <div class="history-avatar-initial" style="background:#00838f">A</div>
+          <div class="history-details">
+            <span class="history-name">Adithya</span>
+            <span class="history-date">22 Sep, 8:10 PM • UPI</span>
+          </div>
+          <span class="history-amount debit">- ₹500.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 9: Original Screenshot Comparison Viewer -->
+  <div class="interactive-modal-backdrop" id="screenshotCompareModal">
+    <div class="screenshot-compare-panel">
+      <div class="compare-header">
+        <h3>Original Stitched Screenshot</h3>
+        <button class="modal-close-btn" id="closeCompareBtn">&times;</button>
+      </div>
+      <div class="compare-image-scroll-box">
+        <img src="original_screenshot.jpg" alt="Original Google Pay Scrolling Screenshot" class="original-scroll-img">
+      </div>
+      <p class="compare-footer-note">Scroll the image above to view the original screenshot.</p>
+    </div>
+  </div>
+
+  <!-- Interactive Toast Notification -->
+  <div class="gpay-toast-notification" id="gpayToast">Notification</div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
