@@ -1,10 +1,11 @@
 /**
  * Google Pay Mobile Interface - Interactive Logic
+ * Modern FinTech Prototype for Hackathon Demo
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Sound synthesizer using Web Audio API
-  let soundEnabled = true;
+  // ================= 1. SOUND SYNTHESIZER (WEB AUDIO API) =================
+  let soundEnabled = localStorage.getItem('gpay_sound') !== 'false';
   let audioCtx = null;
 
   function initAudio() {
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         osc.start(now);
         osc.stop(now + 0.05);
       } else if (type === 'success') {
-        // Iconic Google Pay / UPI success chime: two upbeat high notes
+        // Iconic Google Pay / UPI success chime: 4 upbeat ascending major tones
         const playTone = (freq, start, duration) => {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playTone(523.25, now, 0.12);        // C5
         playTone(659.25, now + 0.12, 0.12); // E5
         playTone(783.99, now + 0.24, 0.15); // G5
-        playTone(1046.50, now + 0.38, 0.35);// C6
+        playTone(1046.50, now + 0.38, 0.38);// C6
       } else if (type === 'pin') {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
@@ -67,17 +68,77 @@ document.addEventListener('DOMContentLoaded', () => {
         gain.connect(audioCtx.destination);
         osc.start(now);
         osc.stop(now + 0.04);
+      } else if (type === 'qr_scan') {
+        // Crisp camera scan lock-on beep
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.setValueAtTime(1600, now + 0.06);
+        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.14);
       }
     } catch (e) {
       console.warn('Audio playback error', e);
     }
   }
 
-  // Live status bar clocks
+  // ================= 2. THEME & DARK MODE SYSTEM =================
+  const themeToggleSwitch = document.getElementById('themeToggleSwitch');
+  const themeStatusText = document.getElementById('themeStatusText');
+  const soundToggleSwitch = document.getElementById('soundToggleSwitch');
+
+  function initTheme() {
+    const savedTheme = localStorage.getItem('gpay_theme') || 'dark';
+    applyTheme(savedTheme, false);
+    if (soundToggleSwitch) {
+      soundToggleSwitch.checked = soundEnabled;
+    }
+  }
+
+  function applyTheme(theme, showFeedback = true) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('gpay_theme', theme);
+    if (themeToggleSwitch) {
+      themeToggleSwitch.checked = (theme === 'dark');
+    }
+    if (themeStatusText) {
+      themeStatusText.textContent = (theme === 'dark') ? 'Dark fintech mode enabled' : 'Light fintech mode enabled';
+    }
+    if (showFeedback) {
+      playSound('tap');
+      showToast(`Switched to ${theme === 'dark' ? 'Dark' : 'Light'} theme`);
+    }
+  }
+
+  if (themeToggleSwitch) {
+    themeToggleSwitch.addEventListener('change', () => {
+      const nextTheme = themeToggleSwitch.checked ? 'dark' : 'light';
+      applyTheme(nextTheme, true);
+    });
+  }
+
+  if (soundToggleSwitch) {
+    soundToggleSwitch.addEventListener('change', () => {
+      soundEnabled = soundToggleSwitch.checked;
+      localStorage.setItem('gpay_sound', soundEnabled);
+      playSound('tap');
+      showToast(soundEnabled ? 'App sounds enabled' : 'App sounds muted');
+    });
+  }
+
+  initTheme();
+
+  // ================= 3. LIVE CLOCKS & STATUS BARS =================
   const statusClock = document.getElementById('statusClock');
   const chatStatusClockEl = document.getElementById('chatStatusClock');
   const successStatusClock = document.getElementById('successStatusClock');
   const txDetailStatusClock = document.getElementById('txDetailStatusClock');
+
   function updateClock() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -91,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateClock();
   setInterval(updateClock, 30000);
 
-  // Toast notification system
+  // ================= 4. TOAST NOTIFICATIONS =================
   const toast = document.getElementById('gpayToast');
   let toastTimer = null;
   function showToast(msg) {
@@ -104,36 +165,383 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2800);
   }
 
-  // Modal Backdrop dismiss helper
+  // ================= 5. MODAL BACKDROP CONTROLS =================
   document.querySelectorAll('.interactive-modal-backdrop').forEach(backdrop => {
     backdrop.addEventListener('click', (e) => {
       if (e.target === backdrop) {
+        // Prevent accidental closing of PIN or Processing modals during active transaction
+        if (backdrop.id === 'processingBackdrop') return;
         backdrop.classList.remove('active');
       }
     });
   });
 
-  // Modal close buttons
   document.querySelectorAll('.modal-close-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', () => {
       const modal = btn.closest('.interactive-modal-backdrop');
       if (modal) modal.classList.remove('active');
+      playSound('tap');
     });
   });
 
-  // Bottom Navigation Switcher
+  // Settings Modal Openers
+  const settingsModalBackdrop = document.getElementById('settingsModalBackdrop');
+  const topProfileAvatarBtn = document.getElementById('topProfileAvatarBtn');
+  const navYouTab = document.getElementById('navYouTab');
+  const resetDemoDataBtn = document.getElementById('resetDemoDataBtn');
+
+  function openSettings() {
+    if (settingsModalBackdrop) {
+      settingsModalBackdrop.classList.add('active');
+      playSound('tap');
+    }
+  }
+
+  if (topProfileAvatarBtn) topProfileAvatarBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openSettings();
+  });
+
+  // ================= 6. DYNAMIC BALANCE & TRANSACTION STORE =================
+  const INITIAL_BALANCE = 10000.00;
+  let currentBalance = parseFloat(localStorage.getItem('gpay_balance'));
+  if (isNaN(currentBalance)) {
+    currentBalance = INITIAL_BALANCE;
+    localStorage.setItem('gpay_balance', currentBalance);
+  }
+
+  const balanceBigAmount = document.getElementById('balanceBigAmount');
+  const balanceUpdatedTime = document.getElementById('balanceUpdatedTime');
+
+  function updateBalanceDisplay() {
+    const formatted = `₹${currentBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (balanceBigAmount) {
+      balanceBigAmount.textContent = formatted;
+    }
+    if (balanceUpdatedTime) {
+      balanceUpdatedTime.textContent = 'Updated just now';
+    }
+  }
+  updateBalanceDisplay();
+
+  // DEFAULT TRANSACTIONS LIST
+  const DEFAULT_TRANSACTIONS = [
+    {
+      id: 'tx_428819204812',
+      name: 'Federal Bank ••••8299 to UPI Lite',
+      upiId: 'upilite@federal',
+      amount: 10,
+      type: 'sent',
+      date: '27 Sep 2026',
+      time: '11:42 am',
+      status: 'Completed',
+      category: 'UPI Lite',
+      color: '#ea580c',
+      initial: 'F'
+    },
+    {
+      id: 'tx_428819204811',
+      name: 'Nithin Mathew',
+      upiId: 'nithin.mathew@okaxis',
+      amount: 2000,
+      type: 'received',
+      date: '27 Sep 2026',
+      time: '10:15 am',
+      status: 'Completed',
+      category: 'Transfer',
+      color: '#374151',
+      initial: 'N'
+    },
+    {
+      id: 'tx_428819204810',
+      name: 'Nithin Mathew',
+      upiId: 'nithin.mathew@okaxis',
+      amount: 2000,
+      type: 'sent',
+      date: '27 Sep 2026',
+      time: '9:40 am',
+      status: 'Completed',
+      category: 'Transfer',
+      color: '#374151',
+      initial: 'N'
+    },
+    {
+      id: 'tx_428819204809',
+      name: 'GO GRILL',
+      upiId: 'gogrill.restaurant@okhdfc',
+      amount: 310,
+      type: 'sent',
+      date: '26 Sep 2026',
+      time: '8:25 pm',
+      status: 'Completed',
+      category: 'Food',
+      color: '#4f46e5',
+      initial: 'G'
+    },
+    {
+      id: 'tx_428819204808',
+      name: 'Cupcake Siblings',
+      upiId: 'cupcakes@okicici',
+      amount: 20,
+      type: 'sent',
+      date: '26 Sep 2026',
+      time: '5:12 pm',
+      status: 'Completed',
+      category: 'Food',
+      color: '#388e3c',
+      initial: 'C'
+    },
+    {
+      id: 'tx_428819204807',
+      name: 'Google Pay Cashback',
+      upiId: 'cashback@gpay',
+      amount: 45,
+      type: 'cashback',
+      date: '26 Sep 2026',
+      time: '2:30 pm',
+      status: 'Completed',
+      category: 'Cashback',
+      color: '#16a34a',
+      initial: '₹'
+    },
+    {
+      id: 'tx_428819204806',
+      name: 'Cupcake Siblings',
+      upiId: 'cupcakes@okicici',
+      amount: 70,
+      type: 'sent',
+      date: '25 Sep 2026',
+      time: '4:15 pm',
+      status: 'Completed',
+      category: 'Food',
+      color: '#388e3c',
+      initial: 'C'
+    },
+    {
+      id: 'tx_428819204805',
+      name: 'CAFETERIA',
+      upiId: 'cafeteria.store@okaxis',
+      amount: 20,
+      type: 'sent',
+      date: '18 Sep 2026',
+      time: '12:57 pm',
+      status: 'Completed',
+      category: 'Food',
+      color: '#c2185b',
+      initial: 'C'
+    },
+    {
+      id: 'tx_428819204804',
+      name: 'CAFETERIA',
+      upiId: 'cafeteria.store@okaxis',
+      amount: 60,
+      type: 'sent',
+      date: '18 Sep 2026',
+      time: '12:53 pm',
+      status: 'Completed',
+      category: 'Food',
+      color: '#c2185b',
+      initial: 'C'
+    },
+    {
+      id: 'tx_428819204803',
+      name: 'Alwin',
+      upiId: 'alwin.joseph@okhdfcbank',
+      amount: 250,
+      type: 'sent',
+      date: '15 Sep 2026',
+      time: '3:45 pm',
+      status: 'Completed',
+      category: 'Transfer',
+      color: '#d97706',
+      initial: 'A'
+    },
+    {
+      id: 'tx_428819204802',
+      name: 'Adarshuv',
+      upiId: 'adarshuv@okicici',
+      amount: 400,
+      type: 'sent',
+      date: '16 Sep 2026',
+      time: '6:50 pm',
+      status: 'Completed',
+      category: 'Transfer',
+      color: '#4338ca',
+      initial: 'A'
+    }
+  ];
+
+  let transactions = [];
+  try {
+    const raw = localStorage.getItem('gpay_transactions');
+    if (raw) {
+      transactions = JSON.parse(raw);
+    }
+  } catch (e) {
+    console.warn('Error reading saved transactions', e);
+  }
+  if (!transactions || transactions.length === 0) {
+    transactions = [...DEFAULT_TRANSACTIONS];
+    localStorage.setItem('gpay_transactions', JSON.stringify(transactions));
+  }
+
+  // ================= 7. RENDER TRANSACTIONS & SEARCH / FILTERS =================
+  const histTxList = document.getElementById('histTxList');
+  const histEmptyState = document.getElementById('histEmptyState');
+  const histSearchInput = document.getElementById('histSearchInput');
+  const histFilterChips = document.querySelectorAll('.hist-filter-chip');
+
+  function renderTransactions(listToRender) {
+    if (!histTxList) return;
+    histTxList.innerHTML = '';
+
+    if (!listToRender || listToRender.length === 0) {
+      if (histEmptyState) histEmptyState.style.display = 'block';
+      return;
+    }
+
+    if (histEmptyState) histEmptyState.style.display = 'none';
+
+    listToRender.forEach(tx => {
+      const row = document.createElement('div');
+      row.className = 'hist-tx-row ripple-btn';
+      row.setAttribute('data-recipient', tx.name);
+      row.setAttribute('data-amount', tx.amount);
+      row.setAttribute('data-date', tx.date);
+      row.setAttribute('data-time', tx.time || '12:00 pm');
+
+      const isCredit = tx.type === 'received' || tx.type === 'cashback';
+      const initial = tx.initial || (tx.name ? tx.name.charAt(0).toUpperCase() : '₹');
+      const color = tx.color || '#00838f';
+      const sign = isCredit ? '+ ' : '';
+
+      row.innerHTML = `
+        <div class="hist-avatar-box" style="background-color: ${color}">
+          <span>${initial}</span>
+        </div>
+        <div class="hist-tx-info">
+          <span class="hist-tx-title">${tx.name}</span>
+          <span class="hist-tx-date">${tx.date} • ${tx.category || 'UPI'}</span>
+        </div>
+        <div class="hist-tx-amount ${isCredit ? 'credit' : ''}">${sign}₹${tx.amount.toLocaleString('en-IN')}</div>
+      `;
+
+      row.addEventListener('click', () => {
+        openTxDetailView({
+          amount: tx.amount,
+          name: tx.name,
+          initial: initial,
+          color: color,
+          date: tx.date,
+          time: tx.time || '12:00 pm',
+          upiId: tx.upiRefId || tx.id.replace(/\D/g, '') || '428819204812',
+          toVpa: tx.upiId || `${tx.name.toLowerCase().replace(/[^a-z0-9]/g, '')}@upi`,
+          fromVpa: '••••1234@federal on Google Pay',
+          googleId: 'CICAg' + (tx.id || 'PjUgO37NA').slice(0, 10).toUpperCase()
+        });
+      });
+
+      histTxList.appendChild(row);
+    });
+  }
+
+  function applyHistoryFilters() {
+    const query = histSearchInput ? histSearchInput.value.toLowerCase().trim() : '';
+    const activeChip = document.querySelector('.hist-filter-chip.active-filter');
+    const filterType = activeChip ? activeChip.getAttribute('data-filter') : 'all';
+
+    const filtered = transactions.filter(tx => {
+      // Filter Type Check
+      let matchesType = true;
+      if (filterType === 'sent') {
+        matchesType = (tx.type === 'sent');
+      } else if (filterType === 'received') {
+        matchesType = (tx.type === 'received');
+      } else if (filterType === 'cashback') {
+        matchesType = (tx.type === 'cashback');
+      }
+
+      if (!matchesType) return false;
+
+      // Query Search Check (Name, UPI ID, Transaction ID, Category, Amount)
+      if (!query) return true;
+
+      const nameMatch = (tx.name || '').toLowerCase().includes(query);
+      const upiMatch = (tx.upiId || '').toLowerCase().includes(query);
+      const idMatch = (tx.id || '').toLowerCase().includes(query);
+      const catMatch = (tx.category || '').toLowerCase().includes(query);
+      const amountMatch = String(tx.amount).includes(query);
+
+      return nameMatch || upiMatch || idMatch || catMatch || amountMatch;
+    });
+
+    renderTransactions(filtered);
+  }
+
+  if (histSearchInput) {
+    histSearchInput.addEventListener('input', applyHistoryFilters);
+  }
+
+  histFilterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      histFilterChips.forEach(c => c.classList.remove('active-filter'));
+      chip.classList.add('active-filter');
+      playSound('tap');
+      applyHistoryFilters();
+    });
+  });
+
+  // Initial render of history
+  applyHistoryFilters();
+
+  // Reset Demo Data Handler
+  if (resetDemoDataBtn) {
+    resetDemoDataBtn.addEventListener('click', () => {
+      currentBalance = INITIAL_BALANCE;
+      localStorage.setItem('gpay_balance', currentBalance);
+      transactions = [...DEFAULT_TRANSACTIONS];
+      localStorage.setItem('gpay_transactions', JSON.stringify(transactions));
+      updateBalanceDisplay();
+      applyHistoryFilters();
+      if (settingsModalBackdrop) settingsModalBackdrop.classList.remove('active');
+      playSound('success');
+      showToast('Demo balance reset to ₹10,000 & transactions restored');
+    });
+  }
+
+  // ================= 8. NAVIGATION TABS =================
   const navTabs = document.querySelectorAll('.nav-tab-item');
+  const homeView = document.getElementById('homeView');
+  const historyView = document.getElementById('historyView');
+  const scrollContainer = document.getElementById('scrollContainer');
+
   navTabs.forEach(tab => {
     tab.addEventListener('click', () => {
       navTabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       playSound('tap');
-      const tabName = tab.querySelector('.nav-tab-label').textContent;
-      showToast(`Navigated to ${tabName}`);
+
+      if (tab.id === 'navHomeTab') {
+        if (historyView) historyView.classList.remove('active');
+        if (scrollContainer) scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (tab.id === 'navMoneyTab') {
+        if (historyView) historyView.classList.add('active');
+      } else if (tab.id === 'navYouTab') {
+        openSettings();
+      }
     });
   });
 
-  // ================= PAYMENT FLOW =================
+  // ================= 9. COMPLETE PAYMENT FLOW (SIMULATED) =================
+  // State for active recipient
+  let currentRecipient = {
+    name: 'Adithya',
+    initial: 'A',
+    upi: 'adithya@upi',
+    avatarBg: '#00838f'
+  };
+
+  // Step 1: Amount Sheet
   const paymentModalBackdrop = document.getElementById('paymentModalBackdrop');
   const payRecipientAvatar = document.getElementById('payRecipientAvatar');
   const payRecipientInitial = document.getElementById('payRecipientInitial');
@@ -143,23 +551,59 @@ document.addEventListener('DOMContentLoaded', () => {
   const confirmPayAmountText = document.getElementById('confirmPayAmountText');
   const confirmPayBtn = document.getElementById('confirmPayBtn');
 
-  let currentRecipient = {
-    name: 'Adithya',
-    initial: 'A',
-    upi: 'adithya.kumar@okicici',
-    avatarBg: '#00838f'
-  };
+  // Step 2: Confirmation Sheet
+  const confirmModalBackdrop = document.getElementById('confirmModalBackdrop');
+  const confirmRecipientAvatar = document.getElementById('confirmRecipientAvatar');
+  const confirmRecipientInitial = document.getElementById('confirmRecipientInitial');
+  const confirmRecipientName = document.getElementById('confirmRecipientName');
+  const confirmRecipientUpi = document.getElementById('confirmRecipientUpi');
+  const confirmDisplayAmount = document.getElementById('confirmDisplayAmount');
+  const proceedAmountText = document.getElementById('proceedAmountText');
+  const proceedToPinBtn = document.getElementById('proceedToPinBtn');
+  const closeConfirmModalBtn = document.getElementById('closeConfirmModalBtn');
 
+  // Step 3: 6-Digit PIN Sheet
+  const upiPinBackdrop = document.getElementById('upiPinBackdrop');
+  const pinDotsRow = document.getElementById('pinDotsRow');
+  const pinRecipientName = document.getElementById('pinRecipientName');
+  const pinAmountText = document.getElementById('pinAmountText');
+  const pinBackspaceBtn = document.getElementById('pinBackspaceBtn');
+  const pinSubmitBtn = document.getElementById('pinSubmitBtn');
+  const closePinModalBtn = document.getElementById('closePinModalBtn');
+  let currentPin = '';
+
+  // Step 4: Processing Screen
+  const processingBackdrop = document.getElementById('processingBackdrop');
+  const processingAmountText = document.getElementById('processingAmountText');
+  const processingRecipientText = document.getElementById('processingRecipientText');
+
+  // Step 5: Success Screen
+  const successBackdrop = document.getElementById('successBackdrop');
+  const successAmountText = document.getElementById('successAmountText');
+  const successRecipientSub = document.getElementById('successRecipientSub');
+  const successRefId = document.getElementById('successRefId');
+  const successBalanceSub = document.getElementById('successBalanceSub');
+  const successDoneBtn = document.getElementById('successDoneBtn');
+
+  // Open Step 1 (Enter Amount)
   function openPaymentSheet(name, initial, upi, avatarBg, defaultAmount) {
-    currentRecipient = { name, initial, upi, avatarBg };
-    if (payRecipientName) payRecipientName.textContent = name;
-    if (payRecipientInitial) payRecipientInitial.textContent = initial;
-    if (payRecipientUpi) payRecipientUpi.textContent = upi;
-    if (payRecipientAvatar) payRecipientAvatar.style.background = avatarBg || '#00838f';
+    currentRecipient = {
+      name: name || 'Adithya',
+      initial: initial || (name ? name.charAt(0) : 'A'),
+      upi: upi || 'adithya@upi',
+      avatarBg: avatarBg || '#00838f'
+    };
+
+    if (payRecipientName) payRecipientName.textContent = currentRecipient.name;
+    if (payRecipientInitial) payRecipientInitial.textContent = currentRecipient.initial;
+    if (payRecipientUpi) payRecipientUpi.textContent = currentRecipient.upi;
+    if (payRecipientAvatar) payRecipientAvatar.style.background = currentRecipient.avatarBg;
+
     if (payAmountInput) {
-      payAmountInput.value = defaultAmount || '';
+      payAmountInput.value = defaultAmount !== undefined && defaultAmount !== null ? defaultAmount : '500';
       updateConfirmAmount();
     }
+
     if (paymentModalBackdrop) {
       paymentModalBackdrop.classList.add('active');
       setTimeout(() => {
@@ -180,10 +624,10 @@ document.addEventListener('DOMContentLoaded', () => {
     payAmountInput.addEventListener('input', updateConfirmAmount);
   }
 
-  // Quick Preset Amount Chips
+  // Preset Amount Chips (+100, +500, +1000, +2000)
   document.querySelectorAll('.preset-chip-btn').forEach(chip => {
     chip.addEventListener('click', () => {
-      const preset = parseInt(chip.getAttribute('data-preset'), 10);
+      const preset = parseInt(chip.getAttribute('data-preset'), 10) || 0;
       const current = parseInt(payAmountInput.value, 10) || 0;
       payAmountInput.value = current + preset;
       updateConfirmAmount();
@@ -191,8 +635,328 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ================= CONTACT CHAT / CONVERSATION VIEW =================
-  const homeView = document.getElementById('homeView');
+  // Step 1 -> Step 2: "Pay ₹500" opens Confirmation
+  if (confirmPayBtn) {
+    confirmPayBtn.addEventListener('click', () => {
+      const amountVal = parseFloat(payAmountInput ? payAmountInput.value : 0) || 0;
+      if (amountVal <= 0) {
+        showToast('Please enter an amount to pay');
+        return;
+      }
+
+      // Close Step 1
+      if (paymentModalBackdrop) paymentModalBackdrop.classList.remove('active');
+
+      // Populate Step 2 (Confirmation)
+      if (confirmRecipientName) confirmRecipientName.textContent = currentRecipient.name;
+      if (confirmRecipientUpi) confirmRecipientUpi.textContent = currentRecipient.upi;
+      if (confirmRecipientInitial) confirmRecipientInitial.textContent = currentRecipient.initial;
+      if (confirmRecipientAvatar) confirmRecipientAvatar.style.background = currentRecipient.avatarBg;
+      if (confirmDisplayAmount) confirmDisplayAmount.textContent = `₹${amountVal.toLocaleString('en-IN')}`;
+      if (proceedAmountText) proceedAmountText.textContent = `₹${amountVal.toLocaleString('en-IN')}`;
+
+      // Open Step 2
+      if (confirmModalBackdrop) confirmModalBackdrop.classList.add('active');
+      playSound('tap');
+    });
+  }
+
+  if (closeConfirmModalBtn && confirmModalBackdrop) {
+    closeConfirmModalBtn.addEventListener('click', () => {
+      confirmModalBackdrop.classList.remove('active');
+      playSound('tap');
+    });
+  }
+
+  // Step 2 -> Step 3: Confirmation "Pay ₹500" opens 6-Dot PIN Screen
+  if (proceedToPinBtn) {
+    proceedToPinBtn.addEventListener('click', () => {
+      const amountVal = parseFloat(payAmountInput ? payAmountInput.value : 0) || 500;
+
+      // Close Confirmation
+      if (confirmModalBackdrop) confirmModalBackdrop.classList.remove('active');
+
+      // Reset PIN
+      resetPin();
+
+      // Populate PIN Screen Header
+      if (pinRecipientName) pinRecipientName.textContent = currentRecipient.name;
+      if (pinAmountText) pinAmountText.textContent = `₹${amountVal.toLocaleString('en-IN')}`;
+
+      // Open PIN Screen
+      if (upiPinBackdrop) upiPinBackdrop.classList.add('active');
+      playSound('tap');
+    });
+  }
+
+  if (closePinModalBtn && upiPinBackdrop) {
+    closePinModalBtn.addEventListener('click', () => {
+      upiPinBackdrop.classList.remove('active');
+      playSound('tap');
+    });
+  }
+
+  // PIN keypad logic (6 Digits)
+  function updatePinDisplay() {
+    if (!pinDotsRow) return;
+    const dots = pinDotsRow.querySelectorAll('.pin-dot');
+    dots.forEach((dot, idx) => {
+      if (idx < currentPin.length) {
+        dot.classList.add('filled');
+      } else {
+        dot.classList.remove('filled');
+      }
+    });
+  }
+
+  function resetPin() {
+    currentPin = '';
+    updatePinDisplay();
+  }
+
+  document.querySelectorAll('#upiKeypad .key-digit[data-num]').forEach(key => {
+    key.addEventListener('click', () => {
+      const num = key.getAttribute('data-num');
+      if (num !== null && currentPin.length < 6) {
+        currentPin += num;
+        updatePinDisplay();
+        playSound('pin');
+      }
+    });
+  });
+
+  if (pinBackspaceBtn) {
+    pinBackspaceBtn.addEventListener('click', () => {
+      if (currentPin.length > 0) {
+        currentPin = currentPin.slice(0, -1);
+        updatePinDisplay();
+        playSound('pin');
+      }
+    });
+  }
+
+  // Step 3 -> Step 4: PIN Submit
+  if (pinSubmitBtn) {
+    pinSubmitBtn.addEventListener('click', submitPin);
+  }
+
+  function submitPin() {
+    if (currentPin.length !== 6) {
+      showToast('Please enter full 6-digit UPI PIN');
+      playSound('tap');
+      return;
+    }
+
+    // Close PIN sheet
+    if (upiPinBackdrop) upiPinBackdrop.classList.remove('active');
+
+    // Step 4: Show Processing Screen for 1.5 seconds
+    const amountVal = parseFloat(payAmountInput ? payAmountInput.value : 0) || 500;
+    if (processingAmountText) processingAmountText.textContent = `₹${amountVal.toLocaleString('en-IN')}`;
+    if (processingRecipientText) processingRecipientText.textContent = `Paying ${currentRecipient.name} (${currentRecipient.upi})`;
+
+    if (processingBackdrop) processingBackdrop.classList.add('active');
+
+    setTimeout(() => {
+      // Step 5: Transition to Success
+      if (processingBackdrop) processingBackdrop.classList.remove('active');
+      triggerSuccess(amountVal);
+    }, 1500);
+  }
+
+  // Support physical keyboard on desktop
+  window.addEventListener('keydown', (e) => {
+    if (upiPinBackdrop && upiPinBackdrop.classList.contains('active')) {
+      if (e.key >= '0' && e.key <= '9') {
+        if (currentPin.length < 6) {
+          currentPin += e.key;
+          updatePinDisplay();
+          playSound('pin');
+        }
+      } else if (e.key === 'Backspace') {
+        if (currentPin.length > 0) {
+          currentPin = currentPin.slice(0, -1);
+          updatePinDisplay();
+          playSound('pin');
+        }
+      } else if (e.key === 'Enter') {
+        submitPin();
+      } else if (e.key === 'Escape') {
+        upiPinBackdrop.classList.remove('active');
+        playSound('tap');
+      }
+    }
+  });
+
+  // Step 5: Success celebration screen
+  let pendingCompletedTx = null;
+
+  function triggerSuccess(amountVal) {
+    playSound('success');
+
+    const generatedRefId = String(Math.floor(100000000000 + Math.random() * 900000000000));
+    const now = new Date();
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+    const hours = now.getHours();
+    const mins = String(now.getMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    const timeStr = `${hours % 12 || 12}:${mins} ${ampm}`;
+
+    // Calculate updated balance
+    const newBal = Math.max(0, currentBalance - amountVal);
+
+    if (successAmountText) successAmountText.textContent = `₹${amountVal.toLocaleString('en-IN')}.00`;
+    if (successRecipientSub) successRecipientSub.textContent = `Paid to ${currentRecipient.name} (${currentRecipient.upi})`;
+    if (successRefId) successRefId.textContent = generatedRefId;
+    if (successBalanceSub) successBalanceSub.textContent = `Available balance: ₹${newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+
+    // Prepare transaction object
+    pendingCompletedTx = {
+      id: 'tx_' + generatedRefId,
+      upiRefId: generatedRefId,
+      name: currentRecipient.name,
+      upiId: currentRecipient.upi,
+      amount: amountVal,
+      type: 'sent',
+      date: `Today, ${now.getDate()} ${months[now.getMonth()]}`,
+      time: timeStr,
+      status: 'Completed',
+      category: 'Payment',
+      color: currentRecipient.avatarBg || '#00838f',
+      initial: currentRecipient.initial || currentRecipient.name.charAt(0)
+    };
+
+    if (successBackdrop) successBackdrop.classList.add('active');
+  }
+
+  // Tapping "Done" on Success Screen
+  if (successDoneBtn) {
+    successDoneBtn.addEventListener('click', () => {
+      if (successBackdrop) successBackdrop.classList.remove('active');
+
+      if (pendingCompletedTx) {
+        // Update Balance
+        currentBalance = Math.max(0, currentBalance - pendingCompletedTx.amount);
+        localStorage.setItem('gpay_balance', currentBalance);
+        updateBalanceDisplay();
+
+        // Add to Transactions History (Newest at top)
+        transactions.unshift(pendingCompletedTx);
+        localStorage.setItem('gpay_transactions', JSON.stringify(transactions));
+        applyHistoryFilters();
+
+        // Append to Contact's Conversation Stream
+        if (!contactHistoryData[pendingCompletedTx.name]) {
+          contactHistoryData[pendingCompletedTx.name] = [];
+        }
+        contactHistoryData[pendingCompletedTx.name].push({
+          type: 'payment',
+          amount: pendingCompletedTx.amount,
+          date: pendingCompletedTx.date,
+          time: pendingCompletedTx.time
+        });
+
+        // Close any full-screen payment/chat views and return to Home
+        if (payScreenView) payScreenView.classList.remove('active');
+        if (chatView) chatView.classList.remove('active');
+        if (homeView) homeView.classList.remove('slide-left');
+
+        showToast(`Payment of ₹${pendingCompletedTx.amount} to ${pendingCompletedTx.name} completed!`);
+        pendingCompletedTx = null;
+      }
+
+      playSound('tap');
+    });
+  }
+
+  // ================= 10. QR SCANNER COMPLETE FLOW =================
+  const scanQrBtn = document.getElementById('scanQrBtn');
+  const scannerModalBackdrop = document.getElementById('scannerModalBackdrop');
+  const closeScannerBtn = document.getElementById('closeScannerBtn');
+  const scannerTorchBtn = document.getElementById('scannerTorchBtn');
+  const scanGallerySimBtn = document.getElementById('scanGallerySimBtn');
+  const scanDemoQrBtn = document.getElementById('scanDemoQrBtn');
+  const scannerReticle = document.getElementById('scannerReticle');
+  const scannerDetectedOverlay = document.getElementById('scannerDetectedOverlay');
+  const scannerPromptText = document.getElementById('scannerPromptText');
+
+  let qrDetectTimer = null;
+
+  function triggerQrDetection() {
+    clearTimeout(qrDetectTimer);
+    playSound('qr_scan');
+
+    if (scannerDetectedOverlay) scannerDetectedOverlay.classList.add('active');
+    if (scannerPromptText) scannerPromptText.textContent = '✓ Adithya (adithya@upi) detected';
+
+    showToast('✓ QR Code Detected • Adithya (adithya@upi)');
+
+    setTimeout(() => {
+      if (scannerModalBackdrop) scannerModalBackdrop.classList.remove('active');
+      if (scannerDetectedOverlay) scannerDetectedOverlay.classList.remove('active');
+      if (scannerPromptText) scannerPromptText.textContent = 'Align QR code within the frame to pay';
+
+      // Transition immediately into payment flow for Adithya
+      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 500);
+    }, 600);
+  }
+
+  if (scanQrBtn && scannerModalBackdrop) {
+    scanQrBtn.addEventListener('click', () => {
+      scannerModalBackdrop.classList.add('active');
+      playSound('tap');
+
+      // Auto-detect after 1.8 seconds of scanning to simulate real camera scanning
+      clearTimeout(qrDetectTimer);
+      qrDetectTimer = setTimeout(() => {
+        if (scannerModalBackdrop.classList.contains('active')) {
+          triggerQrDetection();
+        }
+      }, 1800);
+    });
+  }
+
+  if (closeScannerBtn && scannerModalBackdrop) {
+    closeScannerBtn.addEventListener('click', () => {
+      clearTimeout(qrDetectTimer);
+      scannerModalBackdrop.classList.remove('active');
+      if (scannerDetectedOverlay) scannerDetectedOverlay.classList.remove('active');
+      playSound('tap');
+    });
+  }
+
+  if (scanDemoQrBtn) {
+    scanDemoQrBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      triggerQrDetection();
+    });
+  }
+
+  if (scannerReticle) {
+    scannerReticle.addEventListener('click', () => {
+      triggerQrDetection();
+    });
+  }
+
+  if (scanGallerySimBtn) {
+    scanGallerySimBtn.addEventListener('click', () => {
+      showToast('Scanning QR from gallery...');
+      setTimeout(triggerQrDetection, 500);
+    });
+  }
+
+  if (scannerTorchBtn) {
+    let torchOn = false;
+    scannerTorchBtn.addEventListener('click', () => {
+      torchOn = !torchOn;
+      scannerTorchBtn.style.background = torchOn ? '#fbbc04' : 'rgba(255, 255, 255, 0.15)';
+      showToast(torchOn ? 'Flashlight ON' : 'Flashlight OFF');
+      playSound('tap');
+    });
+  }
+
+  // ================= 11. CONTACT CHAT & CONVERSATION VIEW =================
   const chatView = document.getElementById('chatView');
   const chatBackBtn = document.getElementById('chatBackBtn');
   const chatHeaderName = document.getElementById('chatHeaderName');
@@ -201,10 +965,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatMessagesStream = document.getElementById('chatMessagesStream');
   const chatScrollContainer = document.getElementById('chatScrollContainer');
   const chatFloatingPayBtn = document.getElementById('chatFloatingPayBtn');
-  const chatStatusClock = document.getElementById('chatStatusClock');
-  const chatScratchCardBubble = document.getElementById('chatScratchCardBubble');
 
-  // Contact Transaction Data Store
   const contactHistoryData = {
     'CAFETERIA': [
       { type: 'payment', amount: 60, date: '18 Sept', time: '12:53 pm' },
@@ -281,8 +1042,8 @@ document.addEventListener('DOMContentLoaded', () => {
             date: item.date.includes('2026') ? item.date : `${item.date} 2026`,
             time: item.time || '12:57 pm',
             upiId: '662729941462',
-            toVpa: currentRecipient.upi || '••••460a@sib',
-            fromVpa: '••••0421@okicici on Google Pay',
+            toVpa: currentRecipient.upi || `${name.toLowerCase()}@okaxis`,
+            fromVpa: '••••1234@federal on Google Pay',
             googleId: 'CICAgPjUgO37NA'
           });
         });
@@ -295,46 +1056,18 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="scratch-card-illustration">
             <div class="scratch-graphic-card">
               <svg viewBox="0 0 200 90" width="100%" height="100%" fill="none">
-                <!-- Sunburst / radiating rays on the left -->
                 <g transform="translate(56, 44)" opacity="0.65">
                   <circle cx="0" cy="0" r="2.5" fill="#1d5fc4" />
                   <line x1="0" y1="-5" x2="0" y2="-16" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
                   <circle cx="0" cy="-18" r="1.5" fill="#1d5fc4" />
                   <line x1="6" y1="-6" x2="14" y2="-14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
                   <circle cx="16" cy="-16" r="1.5" fill="#1d5fc4" />
-                  <line x1="8" y1="0" x2="19" y2="0" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
-                  <circle cx="21" cy="0" r="1.5" fill="#1d5fc4" />
-                  <line x1="6" y1="6" x2="14" y2="14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
-                  <circle cx="16" cy="16" r="1.5" fill="#1d5fc4" />
-                  <line x1="0" y1="8" x2="0" y2="19" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
-                  <circle cx="0" cy="21" r="1.5" fill="#1d5fc4" />
-                  <line x1="-6" y1="6" x2="-14" y2="14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
-                  <circle cx="-16" cy="16" r="1.5" fill="#1d5fc4" />
-                  <line x1="-8" y1="0" x2="-19" y2="0" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
-                  <circle cx="-21" cy="0" r="1.5" fill="#1d5fc4" />
-                  <line x1="-6" y1="-6" x2="-14" y2="-14" stroke="#1d5fc4" stroke-width="2" stroke-linecap="round" />
-                  <circle cx="-16" cy="-16" r="1.5" fill="#1d5fc4" />
                 </g>
-
-                <!-- Rosette Medal Badge -->
                 <g transform="translate(108, 38)" opacity="0.65">
                   <circle cx="0" cy="0" r="10.5" fill="#1d5fc4" />
                   <polygon points="-5,9 0,22 2,9" fill="#1d5fc4" />
                   <polygon points="1,9 5,22 7,9" fill="#1a56b2" />
-                  <polygon points="0,-4.5 1.4,-1.2 5,-1.2 2.2,0.8 3.2,4.2 0,2.1 -3.2,4.2 -2.2,0.8 -5,-1.2 -1.4,-1.2" fill="#2d77e5" />
                 </g>
-
-                <!-- Confetti shapes scattered across card -->
-                <rect x="145" y="44" width="22" height="11" rx="2" transform="rotate(-8 145 44)" fill="#1d5fc4" opacity="0.65" />
-                <path d="M 28 32 A 4 4 0 0 1 36 28" fill="none" stroke="#1d5fc4" stroke-width="2.5" stroke-linecap="round" opacity="0.65" />
-                <path d="M 132 58 A 4 4 0 0 1 140 54" fill="none" stroke="#1d5fc4" stroke-width="2.5" stroke-linecap="round" opacity="0.65" />
-                <circle cx="68" cy="18" r="2.2" fill="#1d5fc4" opacity="0.65" />
-                <circle cx="152" cy="24" r="2" fill="#1d5fc4" opacity="0.65" />
-                <circle cx="170" cy="38" r="2.2" fill="#1d5fc4" opacity="0.65" />
-                <circle cx="95" cy="62" r="2.2" fill="#1d5fc4" opacity="0.65" />
-                <circle cx="140" cy="72" r="2.2" fill="#1d5fc4" opacity="0.65" />
-                <polygon points="135,18 136.5,21.5 140,23 136.5,24.5 135,28 133.5,24.5 130,23 133.5,21.5" fill="#1d5fc4" opacity="0.65" />
-                <polygon points="172,60 173.2,62.5 176,63.5 173.2,64.5 172,67 170.8,64.5 168,63.5 170.8,62.5" fill="#1d5fc4" opacity="0.65" />
               </svg>
             </div>
           </div>
@@ -383,23 +1116,54 @@ document.addEventListener('DOMContentLoaded', () => {
     playSound('tap');
   }
 
-  if (chatBackBtn) {
-    chatBackBtn.addEventListener('click', closeChatView);
-  }
+  if (chatBackBtn) chatBackBtn.addEventListener('click', closeChatView);
 
   if (chatFloatingPayBtn) {
     chatFloatingPayBtn.addEventListener('click', () => {
-      openPayScreenView(
-        currentRecipient.name || 'CAFETERIA',
-        currentRecipient.initial || 'C',
-        currentRecipient.phone || '+91 98765 43210',
-        currentRecipient.avatarBg || '#c2185b',
-        0
+      openPaymentSheet(
+        currentRecipient.name || 'Adithya',
+        currentRecipient.initial || 'A',
+        currentRecipient.upi || 'adithya@upi',
+        currentRecipient.avatarBg || '#00838f',
+        500
       );
     });
   }
 
-  // ================= VIEW 3: FULL SCREEN PAYMENT INTERFACE =================
+  // Contact list item taps
+  document.querySelectorAll('.contact-item-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.id === 'moreContactsBtn') {
+        showToast('Viewing all 42 contacts');
+        return;
+      }
+      const name = btn.getAttribute('data-name');
+      const initial = btn.getAttribute('data-initial');
+      const upi = btn.getAttribute('data-upi');
+      const color = btn.getAttribute('data-color') || '#00838f';
+      openChatView(name, initial, upi, color);
+    });
+  });
+
+  // Action button: "Pay anyone" opens payment sheet
+  const payAnyoneBtn = document.getElementById('payAnyoneBtn');
+  if (payAnyoneBtn) {
+    payAnyoneBtn.addEventListener('click', () => {
+      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 500);
+    });
+  }
+
+  // Top search bar trigger opens payment sheet
+  const searchTriggerBtn = document.getElementById('searchTriggerBtn');
+  if (searchTriggerBtn) {
+    searchTriggerBtn.addEventListener('click', (e) => {
+      // If clicking profile avatar directly, that opens settings instead
+      if (e.target.closest('#topProfileAvatarBtn')) return;
+      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 500);
+    });
+  }
+
+  // ================= 12. FULL SCREEN PAYMENT INTERFACE (VIEW 3) =================
   const payScreenView = document.getElementById('payScreenView');
   const payScreenBackBtn = document.getElementById('payScreenBackBtn');
   const payScreenRecipientName = document.getElementById('payScreenRecipientName');
@@ -412,11 +1176,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const payScreenSubmitBtn = document.getElementById('payScreenSubmitBtn');
   const payNotePillBtn = document.getElementById('payNotePillBtn');
   const payNotePillText = document.getElementById('payNotePillText');
-  const payBankSelector = document.getElementById('payBankSelector');
   const payKeyBackspace = document.getElementById('payKeyBackspace');
 
-  let currentPayAmount = '0'; // Default: ₹ 0
-  let currentPayNote = '';
+  let currentPayAmount = '0';
 
   function updatePayScreenDisplay() {
     if (payScreenAmountDisplay) {
@@ -433,28 +1195,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openPayScreenView(name, initial, phone, color, defaultAmount) {
-    if (name) currentRecipient.name = name;
-    if (initial) currentRecipient.initial = initial;
-    if (color) currentRecipient.avatarBg = color;
-    if (phone) currentRecipient.phone = phone;
+    currentRecipient = {
+      name: name || 'Adithya',
+      initial: initial || 'A',
+      upi: `${(name || 'adithya').toLowerCase().replace(/\s+/g, '')}@upi`,
+      avatarBg: color || '#00838f',
+      phone: phone || '+91 98765 43210'
+    };
 
-    const displayName = currentRecipient.name || 'Arjun S';
-    if (payScreenRecipientName) {
-      payScreenRecipientName.textContent = displayName;
-    }
-    if (payScreenRecipientPhone) {
-      payScreenRecipientPhone.textContent = currentRecipient.phone || '+91 98765 43210';
-    }
-    if (payScreenInitial) {
-      payScreenInitial.textContent = currentRecipient.initial || 'A';
-    }
-    if (payScreenAvatar) {
-      payScreenAvatar.style.backgroundColor = currentRecipient.avatarBg || '#00838f';
-    }
+    if (payScreenRecipientName) payScreenRecipientName.textContent = currentRecipient.name;
+    if (payScreenRecipientPhone) payScreenRecipientPhone.textContent = currentRecipient.phone;
+    if (payScreenInitial) payScreenInitial.textContent = currentRecipient.initial;
+    if (payScreenAvatar) payScreenAvatar.style.backgroundColor = currentRecipient.avatarBg;
 
     if (payScreenAvatarImg && payScreenInitial) {
-      // If Arjun S or specific contacts, show the portrait photo just like user's screenshot
-      if (displayName === 'Arjun S' || displayName === 'Adithya' || displayName === 'Alwin') {
+      if (currentRecipient.name === 'Arjun S' || currentRecipient.name === 'Adithya') {
         payScreenAvatarImg.style.display = 'block';
         payScreenInitial.style.display = 'none';
       } else {
@@ -466,36 +1221,20 @@ document.addEventListener('DOMContentLoaded', () => {
     currentPayAmount = defaultAmount !== undefined ? String(defaultAmount) : '0';
     updatePayScreenDisplay();
 
-    if (payNotePillText) {
-      payNotePillText.textContent = 'Add a note';
-      currentPayNote = '';
-    }
+    if (payNotePillText) payNotePillText.textContent = 'Add a note';
 
-    if (payScreenView) {
-      payScreenView.classList.add('active');
-    }
+    if (payScreenView) payScreenView.classList.add('active');
     playSound('tap');
   }
 
   function closePayScreenView() {
-    if (payScreenView) {
-      payScreenView.classList.remove('active');
-    }
+    if (payScreenView) payScreenView.classList.remove('active');
     playSound('tap');
   }
 
-  if (payScreenBackBtn) {
-    payScreenBackBtn.addEventListener('click', closePayScreenView);
-  }
+  if (payScreenBackBtn) payScreenBackBtn.addEventListener('click', closePayScreenView);
 
-  // Tapping Pay in Chat View opens this exact interface!
-  if (chatFloatingPayBtn) {
-    chatFloatingPayBtn.addEventListener('click', () => {
-      openPayScreenView(currentRecipient.name, currentRecipient.initial, '+91 98765 43210', currentRecipient.avatarBg, 0);
-    });
-  }
-
-  // Numeric Keypad Digits
+  // Keypad keys
   document.querySelectorAll('.pay-key[data-key]').forEach(keyBtn => {
     keyBtn.addEventListener('click', () => {
       const key = keyBtn.getAttribute('data-key');
@@ -518,7 +1257,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Numeric Keypad Backspace
   if (payKeyBackspace) {
     payKeyBackspace.addEventListener('click', () => {
       if (currentPayAmount.length > 0) {
@@ -532,30 +1270,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // "Add a note" Button
-  if (payNotePillBtn) {
-    const popularNotes = ['Lunch 🍱', 'Coffee ☕', 'Split bill 🧾', 'Groceries 🛒', 'Movie 🍿'];
-    let noteIdx = 0;
-    payNotePillBtn.addEventListener('click', () => {
-      currentPayNote = popularNotes[noteIdx % popularNotes.length];
-      noteIdx++;
-      if (payNotePillText) {
-        payNotePillText.textContent = currentPayNote;
-      }
-      showToast(`Added note: ${currentPayNote}`);
-      playSound('tap');
-    });
-  }
-
-  // Bank Selector Card Click
-  if (payBankSelector) {
-    payBankSelector.addEventListener('click', () => {
-      showToast('Selected: Federal Bank •••• 1234 (Primary)');
-      playSound('tap');
-    });
-  }
-
-  // "Pay ₹500" Submit Click
   if (payScreenSubmitBtn) {
     payScreenSubmitBtn.addEventListener('click', () => {
       const amountVal = parseFloat(currentPayAmount) || 0;
@@ -563,330 +1277,35 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('Please enter an amount to pay');
         return;
       }
-      if (payAmountInput) {
-        payAmountInput.value = amountVal;
-      }
-      resetPin();
-      if (upiPinBackdrop) {
-        upiPinBackdrop.classList.add('active');
-      }
+      if (payAmountInput) payAmountInput.value = amountVal;
+
+      // Close pay screen and open confirmation
+      closePayScreenView();
+      if (confirmPayBtn) confirmPayBtn.click();
+    });
+  }
+
+  if (payNotePillBtn) {
+    const popularNotes = ['Lunch 🍱', 'Coffee ☕', 'Split bill 🧾', 'Groceries 🛒', 'Movie 🍿'];
+    let noteIdx = 0;
+    payNotePillBtn.addEventListener('click', () => {
+      const note = popularNotes[noteIdx % popularNotes.length];
+      noteIdx++;
+      if (payNotePillText) payNotePillText.textContent = note;
+      showToast(`Added note: ${note}`);
       playSound('tap');
     });
   }
 
-  // Reward Bazaar Card
-  const rewardBazaarCard = document.getElementById('rewardBazaarCard');
-  if (rewardBazaarCard) {
-    rewardBazaarCard.addEventListener('click', () => {
-      showToast('Reward bazaar campaign has expired');
-      playSound('tap');
-    });
-  }
-
-  // Contacts tap: opens corresponding contact chat interface
-  document.querySelectorAll('.contact-item-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (btn.id === 'moreContactsBtn') {
-        showToast('Viewing all 42 contacts');
-        return;
-      }
-      const name = btn.getAttribute('data-name');
-      const initial = btn.getAttribute('data-initial');
-      const upi = btn.getAttribute('data-upi');
-      const color = btn.getAttribute('data-color') || '#00838f';
-      openChatView(name, initial, upi, color);
-    });
-  });
-
-  // Action buttons: Pay anyone opens the full screen payment interface
-  const payAnyoneBtn = document.getElementById('payAnyoneBtn');
-  if (payAnyoneBtn) {
-    payAnyoneBtn.addEventListener('click', () => {
-      openPayScreenView('Arjun S', 'A', '+91 98765 43210', '#00838f', 0);
-    });
-  }
-
-  // Bills & Recharges quick items
-  document.querySelectorAll('.bill-provider-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const biller = item.getAttribute('data-biller');
-      const amount = item.getAttribute('data-amount');
-      openPaymentSheet(biller, biller.charAt(0), `${biller.toLowerCase().replace(/\s+/g, '')}@billdesk`, '#0b57d0', amount);
-    });
-  });
-
-  // Bill categories
-  document.querySelectorAll('.category-icon-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const cat = btn.getAttribute('data-category');
-      showToast(`Selected category: ${cat}`);
-      playSound('tap');
-    });
-  });
-
-  // Manage bills button
-  const manageBillsBtn = document.getElementById('manageBillsBtn');
-  if (manageBillsBtn) {
-    manageBillsBtn.addEventListener('click', () => {
-      showToast('Opening Bills & Subscriptions Manager');
-      playSound('tap');
-    });
-  }
-
-  // Quick Chips
-  const chipTapPay = document.getElementById('chipTapPay');
-  if (chipTapPay) {
-    chipTapPay.addEventListener('click', () => {
-      showToast('Tap & Pay is active on this device');
-      playSound('tap');
-    });
-  }
-
-  const chipUpiLite = document.getElementById('chipUpiLite');
-  if (chipUpiLite) {
-    chipUpiLite.addEventListener('click', () => {
-      showToast('UPI Lite Balance: ₹0.00 • Tap to add money');
-      playSound('tap');
-    });
-  }
-
-  const chipRewards = document.getElementById('chipRewards');
-  if (chipRewards) {
-    chipRewards.addEventListener('click', () => {
-      openScratchCardModal();
-    });
-  }
-
-  // ================= UPI PIN KEYPAD SIMULATION =================
-  const upiPinBackdrop = document.getElementById('upiPinBackdrop');
-  const pinDotsRow = document.getElementById('pinDotsRow');
-  let currentPin = '';
-
-  function updatePinDisplay() {
-    if (!pinDotsRow) return;
-    const dots = pinDotsRow.querySelectorAll('.pin-dot');
-    dots.forEach((dot, idx) => {
-      if (idx < currentPin.length) {
-        dot.classList.add('filled');
-      } else {
-        dot.classList.remove('filled');
-      }
-    });
-  }
-
-  function resetPin() {
-    currentPin = '';
-    updatePinDisplay();
-  }
-
-  // When clicking "Pay ₹XXX"
-  if (confirmPayBtn) {
-    confirmPayBtn.addEventListener('click', () => {
-      const amount = parseFloat(payAmountInput.value) || 0;
-      if (amount <= 0) {
-        showToast('Please enter a valid amount');
-        return;
-      }
-      if (paymentModalBackdrop) paymentModalBackdrop.classList.remove('active');
-      resetPin();
-      if (upiPinBackdrop) {
-        upiPinBackdrop.classList.add('active');
-      }
-      playSound('tap');
-    });
-  }
-
-  // Digit Pad Inputs
-  document.querySelectorAll('.key-digit').forEach(key => {
-    key.addEventListener('click', () => {
-      const num = key.getAttribute('data-num');
-      if (num !== null && currentPin.length < 4) {
-        currentPin += num;
-        updatePinDisplay();
-        playSound('pin');
-        // NOTE: Auto-completion removed! Payment only transacts when user presses confirm (✔)
-      }
-    });
-  });
-
-  const pinBackspaceBtn = document.getElementById('pinBackspaceBtn');
-  if (pinBackspaceBtn) {
-    pinBackspaceBtn.addEventListener('click', () => {
-      if (currentPin.length > 0) {
-        currentPin = currentPin.slice(0, -1);
-        updatePinDisplay();
-        playSound('pin');
-      }
-    });
-  }
-
-  const pinSubmitBtn = document.getElementById('pinSubmitBtn');
-  if (pinSubmitBtn) {
-    pinSubmitBtn.addEventListener('click', () => {
-      if (currentPin.length === 4) {
-        completePayment();
-      } else {
-        showToast('Enter full 4-digit UPI PIN');
-        playSound('tap');
-      }
-    });
-  }
-
-  // Support physical keyboard on desktop
-  window.addEventListener('keydown', (e) => {
-    if (upiPinBackdrop && upiPinBackdrop.classList.contains('active')) {
-      if (e.key >= '0' && e.key <= '9') {
-        if (currentPin.length < 4) {
-          currentPin += e.key;
-          updatePinDisplay();
-          playSound('pin');
-        }
-      } else if (e.key === 'Backspace') {
-        if (currentPin.length > 0) {
-          currentPin = currentPin.slice(0, -1);
-          updatePinDisplay();
-          playSound('pin');
-        }
-      } else if (e.key === 'Enter') {
-        if (currentPin.length === 4) {
-          completePayment();
-        } else {
-          showToast('Enter full 4-digit UPI PIN');
-        }
-      } else if (e.key === 'Escape') {
-        upiPinBackdrop.classList.remove('active');
-        playSound('tap');
-      }
-    }
-  });
-
-  // ================= VIEW 4: FULL-SCREEN PAYMENT SUCCESS =================
-  const successScreenView = document.getElementById('successScreenView');
-  const fullSuccessSubText = document.getElementById('fullSuccessSubText');
-  const fullSuccessHeadline = document.getElementById('fullSuccessHeadline');
-  let successDismissTimer = null;
-
-  function dismissSuccessScreen() {
-    clearTimeout(successDismissTimer);
-    if (successScreenView) {
-      successScreenView.classList.remove('active');
-    }
-    if (chatScrollContainer) {
-      chatScrollContainer.scrollTop = chatScrollContainer.scrollHeight;
-    }
-  }
-
-  if (successScreenView) {
-    successScreenView.addEventListener('click', dismissSuccessScreen);
-  }
-
-  function completePayment() {
-    if (upiPinBackdrop) upiPinBackdrop.classList.remove('active');
-    if (payScreenView) payScreenView.classList.remove('active');
-    if (paymentModalBackdrop) paymentModalBackdrop.classList.remove('active');
-
-    const amountVal = parseFloat(currentPayAmount) || parseFloat(payAmountInput ? payAmountInput.value : 0) || 10;
-    const formattedAmount = amountVal % 1 === 0 ? amountVal.toString() : amountVal.toFixed(2);
-
-    // Update full success screen text matching user's screenshot
-    if (fullSuccessSubText) {
-      fullSuccessSubText.textContent = `₹${formattedAmount} paid to ${currentRecipient.name}`;
-    }
-
-    const startingBalance = 42850;
-    const newBal = Math.max(0, startingBalance - amountVal);
-    if (fullSuccessHeadline) {
-      fullSuccessHeadline.textContent = `New Balance: ₹${newBal.toLocaleString('en-IN')}`;
-    }
-
-    // Play iconic Google Pay success sound
-    playSound('success');
-
-    // Show full-screen success screen
-    if (successScreenView) {
-      successScreenView.classList.add('active');
-    }
-
-    // Add to recipient's conversation history
-    if (!contactHistoryData[currentRecipient.name]) {
-      contactHistoryData[currentRecipient.name] = [];
-    }
-    const now = new Date();
-    const hours = now.getHours();
-    const mins = String(now.getMinutes()).padStart(2, '0');
-    const ampm = hours >= 12 ? 'pm' : 'am';
-    const timeStr = `${hours % 12 || 12}:${mins} ${ampm}`;
-    contactHistoryData[currentRecipient.name].push({
-      type: 'payment',
-      amount: amountVal,
-      date: `Today, ${timeStr}`,
-      time: timeStr
-    });
-
-    // If chat view is open, append the new bubble immediately
-    if (chatMessagesStream) {
-      const bubble = document.createElement('div');
-      bubble.className = 'chat-bubble-payment right ripple-btn';
-      bubble.setAttribute('data-amount', amountVal);
-      bubble.setAttribute('data-date', `Today, ${timeStr}`);
-      bubble.innerHTML = `
-        <div class="bubble-header-label">Payment to <span class="bubble-recipient-name">${currentRecipient.name}</span></div>
-        <div class="bubble-amount-text">₹${formattedAmount}</div>
-        <div class="bubble-footer-row">
-          <div class="bubble-status-left">
-            <div class="status-check-circle">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="#ffffff">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-              </svg>
-            </div>
-            <span class="bubble-status-text">Paid • Today, ${timeStr}</span>
-          </div>
-          <svg class="bubble-chevron" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-          </svg>
-        </div>
-      `;
-      bubble.addEventListener('click', () => {
-        openTxDetailView({
-          amount: formattedAmount,
-          name: currentRecipient.name,
-          initial: currentRecipient.initial,
-          color: currentRecipient.avatarBg || '#880e4f',
-          date: 'Today',
-          time: timeStr,
-          upiId: String(Math.floor(100000000000 + Math.random() * 900000000000)),
-          toVpa: currentRecipient.upi || '••••460a@sib',
-          fromVpa: '••••0421@okicici on Google Pay',
-          googleId: 'CICAgPj' + Math.random().toString(36).substring(2, 8).toUpperCase()
-        });
-      });
-      chatMessagesStream.appendChild(bubble);
-      if (chatScrollContainer) {
-        setTimeout(() => {
-          chatScrollContainer.scrollTop = chatScrollContainer.scrollHeight;
-        }, 100);
-      }
-    }
-
-    // Auto-dismiss full-screen success screen after 3.2s back to chat
-    clearTimeout(successDismissTimer);
-    successDismissTimer = setTimeout(() => {
-      dismissSuccessScreen();
-    }, 3200);
-  }
-
-  // ================= VIEW 5: TRANSACTION DETAILS / RECEIPT SCREEN =================
+  // ================= 13. TRANSACTION DETAILS / RECEIPT SCREEN =================
   const txDetailView = document.getElementById('txDetailView');
   const txDetailBackBtn = document.getElementById('txDetailBackBtn');
-  const txDetailInfoBtn = document.getElementById('txDetailInfoBtn');
-  const txDetailMenuBtn = document.getElementById('txDetailMenuBtn');
   const txDetailAvatar = document.getElementById('txDetailAvatar');
   const txDetailAvatarLetter = document.getElementById('txDetailAvatarLetter');
   const txDetailRecipientName = document.getElementById('txDetailRecipientName');
   const txDetailBigAmount = document.getElementById('txDetailBigAmount');
   const txDetailPayAgainBtn = document.getElementById('txDetailPayAgainBtn');
   const txDetailTimestamp = document.getElementById('txDetailTimestamp');
-  const txDetailBankText = document.getElementById('txDetailBankText');
   const txDetailMsgTitle = document.getElementById('txDetailMsgTitle');
   const txDetailMsgSub = document.getElementById('txDetailMsgSub');
   const txStepTime1 = document.getElementById('txStepTime1');
@@ -900,9 +1319,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const txDetailToVpa = document.getElementById('txDetailToVpa');
   const txDetailFromVpa = document.getElementById('txDetailFromVpa');
   const txDetailGoogleId = document.getElementById('txDetailGoogleId');
-  const txHavingIssuesBtn = document.getElementById('txHavingIssuesBtn');
-  const txShareBtn = document.getElementById('txShareBtn');
-  const txSplitBtn = document.getElementById('txSplitBtn');
 
   function openTxDetailView(data) {
     if (!data) data = {};
@@ -910,14 +1326,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = data.name || currentRecipient.name || 'CAFETERIA';
     const initial = data.initial || (name ? name.charAt(0) : 'C');
     const color = data.color || currentRecipient.avatarBg || '#880e4f';
-    const dateStr = data.date || '18 Sept 2026';
+    const dateStr = data.date || '27 Sep 2026';
     const timeStr = data.time || '12:57 pm';
     const fullDateTime = `${dateStr}, ${timeStr}`;
 
     if (txDetailAvatar) txDetailAvatar.style.backgroundColor = color;
     if (txDetailAvatarLetter) txDetailAvatarLetter.textContent = initial;
     if (txDetailRecipientName) txDetailRecipientName.textContent = name;
-    if (txDetailBigAmount) txDetailBigAmount.textContent = `₹${amount}`;
+    if (txDetailBigAmount) txDetailBigAmount.textContent = `₹${amount.toLocaleString('en-IN')}`;
     if (txDetailTimestamp) txDetailTimestamp.textContent = fullDateTime;
     if (txDetailMsgTitle) txDetailMsgTitle.textContent = `Payment of ₹${amount} completed`;
     if (txDetailMsgSub) txDetailMsgSub.textContent = `Receiver's bank has confirmed deposit of money to ${name}'s bank account`;
@@ -931,181 +1347,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (txDetailToLabel) txDetailToLabel.textContent = `To: ${name}`;
     if (txDetailUpiId) txDetailUpiId.textContent = data.upiId || '662729941462';
-    if (txDetailToVpa) txDetailToVpa.textContent = data.toVpa || '••••460a@sib';
-    if (txDetailFromVpa) txDetailFromVpa.textContent = data.fromVpa || '••••0421@okicici on Google Pay';
+    if (txDetailToVpa) txDetailToVpa.textContent = data.toVpa || `${name.toLowerCase()}@upi`;
+    if (txDetailFromVpa) txDetailFromVpa.textContent = data.fromVpa || '••••1234@federal on Google Pay';
     if (txDetailGoogleId) txDetailGoogleId.textContent = data.googleId || 'CICAgPjUgO37NA';
 
     if (txDetailPayAgainBtn) {
       txDetailPayAgainBtn.onclick = () => {
         closeTxDetailView();
-        openPayScreenView(name, initial, '+91 98765 43210', color, amount);
+        openPaymentSheet(name, initial, data.toVpa || 'adithya@upi', color, amount);
       };
     }
 
-    if (txDetailView) {
-      txDetailView.classList.add('active');
-    }
+    if (txDetailView) txDetailView.classList.add('active');
     playSound('tap');
   }
 
   function closeTxDetailView() {
-    if (txDetailView) {
-      txDetailView.classList.remove('active');
-    }
+    if (txDetailView) txDetailView.classList.remove('active');
     playSound('tap');
   }
 
-  if (txDetailBackBtn) {
-    txDetailBackBtn.addEventListener('click', closeTxDetailView);
-  }
-  if (txDetailInfoBtn) {
-    txDetailInfoBtn.addEventListener('click', () => {
-      showToast('Google Pay Help & Support for this transaction');
-      playSound('tap');
-    });
-  }
-  if (txDetailMenuBtn) {
-    txDetailMenuBtn.addEventListener('click', () => {
-      showToast('Report an issue or dispute this charge');
-      playSound('tap');
-    });
-  }
-  if (txHavingIssuesBtn) {
-    txHavingIssuesBtn.addEventListener('click', () => {
-      showToast('Opening 24x7 UPI Support Desk');
-      playSound('tap');
-    });
-  }
-  if (txShareBtn) {
-    txShareBtn.addEventListener('click', () => {
-      showToast('Receipt details copied to clipboard');
-      playSound('tap');
-    });
-  }
-  if (txSplitBtn) {
-    txSplitBtn.addEventListener('click', () => {
-      showToast('Select contacts to split this bill');
-      playSound('tap');
-    });
-  }
+  if (txDetailBackBtn) txDetailBackBtn.addEventListener('click', closeTxDetailView);
 
-  // Also bind all existing static payment bubbles on the page
-  document.querySelectorAll('.chat-bubble-payment').forEach(bubble => {
-    bubble.addEventListener('click', () => {
-      const amount = bubble.getAttribute('data-amount') || 60;
-      const recipientName = bubble.querySelector('.bubble-recipient-name') ? bubble.querySelector('.bubble-recipient-name').textContent : 'CAFETERIA';
-      openTxDetailView({
-        amount: amount,
-        name: recipientName,
-        initial: recipientName.charAt(0),
-        color: '#c2185b',
-        date: '18 Sept 2026',
-        time: '12:53 pm',
-        upiId: '662729941462',
-        toVpa: '••••460a@sib',
-        fromVpa: '••••0421@okicici on Google Pay',
-        googleId: 'CICAgPjUgO37NA'
-      });
-    });
-  });
-
-  // ================= BANK BALANCE =================
+  // ================= 14. BANK BALANCE MODAL =================
   const rowCheckBalance = document.getElementById('rowCheckBalance');
   const balanceModalBackdrop = document.getElementById('balanceModalBackdrop');
   const balanceCloseBtn = document.getElementById('balanceCloseBtn');
+  const closeBalanceModalBtn = document.getElementById('closeBalanceModalBtn');
   const bankTransferBtn = document.getElementById('bankTransferBtn');
 
   if (rowCheckBalance) {
     rowCheckBalance.addEventListener('click', () => {
+      updateBalanceDisplay();
       if (balanceModalBackdrop) balanceModalBackdrop.classList.add('active');
       playSound('tap');
     });
   }
-  if (bankTransferBtn) {
-    bankTransferBtn.addEventListener('click', () => {
-      showToast('Initiating Direct Bank Account Transfer');
-      playSound('tap');
-    });
-  }
+
   if (balanceCloseBtn && balanceModalBackdrop) {
     balanceCloseBtn.addEventListener('click', () => {
       balanceModalBackdrop.classList.remove('active');
-    });
-  }
-
-  // ================= QR SCANNER MODAL =================
-  const scanQrBtn = document.getElementById('scanQrBtn');
-  const scannerModalBackdrop = document.getElementById('scannerModalBackdrop');
-  const closeScannerBtn = document.getElementById('closeScannerBtn');
-  const scannerTorchBtn = document.getElementById('scannerTorchBtn');
-  const scanGallerySimBtn = document.getElementById('scanGallerySimBtn');
-
-  if (scanQrBtn && scannerModalBackdrop) {
-    scanQrBtn.addEventListener('click', () => {
-      scannerModalBackdrop.classList.add('active');
       playSound('tap');
     });
   }
-  if (closeScannerBtn && scannerModalBackdrop) {
-    closeScannerBtn.addEventListener('click', () => {
-      scannerModalBackdrop.classList.remove('active');
-    });
-  }
-  if (scannerTorchBtn) {
-    let torchOn = false;
-    scannerTorchBtn.addEventListener('click', () => {
-      torchOn = !torchOn;
-      scannerTorchBtn.style.background = torchOn ? '#fbbc04' : 'rgba(255, 255, 255, 0.15)';
-      showToast(torchOn ? 'Flashlight ON' : 'Flashlight OFF');
+
+  if (closeBalanceModalBtn && balanceModalBackdrop) {
+    closeBalanceModalBtn.addEventListener('click', () => {
+      balanceModalBackdrop.classList.remove('active');
       playSound('tap');
     });
   }
-  if (scanGallerySimBtn) {
-    scanGallerySimBtn.addEventListener('click', () => {
-      showToast('Simulating QR scan from photo...');
-      setTimeout(() => {
-        if (scannerModalBackdrop) scannerModalBackdrop.classList.remove('active');
-        openPaymentSheet('Cafeteria Store', 'C', 'cafeteria.store@okaxis', '#c2185b', 180);
-      }, 700);
+
+  if (bankTransferBtn) {
+    bankTransferBtn.addEventListener('click', () => {
+      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 500);
     });
   }
 
-  // ================= CIBIL SCORE MODAL =================
-  const rowCibilScore = document.getElementById('rowCibilScore');
-  const cibilModalBackdrop = document.getElementById('cibilModalBackdrop');
-  const closeCibilBtn2 = document.getElementById('closeCibilBtn2');
-
-  if (rowCibilScore && cibilModalBackdrop) {
-    rowCibilScore.addEventListener('click', () => {
-      cibilModalBackdrop.classList.add('active');
-      playSound('tap');
-    });
-  }
-  if (closeCibilBtn2 && cibilModalBackdrop) {
-    closeCibilBtn2.addEventListener('click', () => {
-      cibilModalBackdrop.classList.remove('active');
-    });
-  }
-
-  // ================= VIEW 6: TRANSACTION HISTORY SCREEN =================
+  // ================= 15. TRANSACTION HISTORY SCREEN (VIEW 6) =================
   const rowTxHistory = document.getElementById('rowTxHistory');
-  const historyView = document.getElementById('historyView');
   const historyBackBtn = document.getElementById('historyBackBtn');
-  const histSearchInput = document.getElementById('histSearchInput');
-  const histMicBtn = document.getElementById('histMicBtn');
-  const histMenuBtn = document.getElementById('histMenuBtn');
-  const histPromoCard = document.getElementById('histPromoCard');
-  const historyModalBackdrop = document.getElementById('historyModalBackdrop');
 
-  // Open Full-screen Transaction History Screen when tapping "See transaction history"
   if (rowTxHistory && historyView) {
     rowTxHistory.addEventListener('click', () => {
+      applyHistoryFilters();
       historyView.classList.add('active');
       playSound('tap');
     });
   }
 
-  // Close Transaction History Screen
   if (historyBackBtn && historyView) {
     historyBackBtn.addEventListener('click', () => {
       historyView.classList.remove('active');
@@ -1113,129 +1423,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Color mapping by recipient name
-  const recipientColors = {
-    'UPI Lite': '#ea580c',
-    'Federal Bank ••••8299 to UPI Lite': '#ea580c',
-    'Nithin Mathew': '#374151',
-    'GO GRILL': '#4f46e5',
-    'Cupcake Siblings': '#388e3c',
-    'CAFETERIA': '#c2185b',
-    'Alwin': '#d97706',
-    'Adarshuv': '#4338ca'
-  };
-
-  // Wire each transaction item to open Transaction Details / Receipt Screen (View 5)
-  document.querySelectorAll('.hist-tx-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const recipient = row.getAttribute('data-recipient') || 'CAFETERIA';
-      const amount = parseFloat(row.getAttribute('data-amount')) || 20;
-      const isCredit = row.getAttribute('data-credit') === 'true';
-      const date = row.getAttribute('data-date') || '27 September 2026';
-      const time = row.getAttribute('data-time') || '11:42 am';
-      const initial = recipient.charAt(0);
-      const color = recipientColors[recipient] || '#374151';
-
-      openTxDetailView({
-        amount: amount,
-        name: recipient,
-        initial: initial,
-        color: color,
-        date: date,
-        time: time,
-        upiId: '428819204812',
-        toVpa: `${recipient.toLowerCase().replace(/[^a-z0-9]/g, '')}@upi`,
-        fromVpa: '••••8299@federal on Google Pay',
-        googleId: 'CICAgPjUgO37NA'
-      });
-    });
-  });
-
-  // Live filter for transaction history
-  if (histSearchInput) {
-    histSearchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
-      document.querySelectorAll('.hist-tx-row').forEach(row => {
-        const title = (row.querySelector('.hist-tx-title')?.textContent || '').toLowerCase();
-        const date = (row.querySelector('.hist-tx-date')?.textContent || '').toLowerCase();
-        const amount = (row.querySelector('.hist-tx-amount')?.textContent || '').toLowerCase();
-        if (!query || title.includes(query) || date.includes(query) || amount.includes(query)) {
-          row.style.display = 'flex';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-    });
-  }
-
-  // Voice search pill button
-  if (histMicBtn) {
-    histMicBtn.addEventListener('click', () => {
-      showToast('Listening for transactions search...');
-      playSound('tap');
-    });
-  }
-
-  // 3-dots menu button
-  if (histMenuBtn) {
-    histMenuBtn.addEventListener('click', () => {
-      showToast('Options: Export statement, Download PDF');
-      playSound('tap');
-    });
-  }
-
-  // Filter chips interaction
-  document.querySelectorAll('.hist-filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const filterName = chip.getAttribute('data-filter');
-      chip.classList.toggle('active-filter');
-      showToast(`Filtered by ${filterName}`);
-      playSound('tap');
-    });
-  });
-
-  // Flex promo card in history list
-  if (histPromoCard) {
-    histPromoCard.addEventListener('click', () => {
-      showToast('Opening Flex Credit Card (₹1,000 welcome rewards)');
-      playSound('tap');
-    });
-  }
-
-  // Also support old drawer items if clicked
-  document.querySelectorAll('.history-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const nameEl = item.querySelector('.history-name');
-      const amountEl = item.querySelector('.history-amount');
-      const name = nameEl ? nameEl.textContent.trim() : 'CAFETERIA';
-      let amount = 20;
-      if (amountEl) {
-        const match = amountEl.textContent.match(/[\d.]+/);
-        if (match) amount = parseFloat(match[0]);
-      }
-      if (historyModalBackdrop) historyModalBackdrop.classList.remove('active');
-      openTxDetailView({
-        amount: amount,
-        name: name,
-        initial: name.charAt(0),
-        color: name === 'CAFETERIA' ? '#c2185b' : '#00838f',
-        date: '18 Sept 2026',
-        time: '12:57 pm',
-        upiId: '662729941462',
-        toVpa: '••••460a@sib',
-        fromVpa: '••••0421@okicici on Google Pay',
-        googleId: 'CICAgPjUgO37NA'
-      });
-    });
-  });
-
-  // ================= SCRATCH CARD / REWARDS =================
+  // ================= 16. SCRATCH CARD / REWARDS =================
   const rewardsTileBtn = document.getElementById('rewardsTileBtn');
   const offersTileBtn = document.getElementById('offersTileBtn');
   const referralsTileBtn = document.getElementById('referralsTileBtn');
+  const chipRewards = document.getElementById('chipRewards');
   const scratchModalBackdrop = document.getElementById('scratchModalBackdrop');
   const scratchCanvas = document.getElementById('scratchCanvas');
   const claimRewardBtn = document.getElementById('claimRewardBtn');
+  const closeScratchBtn = document.getElementById('closeScratchBtn');
 
   function openScratchCardModal() {
     if (scratchModalBackdrop) {
@@ -1246,12 +1442,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (rewardsTileBtn) rewardsTileBtn.addEventListener('click', openScratchCardModal);
+  if (chipRewards) chipRewards.addEventListener('click', openScratchCardModal);
+
+  if (closeScratchBtn && scratchModalBackdrop) {
+    closeScratchBtn.addEventListener('click', () => {
+      scratchModalBackdrop.classList.remove('active');
+      playSound('tap');
+    });
+  }
+
   if (offersTileBtn) {
     offersTileBtn.addEventListener('click', () => {
       showToast('Showing 14 active merchant offers');
       playSound('tap');
     });
   }
+
   if (referralsTileBtn) {
     referralsTileBtn.addEventListener('click', () => {
       showToast('Invite friends to get ₹201 cashback');
@@ -1276,7 +1482,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
-    // Decorative GPay logo pattern on scratch card
+    // Decorative GPay logo pattern
     ctx.fillStyle = '#666666';
     ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
     ctx.textAlign = 'center';
@@ -1311,21 +1517,101 @@ document.addEventListener('DOMContentLoaded', () => {
   if (claimRewardBtn && scratchModalBackdrop) {
     claimRewardBtn.addEventListener('click', () => {
       scratchModalBackdrop.classList.remove('active');
-      showToast('₹45 Cashback transferred to your bank account!');
+
+      // Add Cashback to balance
+      currentBalance += 45;
+      localStorage.setItem('gpay_balance', currentBalance);
+      updateBalanceDisplay();
+
+      // Add Cashback to transactions
+      const cashbackTx = {
+        id: 'tx_' + Date.now(),
+        name: 'Google Pay Cashback',
+        upiId: 'rewards@gpay',
+        amount: 45,
+        type: 'cashback',
+        date: 'Today',
+        time: 'Just now',
+        status: 'Completed',
+        category: 'Cashback',
+        color: '#16a34a',
+        initial: '₹'
+      };
+      transactions.unshift(cashbackTx);
+      localStorage.setItem('gpay_transactions', JSON.stringify(transactions));
+      applyHistoryFilters();
+
+      showToast('₹45 Cashback credited directly to your bank account!');
       playSound('success');
     });
   }
 
-  // Promo Banner "Apply now"
-  const applyFlexBtn = document.getElementById('applyFlexBtn');
-  if (applyFlexBtn) {
-    applyFlexBtn.addEventListener('click', () => {
-      showToast('Opening Flex Credit Card application (Zero-fee)');
+  // ================= 17. CIBIL SCORE MODAL =================
+  const rowCibilScore = document.getElementById('rowCibilScore');
+  const cibilModalBackdrop = document.getElementById('cibilModalBackdrop');
+  const closeCibilBtn = document.getElementById('closeCibilBtn');
+  const closeCibilBtn2 = document.getElementById('closeCibilBtn2');
+
+  if (rowCibilScore && cibilModalBackdrop) {
+    rowCibilScore.addEventListener('click', () => {
+      cibilModalBackdrop.classList.add('active');
+      playSound('tap');
+    });
+  }
+  if (closeCibilBtn && cibilModalBackdrop) {
+    closeCibilBtn.addEventListener('click', () => {
+      cibilModalBackdrop.classList.remove('active');
+      playSound('tap');
+    });
+  }
+  if (closeCibilBtn2 && cibilModalBackdrop) {
+    closeCibilBtn2.addEventListener('click', () => {
+      cibilModalBackdrop.classList.remove('active');
       playSound('tap');
     });
   }
 
-  // Manage your money cards
+  // ================= 18. BILLS & CARDS QUICK ACTIONS =================
+  document.querySelectorAll('.bill-provider-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const biller = item.getAttribute('data-biller') || 'Electricity';
+      const amount = parseFloat(item.getAttribute('data-amount')) || 180;
+      openPaymentSheet(biller, biller.charAt(0), `${biller.toLowerCase().replace(/\s+/g, '')}@billdesk`, '#0b57d0', amount);
+    });
+  });
+
+  document.querySelectorAll('.category-icon-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-category');
+      showToast(`Selected category: ${cat}`);
+      playSound('tap');
+    });
+  });
+
+  const chipTapPay = document.getElementById('chipTapPay');
+  if (chipTapPay) {
+    chipTapPay.addEventListener('click', () => {
+      showToast('NFC Tap & Pay is active on this device');
+      playSound('tap');
+    });
+  }
+
+  const chipUpiLite = document.getElementById('chipUpiLite');
+  if (chipUpiLite) {
+    chipUpiLite.addEventListener('click', () => {
+      showToast(`Primary Account Balance: ₹${currentBalance.toLocaleString('en-IN')}`);
+      playSound('tap');
+    });
+  }
+
+  const applyFlexBtn = document.getElementById('applyFlexBtn');
+  if (applyFlexBtn) {
+    applyFlexBtn.addEventListener('click', () => {
+      showToast('Opening Flex Credit Card (Zero-fee welcome offer)');
+      playSound('tap');
+    });
+  }
+
   const cardFlexGpay = document.getElementById('cardFlexGpay');
   if (cardFlexGpay) {
     cardFlexGpay.addEventListener('click', () => {
@@ -1342,15 +1628,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Top Search Trigger
-  const searchTriggerBtn = document.getElementById('searchTriggerBtn');
-  if (searchTriggerBtn) {
-    searchTriggerBtn.addEventListener('click', () => {
-      openPaymentSheet('Adithya', 'A', 'adithya.kumar@okicici', '#00838f');
-    });
-  }
-
-  // PWA Service Worker Registration
+  // ================= 19. PWA SERVICE WORKER REGISTRATION =================
   if ('serviceWorker' in navigator) {
     const registerSW = () => {
       navigator.serviceWorker.register('./sw.js')

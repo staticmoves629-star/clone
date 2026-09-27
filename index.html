@@ -53,7 +53,7 @@
                   <path
                     d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5-3c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
                 </svg>
-                <div class="search-profile-avatar" title="Account profile">
+                <div class="search-profile-avatar" id="topProfileAvatarBtn" title="Account & Settings" role="button" tabindex="0">
                   <span>A</span>
                 </div>
               </div>
@@ -1181,25 +1181,19 @@
           </button>
         </div>
 
-        <!-- Filter Chips Row -->
+        <!-- Filter Chips Row: All, Sent, Received, Cashback -->
         <div class="hist-filters-scroll-row">
-          <button class="hist-filter-chip active-filter" data-filter="status">
-            <span>Status</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M7 10l5 5 5-5z" />
-            </svg>
+          <button class="hist-filter-chip active-filter" data-filter="all">
+            <span>All</span>
           </button>
-          <button class="hist-filter-chip" data-filter="payment-method">
-            <span>Payment method</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M7 10l5 5 5-5z" />
-            </svg>
+          <button class="hist-filter-chip" data-filter="sent">
+            <span>Sent</span>
           </button>
-          <button class="hist-filter-chip" data-filter="date">
-            <span>Date</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M7 10l5 5 5-5z" />
-            </svg>
+          <button class="hist-filter-chip" data-filter="received">
+            <span>Received</span>
+          </button>
+          <button class="hist-filter-chip" data-filter="cashback">
+            <span>Cashback</span>
           </button>
         </div>
 
@@ -1376,6 +1370,19 @@
 
           </div> <!-- /hist-tx-list -->
 
+          <!-- Empty State when no search results match -->
+          <div class="hist-empty-state" id="histEmptyState" style="display: none;">
+            <div class="empty-icon-circle">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </div>
+            <h4 class="empty-title">No transactions found</h4>
+            <p class="empty-subtitle">Try searching with a different name, UPI ID, or category</p>
+          </div>
+
           <!-- Bottom Home Indicator -->
           <div class="android-home-pill"></div>
 
@@ -1439,17 +1446,71 @@
     </div>
   </div>
 
-  <!-- Modal 2: Simulated UPI PIN Keypad Modal -->
+  <!-- Modal 1B: Payment Confirmation Bottom Sheet -->
+  <div class="interactive-modal-backdrop" id="confirmModalBackdrop">
+    <div class="bottom-sheet-panel confirm-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="sheet-header">
+        <h3 class="confirm-sheet-title">Confirm Payment</h3>
+        <button class="modal-close-btn" id="closeConfirmModalBtn">&times;</button>
+      </div>
+
+      <div class="confirm-recipient-card">
+        <div class="recipient-avatar-large" id="confirmRecipientAvatar">
+          <span id="confirmRecipientInitial">A</span>
+        </div>
+        <div class="confirm-info">
+          <h3 class="confirm-name" id="confirmRecipientName">Adithya</h3>
+          <span class="confirm-upi" id="confirmRecipientUpi">adithya@upi</span>
+          <div class="banking-name-tag">✓ Banking name verified</div>
+        </div>
+      </div>
+
+      <div class="confirm-amount-box">
+        <span class="confirm-amount-label">Amount</span>
+        <div class="confirm-amount-value" id="confirmDisplayAmount">₹500</div>
+      </div>
+
+      <div class="paying-from-card confirm-bank-card">
+        <div class="bank-pill-mini">FB</div>
+        <div class="bank-account-text">
+          <span class="bank-name">Federal Bank</span>
+          <span class="account-num">•••• 1234 (Primary)</span>
+        </div>
+        <div class="secure-upi-badge">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="#34a853">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+          </svg>
+          <span>UPI 256-bit Secure</span>
+        </div>
+      </div>
+
+      <button class="gpay-primary-submit-btn ripple-btn" id="proceedToPinBtn">
+        Pay <span id="proceedAmountText">₹500</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal 2: Simulated UPI PIN Keypad Modal (6-Digit) -->
   <div class="interactive-modal-backdrop" id="upiPinBackdrop">
     <div class="bottom-sheet-panel upi-pin-sheet">
       <div class="upi-header-row">
-        <span class="upi-gov-logo">UPI</span>
-        <span class="upi-bank-name">State Bank of India</span>
+        <div class="upi-gov-badge">
+          <span class="upi-gov-logo">UPI</span>
+        </div>
+        <span class="upi-bank-name">Federal Bank •••• 1234</span>
+        <button class="modal-close-btn" id="closePinModalBtn">&times;</button>
       </div>
-      <p class="upi-instruction-text">ENTER 4-DIGIT UPI PIN</p>
 
-      <!-- PIN Dots -->
+      <div class="upi-sub-summary">
+        Paying <span id="pinRecipientName">Adithya</span> • <strong id="pinAmountText">₹500</strong>
+      </div>
+      <p class="upi-instruction-text">ENTER 6-DIGIT UPI PIN</p>
+
+      <!-- PIN Dots (6 Dots) -->
       <div class="pin-dots-container" id="pinDotsRow">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
         <span class="pin-dot"></span>
         <span class="pin-dot"></span>
         <span class="pin-dot"></span>
@@ -1474,6 +1535,27 @@
     </div>
   </div>
 
+  <!-- Modal 2B: Simulated Payment Processing State -->
+  <div class="interactive-modal-backdrop" id="processingBackdrop">
+    <div class="processing-modal-card">
+      <div class="processing-spinner-wrapper">
+        <div class="gpay-spinner-ring"></div>
+        <div class="gpay-spinner-inner-icon">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="#1a73e8">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
+          </svg>
+        </div>
+      </div>
+      <h3 class="processing-title">Processing payment...</h3>
+      <div class="processing-amount" id="processingAmountText">₹500</div>
+      <p class="processing-recipient" id="processingRecipientText">Paying Adithya (adithya@upi)</p>
+      <div class="processing-status-pill">
+        <span class="pulse-indicator"></span>
+        <span>Securing connection with bank...</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal 3: Payment Success Animated Celebration -->
   <div class="interactive-modal-backdrop" id="successBackdrop">
     <div class="success-card-modal">
@@ -1486,7 +1568,8 @@
       <h3 class="success-title">Payment Successful!</h3>
       <div class="success-amount-display" id="successAmountText">₹500.00</div>
       <p class="success-recipient-text" id="successRecipientSub">Paid to Adithya</p>
-      <div class="success-upi-ref">UPI Ref ID: <span id="successRefId">426918402914</span></div>
+      <div class="success-upi-ref">UPI transaction ID: <span id="successRefId">428819204812</span></div>
+      <div class="success-balance-update" id="successBalanceSub">Updated Balance: ₹9,500.00</div>
       <button class="success-done-btn ripple-btn" id="successDoneBtn">Done</button>
     </div>
   </div>
@@ -1501,12 +1584,12 @@
       </div>
       <div class="balance-bank-card">
         <div class="bank-card-top">
-          <span class="bank-title">State Bank of India</span>
-          <span class="account-pill">Savings A/C •••• 4092</span>
+          <span class="bank-title">Federal Bank •••• 1234</span>
+          <span class="account-pill">Savings (Primary)</span>
         </div>
         <div class="available-balance-label">Available Balance</div>
-        <div class="balance-big-amount">₹42,850.75</div>
-        <div class="balance-updated-time">Updated just now</div>
+        <div class="balance-big-amount" id="balanceBigAmount">₹10,000.00</div>
+        <div class="balance-updated-time" id="balanceUpdatedTime">Updated just now</div>
       </div>
       <button class="gpay-secondary-btn ripple-btn" id="balanceCloseBtn">Close</button>
     </div>
@@ -1530,15 +1613,77 @@
       </div>
 
       <div class="scanner-camera-viewport">
-        <!-- Live laser scanning beam -->
-        <div class="scanner-target-reticle">
+        <!-- Live laser scanning beam & QR preview -->
+        <div class="scanner-target-reticle" id="scannerReticle">
           <div class="reticle-corner top-left"></div>
           <div class="reticle-corner top-right"></div>
           <div class="reticle-corner bottom-left"></div>
           <div class="reticle-corner bottom-right"></div>
-          <div class="scanner-laser-line"></div>
+          <div class="scanner-laser-line" id="scannerLaserLine"></div>
+
+          <!-- Realistic Simulated Merchant QR Card in Viewfinder -->
+          <div class="scanner-mock-qr-card" id="mockQrCard">
+            <div class="mock-qr-header">
+              <span class="mock-qr-brand">Google Pay</span>
+              <span class="mock-qr-badge">UPI</span>
+            </div>
+            <!-- Authentic Scalable Vector QR pattern -->
+            <svg class="mock-qr-code-svg" viewBox="0 0 100 100" fill="currentColor">
+              <!-- Corner 1 -->
+              <rect x="10" y="10" width="24" height="24" rx="3" fill="#1f2937"/>
+              <rect x="15" y="15" width="14" height="14" rx="2" fill="#ffffff"/>
+              <rect x="18" y="18" width="8" height="8" rx="1.5" fill="#1f2937"/>
+              <!-- Corner 2 -->
+              <rect x="66" y="10" width="24" height="24" rx="3" fill="#1f2937"/>
+              <rect x="71" y="15" width="14" height="14" rx="2" fill="#ffffff"/>
+              <rect x="74" y="18" width="8" height="8" rx="1.5" fill="#1f2937"/>
+              <!-- Corner 3 -->
+              <rect x="10" y="66" width="24" height="24" rx="3" fill="#1f2937"/>
+              <rect x="15" y="71" width="14" height="14" rx="2" fill="#ffffff"/>
+              <rect x="18" y="74" width="8" height="8" rx="1.5" fill="#1f2937"/>
+              <!-- Data modules -->
+              <rect x="40" y="12" width="6" height="6" fill="#1f2937"/>
+              <rect x="52" y="12" width="6" height="6" fill="#1f2937"/>
+              <rect x="42" y="24" width="8" height="6" fill="#1f2937"/>
+              <rect x="54" y="22" width="6" height="8" fill="#1f2937"/>
+              <rect x="12" y="42" width="8" height="6" fill="#1f2937"/>
+              <rect x="24" y="44" width="6" height="8" fill="#1f2937"/>
+              <rect x="36" y="38" width="10" height="10" fill="#1a73e8"/>
+              <rect x="52" y="38" width="10" height="10" fill="#34a853"/>
+              <rect x="44" y="52" width="12" height="12" rx="2" fill="#0b57d0"/>
+              <rect x="66" y="42" width="6" height="8" fill="#1f2937"/>
+              <rect x="78" y="40" width="8" height="6" fill="#1f2937"/>
+              <rect x="40" y="68" width="8" height="6" fill="#1f2937"/>
+              <rect x="52" y="66" width="8" height="8" fill="#1f2937"/>
+              <rect x="68" y="66" width="10" height="6" fill="#1f2937"/>
+              <rect x="80" y="76" width="8" height="8" fill="#1f2937"/>
+            </svg>
+            <div class="mock-qr-footer">
+              <span class="mock-qr-name">Adithya</span>
+              <span class="mock-qr-upi">adithya@upi</span>
+            </div>
+          </div>
+
+          <!-- Detected checkmark badge overlay -->
+          <div class="scanner-detected-overlay" id="scannerDetectedOverlay">
+            <div class="detected-check-circle">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span>QR Detected!</span>
+          </div>
         </div>
-        <p class="scanner-prompt-text">Align QR code within the frame to pay</p>
+
+        <p class="scanner-prompt-text" id="scannerPromptText">Align QR code within the frame to pay</p>
+        
+        <!-- Quick scan button -->
+        <button class="scanner-quick-scan-btn ripple-btn" id="scanDemoQrBtn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M9.5 6.5v3h-3v-3h3M11 5H5v6h6V5zm-1.5 9.5v3h-3v-3h3M11 13H5v6h6v-6zm9.5-6.5v3h-3v-3h3M20 5h-6v6h6V5zm-4.5 9.5v1.5h-1.5v-1.5h1.5zm1.5 1.5v1.5h-1.5v-1.5h1.5zm-3 1.5v1.5h-1.5V19h1.5zm4.5 0v-1.5H17V16h1.5v-1.5H17V13h1.5v1.5H20V16h-1.5v1.5H20V19h-1.5z"/>
+          </svg>
+          <span>Scan Adithya's QR Code</span>
+        </button>
       </div>
 
       <div class="scanner-bottom-actions">
@@ -1549,6 +1694,113 @@
           </svg>
           <span>Upload from gallery</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 7: Account & Settings Modal (with Dark Mode Toggle) -->
+  <div class="interactive-modal-backdrop" id="settingsModalBackdrop">
+    <div class="bottom-sheet-panel settings-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="sheet-header">
+        <h3>Settings</h3>
+        <button class="modal-close-btn" id="closeSettingsBtn">&times;</button>
+      </div>
+      <div class="settings-scroll-content">
+        <!-- Profile Card -->
+        <div class="settings-profile-card">
+          <div class="settings-avatar-circle">
+            <span>A</span>
+          </div>
+          <div class="settings-profile-info">
+            <h4 class="settings-profile-name">Arjun S</h4>
+            <span class="settings-profile-phone">+91 98765 43210</span>
+            <span class="settings-profile-upi">arjun.s@okaxis</span>
+          </div>
+          <div class="settings-qr-badge" id="settingsQrBadge" title="Your Personal QR Code">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 2h2v3h-2v-3zm3 3h3v3h-3v-3zm-5 1h2v2h-2v-2z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Section: Appearance -->
+        <div class="settings-section">
+          <div class="settings-section-title">Appearance</div>
+          
+          <!-- Dark Mode Toggle -->
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-item-icon moon-icon-box">
+                <svg class="dark-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
+                </svg>
+              </div>
+              <div class="settings-item-text">
+                <span class="settings-item-label">Dark Mode</span>
+                <span class="settings-item-sub" id="themeStatusText">Dark fintech mode enabled</span>
+              </div>
+            </div>
+            <label class="gpay-switch">
+              <input type="checkbox" id="themeToggleSwitch" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <!-- Sound Effects Toggle -->
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-item-icon sound-icon-box">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+              </div>
+              <div class="settings-item-text">
+                <span class="settings-item-label">Sound Effects</span>
+                <span class="settings-item-sub">Payment chimes and keypad audio</span>
+              </div>
+            </div>
+            <label class="gpay-switch">
+              <input type="checkbox" id="soundToggleSwitch" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Section: Bank Accounts -->
+        <div class="settings-section">
+          <div class="settings-section-title">Bank Accounts & UPI</div>
+          <div class="settings-bank-row">
+            <div class="bank-pill-mini">FB</div>
+            <div class="bank-details">
+              <span class="bank-name">Federal Bank •••• 1234</span>
+              <span class="bank-type">Savings account (Primary)</span>
+            </div>
+            <span class="bank-check-tag">Default</span>
+          </div>
+          <div class="settings-bank-row">
+            <div class="bank-pill-mini sbi-pill">SBI</div>
+            <div class="bank-details">
+              <span class="bank-name">State Bank of India •••• 4092</span>
+              <span class="bank-type">Savings account</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Demo Controls -->
+        <div class="settings-section">
+          <div class="settings-section-title">Demo Controls</div>
+          <button class="settings-action-btn" id="resetDemoDataBtn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+            </svg>
+            <span>Reset Demo Balance & Transactions</span>
+          </button>
+        </div>
+
+        <div class="settings-version-footer">
+          Google Pay Mobile UI • Hackathon Edition v2.4 (Simulated)
+        </div>
       </div>
     </div>
   </div>

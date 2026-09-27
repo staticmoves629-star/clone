@@ -1,0 +1,11 @@
+{
+  "name": "gpay-clone",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Google Pay-inspired mobile fintech web app prototype",
+  "scripts": {
+    "build": "node -e \"console.log('Build completed successfully')\"",
+    "dev": "npx serve -s .",
+    "start": "npx serve -s ."
+  }
+}
