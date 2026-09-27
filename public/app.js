@@ -746,6 +746,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const proceedToPinBtn = document.getElementById('proceedToPinBtn');
   const closeConfirmModalBtn = document.getElementById('closeConfirmModalBtn');
 
+  // Stage 1 (Amount Entry - Screenshot 1) Elements
+  const payBankingNameText = document.getElementById('payBankingNameText');
+  const payAmountDisplay = document.getElementById('payAmountDisplay');
+  const payNotePillBtn = document.getElementById('payNotePillBtn');
+  const payNoteDisplay = document.getElementById('payNoteDisplay');
+  const gpayAmountBackspace = document.getElementById('gpayAmountBackspace');
+  const payInfoBtn = document.getElementById('payInfoBtn');
+  const payOverflowBtn = document.getElementById('payOverflowBtn');
+
+  // Stage 2 (Payment Method - Screenshot 3) Elements
+  const checkBalanceQuickLink = document.getElementById('checkBalanceQuickLink');
+  const revealedBalanceText = document.getElementById('revealedBalanceText');
+  const confirmBankTitle = document.getElementById('confirmBankTitle');
+
+  // Stage 4 (Celebration & Receipt - Screenshots 2, 4, 5) Elements
+  const celebrationBurstView = document.getElementById('celebrationBurstView');
+  const receiptFullView = document.getElementById('receiptFullView');
+  const burstAmountText = document.getElementById('burstAmountText');
+  const burstRecipientName = document.getElementById('burstRecipientName');
+  const successRecipientName = document.getElementById('successRecipientName');
+  const successBankingNameText = document.getElementById('successBankingNameText');
+  const successTimestamp = document.getElementById('successTimestamp');
+  const shareReceiptBtn = document.getElementById('shareReceiptBtn');
+  const seeDetailsBtn = document.getElementById('seeDetailsBtn');
+  const tryUpiLiteBtn = document.getElementById('tryUpiLiteBtn');
+
   // Step 3: 6-Digit PIN Sheet
   const pinDotsRow = document.getElementById('pinDotsRow');
   const pinRecipientName = document.getElementById('pinRecipientName');
@@ -766,80 +792,147 @@ document.addEventListener('DOMContentLoaded', () => {
   const successBalanceSub = document.getElementById('successBalanceSub');
 
   // Open Step 1 (Enter Amount)
+  let currentAmountStr = '0';
+
   function openPaymentSheet(name, initial, upi, avatarBg, defaultAmount) {
     currentRecipient = {
-      name: name || 'Adithya',
-      initial: initial || (name ? name.charAt(0) : 'A'),
-      upi: upi || 'adithya@upi',
-      avatarBg: avatarBg || '#00838f'
+      name: name || 'Siva Sumesh',
+      initial: initial || (name ? name.charAt(0) : 'S'),
+      upi: upi || '9544951867@superyes',
+      avatarBg: avatarBg || '#7c9bf8'
     };
 
     if (payRecipientName) payRecipientName.textContent = currentRecipient.name;
+    if (payBankingNameText) payBankingNameText.textContent = currentRecipient.name;
     if (payRecipientInitial) payRecipientInitial.textContent = currentRecipient.initial;
     if (payRecipientUpi) payRecipientUpi.textContent = currentRecipient.upi;
     if (payRecipientAvatar) payRecipientAvatar.style.background = currentRecipient.avatarBg;
 
-    if (payAmountInput) {
-      payAmountInput.value = defaultAmount !== undefined && defaultAmount !== null ? defaultAmount : '500';
-      updateConfirmAmount();
-    }
+    currentAmountStr = (defaultAmount !== undefined && defaultAmount !== null && defaultAmount > 0) ? String(defaultAmount) : '0';
+    if (payAmountInput) payAmountInput.value = currentAmountStr;
+    if (payAmountDisplay) payAmountDisplay.textContent = currentAmountStr;
+    if (payNoteDisplay) payNoteDisplay.textContent = 'Add note';
+    if (payNoteInput) payNoteInput.value = '';
+
+    updateConfirmAmount();
 
     if (paymentModalBackdrop) {
       paymentModalBackdrop.classList.add('active');
       pushNavState('modal', 'paymentModalBackdrop');
-      setTimeout(() => {
-        if (payAmountInput) payAmountInput.focus();
-      }, 350);
     }
     playSound('tap');
   }
 
   function updateConfirmAmount() {
-    const val = payAmountInput ? (parseFloat(payAmountInput.value) || 0) : 0;
+    const val = parseFloat(currentAmountStr) || 0;
     if (confirmPayAmountText) {
       confirmPayAmountText.textContent = `₹${val.toLocaleString('en-IN')}`;
     }
+    if (proceedAmountText) {
+      proceedAmountText.textContent = `₹${val.toLocaleString('en-IN')}`;
+    }
   }
 
-  if (payAmountInput) {
-    payAmountInput.addEventListener('input', updateConfirmAmount);
-  }
-
-  // Preset Amount Chips (+100, +500, +1000, +2000)
-  document.querySelectorAll('.preset-chip-btn').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const preset = parseInt(chip.getAttribute('data-preset'), 10) || 0;
-      const current = parseInt(payAmountInput.value, 10) || 0;
-      payAmountInput.value = current + preset;
+  // Keypad clicks for Amount Entry
+  document.querySelectorAll('#gpayAmountKeypad .gpay-k-btn[data-val]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const val = btn.getAttribute('data-val');
+      if (val === '.') {
+        if (!currentAmountStr.includes('.')) {
+          currentAmountStr = currentAmountStr ? currentAmountStr + '.' : '0.';
+        }
+      } else {
+        if (currentAmountStr === '0') {
+          currentAmountStr = val;
+        } else if (currentAmountStr.length < 8) {
+          const parts = currentAmountStr.split('.');
+          if (parts.length < 2 || parts[1].length < 2) {
+            currentAmountStr += val;
+          }
+        }
+      }
+      if (payAmountDisplay) payAmountDisplay.textContent = currentAmountStr;
+      if (payAmountInput) payAmountInput.value = currentAmountStr;
       updateConfirmAmount();
       playSound('tap');
     });
   });
 
-  // Step 1 -> Step 2: "Pay ₹500" opens Confirmation
+  if (gpayAmountBackspace) {
+    gpayAmountBackspace.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentAmountStr.length > 1) {
+        currentAmountStr = currentAmountStr.slice(0, -1);
+      } else {
+        currentAmountStr = '0';
+      }
+      if (payAmountDisplay) payAmountDisplay.textContent = currentAmountStr;
+      if (payAmountInput) payAmountInput.value = currentAmountStr;
+      updateConfirmAmount();
+      playSound('tap');
+    });
+  }
+
+  // Add Note pill
+  if (payNotePillBtn) {
+    payNotePillBtn.addEventListener('click', () => {
+      const currentNote = payNoteInput ? payNoteInput.value : '';
+      const entered = prompt('Add a payment note (e.g. Dinner, rent, groceries):', currentNote);
+      if (entered !== null) {
+        const trimmed = entered.trim();
+        if (payNoteInput) payNoteInput.value = trimmed;
+        if (payNoteDisplay) payNoteDisplay.textContent = trimmed ? trimmed : 'Add note';
+      }
+    });
+  }
+
+  if (payInfoBtn) {
+    payInfoBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showToast('Verified UPI merchant/contact via NPCI');
+    });
+  }
+
+  if (payOverflowBtn) {
+    payOverflowBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showToast('Options: Report issue, Block user, UPI Help');
+    });
+  }
+
+  // Step 1 -> Step 2: Proceed Arrow opens "Select payment method" Bottom Sheet
   if (confirmPayBtn) {
     confirmPayBtn.addEventListener('click', () => {
-      const amountVal = parseFloat(payAmountInput ? payAmountInput.value : 0) || 0;
+      const amountVal = parseFloat(currentAmountStr) || 0;
       if (amountVal <= 0) {
         showToast('Please enter an amount to pay');
+        playSound('tap');
         return;
       }
 
-      // Close Step 1
-      if (paymentModalBackdrop) paymentModalBackdrop.classList.remove('active');
+      // Reset balance display
+      if (revealedBalanceText) revealedBalanceText.style.display = 'none';
+      if (checkBalanceQuickLink) checkBalanceQuickLink.style.display = 'inline';
+      if (confirmBankTitle) confirmBankTitle.textContent = 'State Bank of India 8102';
 
-      // Populate Step 2 (Confirmation)
-      if (confirmRecipientName) confirmRecipientName.textContent = currentRecipient.name;
-      if (confirmRecipientUpi) confirmRecipientUpi.textContent = currentRecipient.upi;
-      if (confirmRecipientInitial) confirmRecipientInitial.textContent = currentRecipient.initial;
-      if (confirmRecipientAvatar) confirmRecipientAvatar.style.background = currentRecipient.avatarBg;
-      if (confirmDisplayAmount) confirmDisplayAmount.textContent = `₹${amountVal.toLocaleString('en-IN')}`;
-      if (proceedAmountText) proceedAmountText.textContent = `₹${amountVal.toLocaleString('en-IN')}`;
-
-      // Open Step 2
+      // Open Step 2: "Select payment method" sheet
       if (confirmModalBackdrop) {
         confirmModalBackdrop.classList.add('active');
         pushNavState('modal', 'confirmModalBackdrop');
+      }
+      playSound('tap');
+    });
+  }
+
+  // Check Balance quick link on Payment Method sheet
+  if (checkBalanceQuickLink) {
+    checkBalanceQuickLink.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (revealedBalanceText) {
+        revealedBalanceText.textContent = `₹${currentBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+        revealedBalanceText.style.display = 'inline';
+        checkBalanceQuickLink.style.display = 'none';
       }
       playSound('tap');
     });
@@ -978,7 +1071,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Step 5: Success celebration screen
+  // Step 5: Success celebration screen & Authentic Receipt
   let pendingCompletedTx = null;
 
   function triggerSuccess(amountVal) {
@@ -986,19 +1079,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const generatedRefId = String(Math.floor(100000000000 + Math.random() * 900000000000));
     const now = new Date();
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const hours = now.getHours();
     const mins = String(now.getMinutes()).padStart(2, '0');
     const ampm = hours >= 12 ? 'pm' : 'am';
     const timeStr = `${hours % 12 || 12}:${mins} ${ampm}`;
+    const dateFormatted = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}, ${timeStr}`;
 
-    // Calculate updated balance
-    const newBal = Math.max(0, currentBalance - amountVal);
+    // Format amount cleanly: ₹1 or ₹500
+    const formattedAmount = Number.isInteger(amountVal) ? `₹${amountVal}` : `₹${amountVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
-    if (successAmountText) successAmountText.textContent = `₹${amountVal.toLocaleString('en-IN')}.00`;
-    if (successRecipientSub) successRecipientSub.textContent = `Paid to ${currentRecipient.name} (${currentRecipient.upi})`;
-    if (successRefId) successRefId.textContent = generatedRefId;
-    if (successBalanceSub) successBalanceSub.textContent = `Available balance: ₹${newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+    // Set Stage 1: Celebration Burst
+    if (burstAmountText) burstAmountText.textContent = formattedAmount;
+    if (burstRecipientName) burstRecipientName.textContent = (currentRecipient.name || 'JOB THOMAS CHERIAN').toUpperCase();
+
+    // Set Stage 2: Full Receipt
+    if (successAmountText) successAmountText.textContent = formattedAmount;
+    if (successRecipientName) successRecipientName.textContent = (currentRecipient.name || 'JOB THOMAS CHERIAN').toUpperCase();
+    if (successBankingNameText) successBankingNameText.textContent = currentRecipient.name || 'JOB THOMAS CHERIAN';
+    if (successTimestamp) successTimestamp.textContent = dateFormatted;
+
+    // Reset views: show burst first, hide receipt
+    if (celebrationBurstView) celebrationBurstView.classList.remove('fade-out');
+    if (receiptFullView) receiptFullView.classList.remove('active');
+
+    // Open Success Backdrop
+    if (successBackdrop) {
+      successBackdrop.classList.add('active');
+      pushNavState('modal', 'successBackdrop');
+    }
+
+    // Seamlessly transition from Celebration Burst to Full Receipt after 1.4s
+    setTimeout(() => {
+      if (celebrationBurstView) celebrationBurstView.classList.add('fade-out');
+      if (receiptFullView) receiptFullView.classList.add('active');
+    }, 1400);
 
     // Prepare transaction object
     pendingCompletedTx = {
@@ -1008,18 +1123,46 @@ document.addEventListener('DOMContentLoaded', () => {
       upiId: currentRecipient.upi,
       amount: amountVal,
       type: 'sent',
-      date: `Today, ${now.getDate()} ${months[now.getMonth()]}`,
+      date: `Today, ${now.getDate()} ${months[now.getMonth()].substring(0, 3)}`,
       time: timeStr,
       status: 'Completed',
       category: 'Payment',
-      color: currentRecipient.avatarBg || '#00838f',
+      color: currentRecipient.avatarBg || '#7c9bf8',
       initial: currentRecipient.initial || currentRecipient.name.charAt(0)
     };
+  }
 
-    if (successBackdrop) {
-      successBackdrop.classList.add('active');
-      pushNavState('modal', 'successBackdrop');
-    }
+  // Share Screenshot action
+  if (shareReceiptBtn) {
+    shareReceiptBtn.addEventListener('click', () => {
+      if (navigator.share && pendingCompletedTx) {
+        navigator.share({
+          title: 'Google Pay Receipt',
+          text: `Paid ₹${pendingCompletedTx.amount} to ${pendingCompletedTx.name}. UPI Ref: ${pendingCompletedTx.upiRefId}`
+        }).catch(() => {});
+      } else {
+        showToast('Receipt details copied to clipboard!');
+      }
+      playSound('tap');
+    });
+  }
+
+  // See Details action
+  if (seeDetailsBtn) {
+    seeDetailsBtn.addEventListener('click', () => {
+      if (pendingCompletedTx) {
+        showToast(`UPI ID: ${pendingCompletedTx.upiId} • Ref: ${pendingCompletedTx.upiRefId}`);
+      }
+      playSound('tap');
+    });
+  }
+
+  // Try UPI Lite promo
+  if (tryUpiLiteBtn) {
+    tryUpiLiteBtn.addEventListener('click', () => {
+      showToast('UPI Lite feature enabled for State Bank of India');
+      playSound('tap');
+    });
   }
 
   // Tapping "Done" on Success Screen
@@ -1051,6 +1194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Close any full-screen payment/chat views and return to Home
         if (payScreenView) payScreenView.classList.remove('active');
+        if (paymentModalBackdrop) paymentModalBackdrop.classList.remove('active');
         if (chatView) chatView.classList.remove('active');
         if (homeView) homeView.classList.remove('slide-left');
 
@@ -1090,7 +1234,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (scannerPromptText) scannerPromptText.textContent = 'Align QR code within the frame to pay';
 
       // Transition immediately into payment flow for Adithya
-      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 500);
+      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 0);
     }, 600);
   }
 
@@ -1313,7 +1457,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRecipient.initial || 'A',
         currentRecipient.upi || 'adithya@upi',
         currentRecipient.avatarBg || '#00838f',
-        500
+        0
       );
     });
   }
@@ -1337,7 +1481,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const payAnyoneBtn = document.getElementById('payAnyoneBtn');
   if (payAnyoneBtn) {
     payAnyoneBtn.addEventListener('click', () => {
-      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 500);
+      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 0);
     });
   }
 
@@ -1347,7 +1491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchTriggerBtn.addEventListener('click', (e) => {
       // If clicking profile avatar directly, that opens settings instead
       if (e.target.closest('#topProfileAvatarBtn')) return;
-      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 500);
+      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 0);
     });
   }
 
@@ -1361,7 +1505,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const payScreenAmountDisplay = document.getElementById('payScreenAmountDisplay');
   const payScreenSubmitAmountText = document.getElementById('payScreenSubmitAmountText');
   const payScreenSubmitBtn = document.getElementById('payScreenSubmitBtn');
-  const payNotePillBtn = document.getElementById('payNotePillBtn');
   const payNotePillText = document.getElementById('payNotePillText');
   const payKeyBackspace = document.getElementById('payKeyBackspace');
 
@@ -1586,7 +1729,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (bankTransferBtn) {
     bankTransferBtn.addEventListener('click', () => {
-      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 500);
+      openPaymentSheet('Adithya', 'A', 'adithya@upi', '#00838f', 0);
     });
   }
 

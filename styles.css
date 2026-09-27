@@ -1173,180 +1173,391 @@ body.fullscreen-mobile-mode .phone-camera-hole {
   color: #ffffff;
 }
 
-/* Payment Sheet Details */
-.recipient-avatar-large {
-  width: 46px;
-  height: 46px;
+/* ================= GPAY AMOUNT ENTRY SCREEN (SCREENSHOT 1) ================= */
+.gpay-fullscreen-backdrop {
+  align-items: flex-end;
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.gpay-pay-flow-panel {
+  width: 100%;
+  max-width: 440px;
+  height: 100%;
+  max-height: 100dvh;
+  background: #121316 !important;
+  color: #ffffff !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  border-radius: 0 !important;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
+  padding: 0 !important;
+}
+
+@media (min-width: 501px) {
+  .gpay-pay-flow-panel {
+    height: 94vh;
+    max-height: 820px;
+    border-radius: 28px 28px 0 0 !important;
+  }
+}
+
+.gpay-pay-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 8px 18px;
+}
+
+.gpay-top-icon-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  padding: 8px;
   border-radius: 50%;
-  background: #00838f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.gpay-top-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.gpay-top-bar-spacer {
+  flex: 1;
+}
+
+.gpay-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Recipient Header */
+.gpay-pay-recipient-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 6px 20px 0 20px;
+}
+
+.gpay-avatar-circle {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #7c9bf8;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  font-weight: 700;
-  margin-right: 12px;
+  font-size: 26px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
-.recipient-info {
+.gpay-paying-to-title {
+  font-size: 17px;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 5px;
+}
+
+.gpay-banking-name-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: #e3e3e3;
+  margin-bottom: 3px;
+}
+
+.gpay-upi-id-text {
+  font-size: 13.5px;
+  color: #9aa0a6;
+}
+
+/* Big Amount & Cursor */
+.gpay-big-amount-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 26px;
+  padding: 0 20px;
+}
+
+.gpay-big-amount-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.gpay-currency-sign {
+  font-size: 38px;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.gpay-amount-digits {
+  font-size: 58px;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.gpay-cursor-bar {
+  font-size: 52px;
+  font-weight: 200;
+  color: #a8c7fa;
+  margin-left: 2px;
+  animation: gpayCursorBlink 1s infinite;
+  line-height: 1;
+}
+
+@keyframes gpayCursorBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Add note button */
+.gpay-add-note-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.gpay-add-note-btn {
+  background: #25272c;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 22px;
+  color: #e3e3e3;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gpay-add-note-btn:hover {
+  background: #31343a;
+}
+
+.gpay-amount-screen-spacer {
   flex: 1;
 }
 
-.pay-recipient-name {
+/* Bottom Controls: Arrow Button + Keypad */
+.gpay-bottom-controls {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.gpay-proceed-arrow-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 20px 14px 20px;
+}
+
+.gpay-squircle-arrow-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: #c2e7ff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(194, 231, 255, 0.25);
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gpay-squircle-arrow-btn:hover {
+  background: #b1ddfa;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(194, 231, 255, 0.35);
+}
+
+.gpay-squircle-arrow-btn:active {
+  transform: scale(0.92);
+}
+
+.gpay-integrated-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px 8px;
+  padding: 8px 16px calc(14px + env(safe-area-inset-bottom, 0px)) 16px;
+  background: #18191d;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gpay-k-btn {
+  height: 52px;
+  background: transparent;
+  border: none;
+  border-radius: 14px;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 400;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.gpay-k-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gpay-k-btn:active {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(0.96);
+}
+
+.gpay-k-backspace {
+  font-size: 20px;
+}
+
+/* ================= SELECT PAYMENT METHOD SHEET (SCREENSHOT 3) ================= */
+.gpay-payment-method-sheet {
+  width: 100%;
+  max-width: 440px;
+  background: #1f2025 !important;
+  border-radius: 28px 28px 0 0;
+  padding: 16px 20px 24px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.4);
+}
+
+.gpay-method-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.gpay-method-title {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
+  color: #e3e3e3;
+  margin: 0;
+}
+
+.gpay-bank-method-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 22px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.gpay-bank-method-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.gpay-bank-logo-box {
+  width: 44px;
+  height: 32px;
+  background: #ffffff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gpay-bank-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.gpay-bank-title {
+  font-size: 15px;
+  font-weight: 500;
   color: #ffffff;
 }
 
-.pay-recipient-upi {
-  font-size: 11.5px;
+.gpay-bank-balance-row {
+  font-size: 13px;
   color: #9aa0a6;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.banking-name-tag {
-  font-size: 10.5px;
+.gpay-check-balance-link {
+  color: #a8c7fa;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.gpay-check-balance-link:hover {
+  text-decoration: underline;
+}
+
+.gpay-balance-revealed {
   color: #34a853;
   font-weight: 600;
 }
 
-.payment-amount-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 0;
-  margin-bottom: 12px;
-}
-
-.currency-symbol {
-  font-size: 34px;
-  font-weight: 700;
-  color: #ffffff;
-  margin-right: 6px;
-}
-
-.pay-amount-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  font-family: inherit;
-  font-size: 42px;
-  font-weight: 800;
-  color: #ffffff;
-  width: 170px;
-  text-align: left;
-}
-
-.amount-presets-row {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.preset-chip-btn {
-  padding: 6px 12px;
-  background: #2b2d32;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-full);
-  color: #e3e3e3;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-}
-.preset-chip-btn:hover {
-  background: #363940;
-}
-
-.payment-note-wrapper {
-  margin-bottom: 16px;
-}
-
-.pay-note-input {
-  width: 100%;
-  background: #282a2e;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  padding: 12px 14px;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 13.5px;
-  outline: none;
-}
-.pay-note-input:focus {
-  border-color: var(--gpay-blue);
-}
-
-.paying-from-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #282a2e;
-  padding: 10px 14px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.bank-pill-mini {
-  background: #004a77;
-  color: #ffffff;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 4px 6px;
-  border-radius: 4px;
-}
-
-.bank-account-text {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.bank-name {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #ffffff;
-}
-.account-num {
-  font-size: 11px;
-  color: #9aa0a6;
-}
-
-.gpay-primary-submit-btn {
+.gpay-method-pay-btn {
   width: 100%;
   height: 48px;
-  background: var(--gpay-blue);
-  color: #ffffff;
-  border: none;
-  border-radius: var(--radius-full);
-  font-family: inherit;
+  border-radius: 9999px;
+  background: #a8c7fa !important;
+  color: #042663 !important;
   font-size: 15px;
   font-weight: 700;
+  border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(11, 87, 208, 0.4);
-  transition: background var(--transition-fast);
-}
-.gpay-primary-submit-btn:hover {
-  background: var(--gpay-blue-hover);
+  box-shadow: 0 4px 14px rgba(168, 199, 250, 0.35);
+  transition: transform 0.15s ease, background 0.2s ease;
+  margin-bottom: 16px;
 }
 
-.gpay-secondary-btn {
-  width: 100%;
-  height: 44px;
-  background: #2a2c31;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-full);
-  font-family: inherit;
-  font-size: 14px;
+.gpay-method-pay-btn:hover {
+  background: #9bc0f8 !important;
+}
+
+.gpay-method-pay-btn:active {
+  transform: scale(0.98);
+  background: #8ab4f8 !important;
+}
+
+.gpay-powered-by-upi {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.powered-by-text {
+  font-size: 8px;
+  color: #8e9196;
+  letter-spacing: 0.8px;
   font-weight: 600;
-  cursor: pointer;
-  margin-top: 16px;
 }
 
 /* ================= NPCI UPI PIN AUTHENTIC SCREEN ================= */
@@ -1654,99 +1865,302 @@ body.fullscreen-mobile-mode .phone-camera-hole {
   transform: scale(0.95);
 }
 
-/* ================= SUCCESS CELEBRATION MODAL ================= */
-.success-card-modal {
-  width: 90%;
-  max-width: 360px;
-  background: #1e1f23;
-  border-radius: 28px;
-  padding: 30px 20px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  margin-bottom: auto;
-  margin-top: auto;
-  transform: scale(0.9);
-  transition: transform 0.25s ease;
+/* ================= GPAY SUCCESS CELEBRATION & RECEIPT (SCREENSHOTS 2, 4, 5) ================= */
+.gpay-success-container {
+  width: 100%;
+  max-width: 440px;
+  height: 100%;
+  max-height: 100dvh;
+  background: #131418 !important;
+  color: #ffffff !important;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.7);
+  padding: 0 !important;
+  border-radius: 0 !important;
 }
 
-.interactive-modal-backdrop.active .success-card-modal {
-  transform: scale(1);
+@media (min-width: 501px) {
+  .gpay-success-container {
+    height: 94vh;
+    max-height: 820px;
+    border-radius: 28px 28px 0 0 !important;
+  }
 }
 
-.success-animation-circle {
-  width: 72px;
-  height: 72px;
+/* Stage 1: Celebration Burst */
+.gpay-celebration-burst-view {
+  position: absolute;
+  inset: 0;
+  background: #131418;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  opacity: 1;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.gpay-celebration-burst-view.fade-out {
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+}
+
+.gpay-badge-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.gpay-scalloped-blue-badge {
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
-  background: rgba(52, 168, 83, 0.15);
+  background: #1a73e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 45px rgba(26, 115, 232, 0.65);
+  animation: gpayBadgePop 0.55s cubic-bezier(0.17, 0.89, 0.32, 1.25);
+  z-index: 2;
+}
+
+@keyframes gpayBadgePop {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Confetti Cluster */
+.gpay-confetti-cluster {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.c-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: confettiExplode 0.7s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
+}
+
+.c-yellow { background: #fbbc04; }
+.c-green  { background: #34a853; border-radius: 4px; width: 8px; height: 12px; }
+.c-red    { background: #ea4335; border-radius: 4px; width: 12px; height: 6px; }
+.c-cyan   { background: #24c1e0; }
+.c-orange { background: #f37021; border-radius: 4px; width: 10px; height: 6px; }
+
+.c-1 { transform: rotate(0deg) translate(68px) rotate(20deg); }
+.c-2 { transform: rotate(45deg) translate(72px) rotate(45deg); }
+.c-3 { transform: rotate(90deg) translate(66px) rotate(15deg); }
+.c-4 { transform: rotate(135deg) translate(74px) rotate(60deg); }
+.c-5 { transform: rotate(180deg) translate(70px) rotate(30deg); }
+.c-6 { transform: rotate(225deg) translate(68px) rotate(50deg); }
+.c-7 { transform: rotate(270deg) translate(72px) rotate(25deg); }
+.c-8 { transform: rotate(315deg) translate(70px) rotate(70deg); }
+
+@keyframes confettiExplode {
+  0% { opacity: 0; transform: scale(0.2) translate(0, 0); }
+  60% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.gpay-burst-text-group {
+  text-align: center;
+}
+
+.gpay-burst-paid-title {
+  font-size: 17px;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.gpay-burst-recipient {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+/* Stage 2: Receipt View */
+.gpay-receipt-view {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32px 24px 24px 24px;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.gpay-receipt-view.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.receipt-checkmark-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #1a73e8;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 16px;
+  box-shadow: 0 4px 16px rgba(26, 115, 232, 0.4);
 }
 
-.checkmark-svg {
-  width: 48px;
-  height: 48px;
-}
-
-.checkmark-circle {
-  stroke: #34a853;
-  stroke-width: 3;
-  stroke-dasharray: 166;
-  stroke-dashoffset: 166;
-  animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-}
-
-.checkmark-check {
-  stroke: #34a853;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 48;
-  stroke-dashoffset: 48;
-  animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
-}
-
-@keyframes strokeCircle {
-  100% { stroke-dashoffset: 0; }
-}
-
-@keyframes strokeCheck {
-  100% { stroke-dashoffset: 0; }
-}
-
-.success-title {
-  font-size: 20px;
+.receipt-amount-display {
+  font-size: 40px;
+  font-weight: 700;
   color: #ffffff;
-  margin-bottom: 6px;
-}
-.success-amount-display {
-  font-size: 32px;
-  font-weight: 800;
-  color: #34a853;
-  margin-bottom: 6px;
-}
-.success-recipient-text {
-  font-size: 13.5px;
-  color: #9aa0a6;
+  text-align: center;
   margin-bottom: 12px;
+  letter-spacing: -0.5px;
 }
-.success-upi-ref {
-  font-size: 11px;
-  color: #5f6368;
+
+.receipt-paid-to-label {
+  font-size: 15px;
+  color: #9aa0a6;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.receipt-recipient-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.2px;
+}
+
+.receipt-banking-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #c4c7c5;
+  margin-bottom: 6px;
+}
+
+.receipt-timestamp {
+  font-size: 13px;
+  color: #9aa0a6;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.receipt-powered-by-upi {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   margin-bottom: 24px;
 }
-.success-done-btn {
-  width: 100%;
-  height: 46px;
-  background: #34a853;
+
+.receipt-actions-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.receipt-action-btn {
+  flex: 1;
+  height: 42px;
+  border-radius: 9999px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
-  border: none;
-  border-radius: var(--radius-full);
-  font-family: inherit;
-  font-size: 14.5px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.receipt-action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.receipt-promo-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #1e2025;
+  border-radius: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 16px;
+}
+
+.promo-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(168, 199, 250, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.promo-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.promo-link {
+  font-size: 13px;
+  color: #a8c7fa;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.receipt-done-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 9999px;
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #a8c7fa;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.receipt-done-btn:hover {
+  background: rgba(168, 199, 250, 0.08);
+  border-color: #a8c7fa;
 }
 
 /* ================= BANK BALANCE MODAL ================= */

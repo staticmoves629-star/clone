@@ -1395,99 +1395,156 @@
 
   <!-- ================= INTERACTIVE BOTTOM SHEETS & MODALS ================= -->
 
-  <!-- Modal 1: Payment Bottom Sheet (Pay Anyone / Contact Tap) -->
-  <div class="interactive-modal-backdrop" id="paymentModalBackdrop">
-    <div class="bottom-sheet-panel" id="paymentSheet">
-      <div class="sheet-drag-handle"></div>
-      <div class="sheet-header">
-        <div class="recipient-avatar-large" id="payRecipientAvatar">
-          <span id="payRecipientInitial">A</span>
+  <!-- Modal 1: Authentic Google Pay Amount Entry View (Matching User Screenshot 1) -->
+  <div class="interactive-modal-backdrop gpay-fullscreen-backdrop" id="paymentModalBackdrop">
+    <div class="gpay-pay-flow-panel" id="paymentSheet">
+      <!-- Top Bar with Close, Info, and More Options -->
+      <div class="gpay-pay-top-bar">
+        <button class="gpay-top-icon-btn" id="closePaymentModalBtn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="gpay-top-bar-spacer"></div>
+        <div class="gpay-top-actions">
+          <button class="gpay-top-icon-btn" id="payInfoBtn" aria-label="Info">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+          </button>
+          <button class="gpay-top-icon-btn" id="payOverflowBtn" aria-label="More options">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+          </button>
         </div>
-        <div class="recipient-info">
-          <h3 class="pay-recipient-name" id="payRecipientName">Adithya</h3>
-          <span class="pay-recipient-upi" id="payRecipientUpi">adithya.kumar@okicici</span>
-          <span class="banking-name-tag">✓ Banking name verified</span>
+      </div>
+
+      <!-- Recipient Header (Centered with Initial Avatar) -->
+      <div class="gpay-pay-recipient-card">
+        <div class="gpay-avatar-circle" id="payRecipientAvatar">
+          <span id="payRecipientInitial">S</span>
         </div>
-        <button class="modal-close-btn" id="closePaymentModalBtn">&times;</button>
-      </div>
-
-      <div class="payment-amount-box">
-        <span class="currency-symbol">₹</span>
-        <input type="number" id="payAmountInput" class="pay-amount-input" placeholder="0" autofocus>
-      </div>
-
-      <!-- Quick Amount Presets -->
-      <div class="amount-presets-row">
-        <button class="preset-chip-btn" data-preset="100">+ ₹100</button>
-        <button class="preset-chip-btn" data-preset="500">+ ₹500</button>
-        <button class="preset-chip-btn" data-preset="1000">+ ₹1,000</button>
-        <button class="preset-chip-btn" data-preset="2000">+ ₹2,000</button>
-      </div>
-
-      <div class="payment-note-wrapper">
-        <input type="text" id="payNoteInput" class="pay-note-input" placeholder="Add a note (e.g. Lunch, movie, bill)">
-      </div>
-
-      <!-- Paying from Account selection -->
-      <div class="paying-from-card">
-        <div class="bank-pill-mini">SBI</div>
-        <div class="bank-account-text">
-          <span class="bank-name">State Bank of India</span>
-          <span class="account-num">•••• 4092</span>
+        <div class="gpay-paying-to-title">Paying <span id="payRecipientName">Siva Sumesh</span></div>
+        <div class="gpay-banking-name-badge">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="#34a853">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+          </svg>
+          <span>Banking name: <strong id="payBankingNameText">Siva Sumesh</strong></span>
         </div>
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-          <path d="M7 10l5 5 5-5z" />
-        </svg>
+        <div class="gpay-upi-id-text" id="payRecipientUpi">9544951867@superyes</div>
       </div>
 
-      <button class="gpay-primary-submit-btn ripple-btn" id="confirmPayBtn">
-        Pay <span id="confirmPayAmountText">₹0</span>
-      </button>
+      <!-- Huge Centered Amount Display with Active Cursor -->
+      <div class="gpay-big-amount-wrapper">
+        <div class="gpay-big-amount-row">
+          <span class="gpay-currency-sign">₹</span>
+          <span class="gpay-amount-digits" id="payAmountDisplay">0</span>
+          <span class="gpay-cursor-bar">|</span>
+        </div>
+        <!-- Hidden input for seamless script bindings -->
+        <input type="hidden" id="payAmountInput" value="0">
+        <input type="hidden" id="payNoteInput" value="">
+      </div>
+
+      <!-- "Add note" Capsule Button -->
+      <div class="gpay-add-note-container">
+        <button class="gpay-add-note-btn" id="payNotePillBtn">
+          <span id="payNoteDisplay">Add note</span>
+        </button>
+      </div>
+
+      <!-- Middle Spacer -->
+      <div class="gpay-amount-screen-spacer"></div>
+
+      <!-- Bottom Controls: Light Blue Squircle Proceed Button + Integrated Keypad -->
+      <div class="gpay-bottom-controls">
+        <div class="gpay-proceed-arrow-row">
+          <button class="gpay-squircle-arrow-btn" id="confirmPayBtn" aria-label="Proceed to payment method">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#001d35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <div class="gpay-integrated-keypad" id="gpayAmountKeypad">
+          <button class="gpay-k-btn" data-val="1">1</button>
+          <button class="gpay-k-btn" data-val="2">2</button>
+          <button class="gpay-k-btn" data-val="3">3</button>
+          <button class="gpay-k-btn" data-val="4">4</button>
+          <button class="gpay-k-btn" data-val="5">5</button>
+          <button class="gpay-k-btn" data-val="6">6</button>
+          <button class="gpay-k-btn" data-val="7">7</button>
+          <button class="gpay-k-btn" data-val="8">8</button>
+          <button class="gpay-k-btn" data-val="9">9</button>
+          <button class="gpay-k-btn" data-val=".">.</button>
+          <button class="gpay-k-btn" data-val="0">0</button>
+          <button class="gpay-k-btn gpay-k-backspace" id="gpayAmountBackspace" aria-label="Backspace">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+              <line x1="18" y1="9" x2="12" y2="15"></line>
+              <line x1="12" y1="9" x2="18" y2="15"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Modal 1B: Payment Confirmation Bottom Sheet -->
+  <!-- Modal 1B: Authentic Google Pay "Select payment method" Bottom Sheet (Matching User Screenshot 3) -->
   <div class="interactive-modal-backdrop" id="confirmModalBackdrop">
-    <div class="bottom-sheet-panel confirm-sheet">
+    <div class="bottom-sheet-panel gpay-payment-method-sheet" id="confirmSheet">
       <div class="sheet-drag-handle"></div>
-      <div class="sheet-header">
-        <h3 class="confirm-sheet-title">Confirm Payment</h3>
-        <button class="modal-close-btn" id="closeConfirmModalBtn">&times;</button>
+      
+      <div class="gpay-method-header">
+        <h3 class="gpay-method-title">Select payment method</h3>
+        <button class="modal-close-btn" id="closeConfirmModalBtn" aria-label="Close">&times;</button>
       </div>
 
-      <div class="confirm-recipient-card">
-        <div class="recipient-avatar-large" id="confirmRecipientAvatar">
-          <span id="confirmRecipientInitial">A</span>
-        </div>
-        <div class="confirm-info">
-          <h3 class="confirm-name" id="confirmRecipientName">Adithya</h3>
-          <span class="confirm-upi" id="confirmRecipientUpi">adithya@upi</span>
-          <div class="banking-name-tag">✓ Banking name verified</div>
-        </div>
-      </div>
-
-      <div class="confirm-amount-box">
-        <span class="confirm-amount-label">Amount</span>
-        <div class="confirm-amount-value" id="confirmDisplayAmount">₹500</div>
-      </div>
-
-      <div class="paying-from-card confirm-bank-card">
-        <div class="bank-pill-mini">FB</div>
-        <div class="bank-account-text">
-          <span class="bank-name">Federal Bank</span>
-          <span class="account-num">•••• 1234 (Primary)</span>
-        </div>
-        <div class="secure-upi-badge">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="#34a853">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+      <!-- State Bank of India Account Card (Exact styling from screenshot) -->
+      <div class="gpay-bank-method-card">
+        <div class="gpay-bank-logo-box">
+          <svg viewBox="0 0 32 32" width="24" height="24">
+            <circle cx="16" cy="16" r="14" fill="#00a5e5"/>
+            <circle cx="16" cy="16" r="5" fill="#ffffff"/>
+            <rect x="14.5" y="16" width="3" height="11" fill="#ffffff"/>
           </svg>
-          <span>UPI 256-bit Secure</span>
         </div>
+        <div class="gpay-bank-info-col">
+          <div class="gpay-bank-title-row">
+            <span class="gpay-bank-title" id="confirmBankTitle">State Bank of India 8102</span>
+          </div>
+          <div class="gpay-bank-balance-row">
+            <span>Balance: </span>
+            <span class="gpay-check-balance-link" id="checkBalanceQuickLink">Check now</span>
+            <span class="gpay-balance-revealed" id="revealedBalanceText" style="display:none;"></span>
+          </div>
+        </div>
+        <svg class="gpay-method-chevron" viewBox="0 0 24 24" width="20" height="20" fill="#9aa0a6">
+          <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+        </svg>
       </div>
 
-      <button class="gpay-primary-submit-btn ripple-btn" id="proceedToPinBtn">
-        Pay <span id="proceedAmountText">₹500</span>
+      <!-- Primary Action: Pay ₹... (Light pastel blue with dark navy text) -->
+      <button class="gpay-method-pay-btn ripple-btn" id="proceedToPinBtn">
+        Pay <span id="proceedAmountText">₹3</span>
       </button>
+
+      <!-- Powered by UPI subtext -->
+      <div class="gpay-powered-by-upi">
+        <span class="powered-by-text">POWERED BY</span>
+        <svg class="upi-logo-mono" viewBox="0 0 70 18" height="13">
+          <g transform="skewX(-14)">
+            <text x="0" y="14" font-family="'Plus Jakarta Sans', Roboto, sans-serif" font-weight="900" font-size="16" fill="#8e9196" letter-spacing="-0.5">UPI</text>
+            <polygon points="36,4 42,9 36,9" fill="#8e9196" />
+            <polygon points="41,4 47,9 41,9" fill="#8e9196" />
+            <polygon points="36,10 42,15 36,15" fill="#8e9196" />
+            <polygon points="41,10 47,15 41,15" fill="#8e9196" />
+          </g>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -1592,7 +1649,7 @@
         </div>
       </div>
       <h3 class="processing-title">Processing payment...</h3>
-      <div class="processing-amount" id="processingAmountText">₹500</div>
+      <div class="processing-amount" id="processingAmountText">₹0</div>
       <p class="processing-recipient" id="processingRecipientText">Paying Adithya (adithya@upi)</p>
       <div class="processing-status-pill">
         <span class="pulse-indicator"></span>
@@ -1601,21 +1658,120 @@
     </div>
   </div>
 
-  <!-- Modal 3: Payment Success Animated Celebration -->
-  <div class="interactive-modal-backdrop" id="successBackdrop">
-    <div class="success-card-modal">
-      <div class="success-animation-circle">
-        <svg class="checkmark-svg" viewBox="0 0 52 52">
-          <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
-          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-        </svg>
+  <!-- Modal 3: Payment Success Celebration & Full Receipt (Matching User Screenshots 2, 4, 5) -->
+  <div class="interactive-modal-backdrop gpay-fullscreen-backdrop" id="successBackdrop">
+    <div class="gpay-success-container">
+      
+      <!-- Stage 1: Celebration Burst (Screenshots 2 & 5) -->
+      <div class="gpay-celebration-burst-view" id="celebrationBurstView">
+        <div class="gpay-badge-wrapper">
+          <!-- Festive Confetti Shapes -->
+          <div class="gpay-confetti-cluster">
+            <span class="c-dot c-yellow c-1"></span>
+            <span class="c-dot c-green c-2"></span>
+            <span class="c-dot c-red c-3"></span>
+            <span class="c-dot c-cyan c-4"></span>
+            <span class="c-dot c-orange c-5"></span>
+            <span class="c-dot c-yellow c-6"></span>
+            <span class="c-dot c-green c-7"></span>
+            <span class="c-dot c-cyan c-8"></span>
+          </div>
+
+          <!-- Blue Scalloped Badge with White Checkmark -->
+          <div class="gpay-scalloped-blue-badge">
+            <svg class="gpay-badge-checkmark" viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <div class="gpay-burst-text-group">
+          <div class="gpay-burst-paid-title">Paid <span id="burstAmountText">₹1</span> to</div>
+          <div class="gpay-burst-recipient" id="burstRecipientName">JOB THOMAS CHERIAN</div>
+        </div>
       </div>
-      <h3 class="success-title">Payment Successful!</h3>
-      <div class="success-amount-display" id="successAmountText">₹500.00</div>
-      <p class="success-recipient-text" id="successRecipientSub">Paid to Adithya</p>
-      <div class="success-upi-ref">UPI transaction ID: <span id="successRefId">428819204812</span></div>
-      <div class="success-balance-update" id="successBalanceSub">Updated Balance: ₹9,500.00</div>
-      <button class="success-done-btn ripple-btn" id="successDoneBtn">Done</button>
+
+      <!-- Stage 2: Authentic Full Receipt Screen (Screenshot 4) -->
+      <div class="gpay-receipt-view" id="receiptFullView">
+        <div class="gpay-receipt-body">
+          <!-- Top Blue Circle Checkmark -->
+          <div class="receipt-checkmark-circle">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+
+          <!-- Big Amount Display -->
+          <div class="receipt-amount-display" id="successAmountText">₹1</div>
+
+          <!-- Paid to + Recipient Name -->
+          <div class="receipt-paid-to-label">Paid to</div>
+          <h2 class="receipt-recipient-name" id="successRecipientName">JOB THOMAS CHERIAN</h2>
+          
+          <div class="receipt-banking-name">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="#34a853">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            <span>Banking name: <strong id="successBankingNameText">JOB THOMAS CHERIAN</strong></span>
+          </div>
+
+          <div class="receipt-timestamp" id="successTimestamp">27 September 2026, 3:59 pm</div>
+
+          <!-- Powered by UPI -->
+          <div class="receipt-powered-by-upi">
+            <span class="powered-by-text">POWERED BY</span>
+            <svg class="upi-logo-mono" viewBox="0 0 70 18" height="13">
+              <g transform="skewX(-14)">
+                <text x="0" y="14" font-family="'Plus Jakarta Sans', Roboto, sans-serif" font-weight="900" font-size="16" fill="#8e9196" letter-spacing="-0.5">UPI</text>
+                <polygon points="36,4 42,9 36,9" fill="#8e9196" />
+                <polygon points="41,4 47,9 41,9" fill="#8e9196" />
+                <polygon points="36,10 42,15 36,15" fill="#8e9196" />
+                <polygon points="41,10 47,15 41,15" fill="#8e9196" />
+              </g>
+            </svg>
+          </div>
+
+          <!-- Action buttons row: Share screenshot | See details -->
+          <div class="receipt-actions-row">
+            <button class="receipt-action-btn ripple-btn" id="shareReceiptBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+              <span>Share screenshot</span>
+            </button>
+            <button class="receipt-action-btn ripple-btn" id="seeDetailsBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="15" y2="12"></line>
+                <polyline points="10 7 15 12 10 17"></polyline>
+                <line x1="21" y1="5" x2="21" y2="19"></line>
+              </svg>
+              <span>See details</span>
+            </button>
+          </div>
+
+          <!-- Promo Feature Card: Pay up to ₹1000 without PIN -->
+          <div class="receipt-promo-card">
+            <div class="promo-icon-box">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="#a8c7fa">
+                <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+              </svg>
+            </div>
+            <div class="promo-content">
+              <div class="promo-title">Pay up to ₹1000 without PIN</div>
+              <div class="promo-link" id="tryUpiLiteBtn">Try UPI Lite</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wide Outline Done Button -->
+        <div class="receipt-done-footer">
+          <button class="receipt-done-btn ripple-btn" id="successDoneBtn">Done</button>
+        </div>
+      </div>
     </div>
   </div>
 
