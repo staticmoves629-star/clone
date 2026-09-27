@@ -945,10 +945,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Step 2 -> Step 3: Confirmation "Pay ₹500" opens 6-Dot PIN Screen
+  // Step 2 -> Step 3: Confirmation "Pay ₹..." opens 6-Dot PIN Screen
   if (proceedToPinBtn) {
     proceedToPinBtn.addEventListener('click', () => {
-      const amountVal = parseFloat(payAmountInput ? payAmountInput.value : 0) || 500;
+      const amountVal = parseFloat(currentAmountStr) || parseFloat(payAmountInput ? payAmountInput.value : 0) || 1;
 
       // Close Confirmation
       if (confirmModalBackdrop) confirmModalBackdrop.classList.remove('active');
@@ -1019,7 +1019,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Step 3 -> Step 4: PIN Submit
+  // Step 3 -> Step 4: PIN Submit immediately triggers Tick Mark Celebration
   if (pinSubmitBtn) {
     pinSubmitBtn.addEventListener('click', submitPin);
   }
@@ -1031,21 +1031,15 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Close PIN sheet
+    // Close PIN sheet and intermediate modals immediately
     if (upiPinBackdrop) upiPinBackdrop.classList.remove('active');
+    if (confirmModalBackdrop) confirmModalBackdrop.classList.remove('active');
+    if (paymentModalBackdrop) paymentModalBackdrop.classList.remove('active');
+    if (processingBackdrop) processingBackdrop.classList.remove('active');
 
-    // Step 4: Show Processing Screen for 1.5 seconds
-    const amountVal = parseFloat(payAmountInput ? payAmountInput.value : 0) || 500;
-    if (processingAmountText) processingAmountText.textContent = `₹${amountVal.toLocaleString('en-IN')}`;
-    if (processingRecipientText) processingRecipientText.textContent = `Paying ${currentRecipient.name} (${currentRecipient.upi})`;
-
-    if (processingBackdrop) processingBackdrop.classList.add('active');
-
-    setTimeout(() => {
-      // Step 5: Transition to Success
-      if (processingBackdrop) processingBackdrop.classList.remove('active');
-      triggerSuccess(amountVal);
-    }, 1500);
+    // Immediately trigger authentic Google Pay tick mark celebration animation
+    const amountVal = parseFloat(currentAmountStr) || parseFloat(payAmountInput ? payAmountInput.value : 0) || 1;
+    triggerSuccess(amountVal);
   }
 
   // Support physical keyboard on desktop
@@ -1100,7 +1094,36 @@ document.addEventListener('DOMContentLoaded', () => {
     if (successTimestamp) successTimestamp.textContent = dateFormatted;
 
     // Reset views: show burst first, hide receipt
-    if (celebrationBurstView) celebrationBurstView.classList.remove('fade-out');
+    if (celebrationBurstView) {
+      celebrationBurstView.classList.remove('fade-out');
+
+      // Re-trigger SVG animations smoothly
+      const badgeGroup = celebrationBurstView.querySelector('.gpay-scalloped-badge-group');
+      const tickMark = celebrationBurstView.querySelector('.animated-tick');
+      const confettiRing = celebrationBurstView.querySelector('.gpay-confetti-ring');
+      const textGroup = celebrationBurstView.querySelector('.gpay-burst-text-group');
+
+      if (badgeGroup) {
+        badgeGroup.style.animation = 'none';
+        void badgeGroup.offsetHeight;
+        badgeGroup.style.animation = 'gpayBadgePop 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.25) forwards';
+      }
+      if (tickMark) {
+        tickMark.style.animation = 'none';
+        void tickMark.offsetHeight;
+        tickMark.style.animation = 'drawTickMark 0.42s cubic-bezier(0.65, 0, 0.45, 1) 0.18s forwards';
+      }
+      if (confettiRing) {
+        confettiRing.style.animation = 'none';
+        void confettiRing.offsetHeight;
+        confettiRing.style.animation = 'confettiBurst 0.65s cubic-bezier(0.12, 0.8, 0.32, 1) forwards';
+      }
+      if (textGroup) {
+        textGroup.style.animation = 'none';
+        void textGroup.offsetHeight;
+        textGroup.style.animation = 'burstTextFadeUp 0.4s ease 0.22s both';
+      }
+    }
     if (receiptFullView) receiptFullView.classList.remove('active');
 
     // Open Success Backdrop
@@ -1109,11 +1132,11 @@ document.addEventListener('DOMContentLoaded', () => {
       pushNavState('modal', 'successBackdrop');
     }
 
-    // Seamlessly transition from Celebration Burst to Full Receipt after 1.4s
+    // Transition from Celebration Burst to Full Receipt after 1.8s
     setTimeout(() => {
       if (celebrationBurstView) celebrationBurstView.classList.add('fade-out');
       if (receiptFullView) receiptFullView.classList.add('active');
-    }, 1400);
+    }, 1800);
 
     // Prepare transaction object
     pendingCompletedTx = {

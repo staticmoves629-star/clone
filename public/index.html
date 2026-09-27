@@ -20,7 +20,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 
 <body class="desktop-preview-mode">
@@ -1637,52 +1637,54 @@
     </div>
   </div>
 
-  <!-- Modal 2B: Simulated Payment Processing State -->
-  <div class="interactive-modal-backdrop" id="processingBackdrop">
-    <div class="processing-modal-card">
-      <div class="processing-spinner-wrapper">
-        <div class="gpay-spinner-ring"></div>
-        <div class="gpay-spinner-inner-icon">
-          <svg viewBox="0 0 24 24" width="26" height="26" fill="#1a73e8">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
-          </svg>
-        </div>
-      </div>
-      <h3 class="processing-title">Processing payment...</h3>
-      <div class="processing-amount" id="processingAmountText">₹0</div>
-      <p class="processing-recipient" id="processingRecipientText">Paying Adithya (adithya@upi)</p>
-      <div class="processing-status-pill">
-        <span class="pulse-indicator"></span>
-        <span>Securing connection with bank...</span>
-      </div>
-    </div>
-  </div>
-
   <!-- Modal 3: Payment Success Celebration & Full Receipt (Matching User Screenshots 2, 4, 5) -->
   <div class="interactive-modal-backdrop gpay-fullscreen-backdrop" id="successBackdrop">
     <div class="gpay-success-container">
       
-      <!-- Stage 1: Celebration Burst (Screenshots 2 & 5) -->
+      <!-- Stage 1: Celebration Burst (Matching User Tick Mark Animation) -->
       <div class="gpay-celebration-burst-view" id="celebrationBurstView">
-        <div class="gpay-badge-wrapper">
-          <!-- Festive Confetti Shapes -->
-          <div class="gpay-confetti-cluster">
-            <span class="c-dot c-yellow c-1"></span>
-            <span class="c-dot c-green c-2"></span>
-            <span class="c-dot c-red c-3"></span>
-            <span class="c-dot c-cyan c-4"></span>
-            <span class="c-dot c-orange c-5"></span>
-            <span class="c-dot c-yellow c-6"></span>
-            <span class="c-dot c-green c-7"></span>
-            <span class="c-dot c-cyan c-8"></span>
-          </div>
+        <div class="gpay-celebration-badge-stage">
+          <svg class="gpay-celebration-svg" viewBox="0 0 220 220" width="220" height="220" xmlns="http://www.w3.org/2000/svg">
+            <!-- Confetti Particle Ring matching reference image -->
+            <g class="gpay-confetti-ring">
+              <!-- Top (12:00) Red capsule -->
+              <rect x="106" y="32" width="8" height="15" rx="4" fill="#ea4335" />
+              <!-- 1:00 Green circle -->
+              <circle cx="136" cy="42" r="5.5" fill="#34a853" />
+              <!-- 2:00 Cyan arc -->
+              <path d="M 158 54 A 7 7 0 1 1 164 64" fill="none" stroke="#24c1e0" stroke-width="4.5" stroke-linecap="round" />
+              <!-- 2:30 Yellow 4-point star -->
+              <path d="M 172 78 Q 172 83 177 83 Q 172 83 172 88 Q 172 83 167 83 Q 172 83 172 78 Z" fill="#fbbc04" />
+              <!-- 3:15 Grey circle dot -->
+              <circle cx="178" cy="108" r="4.5" fill="#9aa0a6" />
+              <!-- 4:00 Red arc -->
+              <path d="M 168 132 A 7 7 0 1 1 173 142" fill="none" stroke="#ea4335" stroke-width="4.5" stroke-linecap="round" />
+              <!-- 4:45 Cyan capsule rotated -->
+              <rect x="148" y="154" width="7" height="14" rx="3.5" transform="rotate(-35 151 161)" fill="#24c1e0" />
+              <!-- 5:15 Yellow 4-point star -->
+              <path d="M 134 172 Q 134 177 139 177 Q 134 177 134 182 Q 134 177 129 177 Q 134 177 134 172 Z" fill="#fbbc04" />
+              <!-- 6:30 Red circle dot -->
+              <circle cx="106" cy="176" r="5" fill="#ea4335" />
+              <!-- 7:30 White 4-point star -->
+              <path d="M 80 165 Q 80 170 85 170 Q 80 170 80 175 Q 80 170 75 170 Q 80 170 80 165 Z" fill="#ffffff" />
+              <!-- 8:15 Yellow circle dot -->
+              <circle cx="74" cy="138" r="5" fill="#fbbc04" />
+              <!-- 9:00 Cyan capsule -->
+              <rect x="62" y="106" width="14" height="7" rx="3.5" fill="#24c1e0" />
+              <!-- 10:00 Green 4-point star -->
+              <path d="M 78 78 Q 78 83 83 83 Q 78 83 78 88 Q 78 83 73 83 Q 78 83 78 78 Z" fill="#34a853" />
+              <!-- 11:00 Red capsule rotated -->
+              <rect x="90" y="44" width="6.5" height="12" rx="3.2" transform="rotate(25 93 50)" fill="#ea4335" />
+            </g>
 
-          <!-- Blue Scalloped Badge with White Checkmark -->
-          <div class="gpay-scalloped-blue-badge">
-            <svg class="gpay-badge-checkmark" viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
+            <!-- Center Scalloped Badge with Animated Tick -->
+            <g class="gpay-scalloped-badge-group">
+              <!-- 16-lobe rosette in Google Blue -->
+              <path class="gpay-scallop-path" d="M 110.0 68.0 A 8.8 8.8 0 0 1 126.1 71.2 A 8.8 8.8 0 0 1 139.7 80.3 A 8.8 8.8 0 0 1 148.8 93.9 A 8.8 8.8 0 0 1 152.0 110.0 A 8.8 8.8 0 0 1 148.8 126.1 A 8.8 8.8 0 0 1 139.7 139.7 A 8.8 8.8 0 0 1 126.1 148.8 A 8.8 8.8 0 0 1 110.0 152.0 A 8.8 8.8 0 0 1 93.9 148.8 A 8.8 8.8 0 0 1 80.3 139.7 A 8.8 8.8 0 0 1 71.2 126.1 A 8.8 8.8 0 0 1 68.0 110.0 A 8.8 8.8 0 0 1 71.2 93.9 A 8.8 8.8 0 0 1 80.3 80.3 A 8.8 8.8 0 0 1 93.9 71.2 A 8.8 8.8 0 0 1 110.0 68.0 Z" fill="#1a73e8" />
+              <!-- Animated White Checkmark -->
+              <path class="animated-tick" d="M 94 110 L 105 121 L 130 96" fill="none" stroke="#ffffff" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+          </svg>
         </div>
 
         <div class="gpay-burst-text-group">
@@ -2134,7 +2136,7 @@
   <!-- Interactive Toast Notification -->
   <div class="gpay-toast-notification" id="gpayToast">Notification</div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=5"></script>
 </body>
 
 </html>

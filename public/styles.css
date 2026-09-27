@@ -1865,13 +1865,44 @@ body.fullscreen-mobile-mode .phone-camera-hole {
   transform: scale(0.95);
 }
 
-/* ================= GPAY SUCCESS CELEBRATION & RECEIPT (SCREENSHOTS 2, 4, 5) ================= */
+/* ================= MODAL STACKING & GPAY FULLSCREEN BACKDROPS ================= */
+#paymentModalBackdrop {
+  z-index: 2000 !important;
+}
+
+#confirmModalBackdrop {
+  z-index: 2500 !important;
+}
+
+#upiPinBackdrop {
+  z-index: 2600 !important;
+}
+
+#successBackdrop {
+  z-index: 3000 !important;
+}
+
+.interactive-modal-backdrop.gpay-fullscreen-backdrop {
+  background: #121316 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+
+.gpay-fullscreen-backdrop.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
 .gpay-success-container {
   width: 100%;
   max-width: 440px;
   height: 100%;
   max-height: 100dvh;
-  background: #131418 !important;
+  background: #121316 !important;
   color: #ffffff !important;
   display: flex;
   flex-direction: column;
@@ -1891,18 +1922,18 @@ body.fullscreen-mobile-mode .phone-camera-hole {
   }
 }
 
-/* Stage 1: Celebration Burst */
+/* Stage 1: Celebration Burst (Matching User Reference Image) */
 .gpay-celebration-burst-view {
   position: absolute;
   inset: 0;
-  background: #131418;
+  background: #121316;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 10;
   opacity: 1;
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .gpay-celebration-burst-view.fade-out {
@@ -1911,91 +1942,78 @@ body.fullscreen-mobile-mode .phone-camera-hole {
   pointer-events: none;
 }
 
-.gpay-badge-wrapper {
-  position: relative;
-  width: 140px;
-  height: 140px;
+.gpay-celebration-badge-stage {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 30px;
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin-bottom: 24px;
 }
 
-.gpay-scalloped-blue-badge {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  background: #1a73e8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 45px rgba(26, 115, 232, 0.65);
-  animation: gpayBadgePop 0.55s cubic-bezier(0.17, 0.89, 0.32, 1.25);
-  z-index: 2;
+.gpay-celebration-svg {
+  overflow: visible;
+}
+
+.gpay-scalloped-badge-group {
+  transform-origin: 110px 110px;
+  animation: gpayBadgePop 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.25) forwards;
+  filter: drop-shadow(0 0 28px rgba(26, 115, 232, 0.65));
 }
 
 @keyframes gpayBadgePop {
-  0% { transform: scale(0.3); opacity: 0; }
-  60% { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(1); }
+  0% { transform: scale(0.2); opacity: 0; }
+  65% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-/* Confetti Cluster */
-.gpay-confetti-cluster {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 1;
+.animated-tick {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: drawTickMark 0.42s cubic-bezier(0.65, 0, 0.45, 1) 0.18s forwards;
 }
 
-.c-dot {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  animation: confettiExplode 0.7s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
+@keyframes drawTickMark {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
-.c-yellow { background: #fbbc04; }
-.c-green  { background: #34a853; border-radius: 4px; width: 8px; height: 12px; }
-.c-red    { background: #ea4335; border-radius: 4px; width: 12px; height: 6px; }
-.c-cyan   { background: #24c1e0; }
-.c-orange { background: #f37021; border-radius: 4px; width: 10px; height: 6px; }
+.gpay-confetti-ring {
+  transform-origin: 110px 110px;
+  animation: confettiBurst 0.65s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
+}
 
-.c-1 { transform: rotate(0deg) translate(68px) rotate(20deg); }
-.c-2 { transform: rotate(45deg) translate(72px) rotate(45deg); }
-.c-3 { transform: rotate(90deg) translate(66px) rotate(15deg); }
-.c-4 { transform: rotate(135deg) translate(74px) rotate(60deg); }
-.c-5 { transform: rotate(180deg) translate(70px) rotate(30deg); }
-.c-6 { transform: rotate(225deg) translate(68px) rotate(50deg); }
-.c-7 { transform: rotate(270deg) translate(72px) rotate(25deg); }
-.c-8 { transform: rotate(315deg) translate(70px) rotate(70deg); }
-
-@keyframes confettiExplode {
-  0% { opacity: 0; transform: scale(0.2) translate(0, 0); }
-  60% { opacity: 1; }
-  100% { opacity: 1; }
+@keyframes confettiBurst {
+  0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+  60% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
 
 .gpay-burst-text-group {
   text-align: center;
+  animation: burstTextFadeUp 0.4s ease 0.22s both;
+}
+
+@keyframes burstTextFadeUp {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 .gpay-burst-paid-title {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 500;
   color: #ffffff;
   margin-bottom: 6px;
+  letter-spacing: -0.2px;
 }
 
 .gpay-burst-recipient {
-  font-size: 22px;
+  font-size: 23px;
   font-weight: 700;
   color: #ffffff;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
 }
 
